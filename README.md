@@ -1,18 +1,20 @@
 # PimPam
 
+### Details
+
 **Android App for a Comic Collection Manager**
 
 *Subject*: DDS
 
 
 
-*Team*:
+### Developers
 
-Jose Collado San Pedro
+[Jose Collado San Pedro](https://github.com/jcolladosp/)
 
-Andrés Paúl Muñoz
+[Andrés Paúl Muñoz](https://github.com/LordHub)
 
-Victor Ribera Vázquez
+[Victor Ribera Vázquez](https://github.com/YukiFreedy)
 
 
 
