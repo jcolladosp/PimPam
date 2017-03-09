@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">PimPam</string>
+
+    <!-- Drawer -->
+    <string name="addComic">Añadir comic</string>
+    <string name="seeCollection">Ver colección</string>
+    <string name="settings">Ajustes</string>
+    <string name="placeholderName">Andres Paul</string>
+
+
 </resources>
