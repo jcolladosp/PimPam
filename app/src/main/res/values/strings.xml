@@ -6,6 +6,13 @@
     <string name="seeCollection">Ver colección</string>
     <string name="settings">Ajustes</string>
     <string name="placeholderName">Andres Paul</string>
+    <string name="ok">Vale</string>
+    <string name="error_general">Ha habido un error.</string>
+    <string name="error_title">Error</string>
+    <string name="body_connection_error">Se necesita conexión a Internet para funcionar. Por favor, activa la red WIFI o tu conexión de datos.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

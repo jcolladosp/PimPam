@@ -1,8 +1,10 @@
-package jcollado.pw.pimpam;
+package jcollado.pw.pimpam.controller;
 
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
@@ -15,9 +17,13 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
-public class MainActivity extends AppCompatActivity {
+import jcollado.pw.pimpam.R;
+import jcollado.pw.pimpam.utils.BaseFragment;
+import jcollado.pw.pimpam.controller.CollectionFragment;
+
+public class MainActivity extends AppCompatActivity   implements CollectionFragment.OnFragmentInteractionListener,AddComicFragment.OnFragmentInteractionListener
+        {
     private Drawer result = null;
     Toolbar toolbar;
 
@@ -64,6 +70,25 @@ public class MainActivity extends AppCompatActivity {
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+
+                        BaseFragment fragment = CollectionFragment.newInstance();
+                        if (position == 1){
+                            toolbar.setTitle(getString(R.string.seeCollection));
+                        }
+
+                        if (position == 2){
+                            fragment = AddComicFragment.newInstance();
+                            toolbar.setTitle(getString(R.string.addComic));
+                        }
+                        if (position == 4){
+                            fragment = AddComicFragment.newInstance();
+                            toolbar.setTitle(getString(R.string.settings));
+                        }
+
+                        getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.container, fragment,"")
+                                .commit();
                         result.closeDrawer();
                         return true;
                     }
@@ -71,4 +96,9 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
     }
-}
+
+            @Override
+            public void onFragmentInteraction(Uri uri) {
+
+            }
+        }
