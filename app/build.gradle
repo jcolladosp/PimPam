@@ -33,6 +33,10 @@ dependencies {
     compile 'com.mikepenz:fontawesome-typeface:4.7.0.0@aar'
     compile 'com.android.support:multidex:1.0.0'
     compile 'com.android.support:support-v4:25.2.0'
+    compile 'com.google.firebase:firebase-database:10.0.1'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 }
+
+
+apply plugin: 'com.google.gms.google-services'
