@@ -41,6 +41,13 @@ public class Functions {
         }
         return false;
     }
+    public static AlertDialog.Builder getModal(int title, int body, Context context) {
+        final  AlertDialog.Builder builder = new  AlertDialog.Builder (context);
+        builder.setTitle(title);
+        builder.setMessage(body);
+
+        return builder;
+    }
     public static  AlertDialog.Builder getModal(int title, Context context) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(title);

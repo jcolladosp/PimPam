@@ -4,7 +4,6 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
@@ -20,9 +19,8 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.utils.BaseFragment;
-import jcollado.pw.pimpam.controller.CollectionFragment;
 
-public class MainActivity extends AppCompatActivity   implements CollectionFragment.OnFragmentInteractionListener,AddComicFragment.OnFragmentInteractionListener
+public class MainActivity extends AppCompatActivity   implements ViewComicFragment.OnFragmentInteractionListener,AddComicFragment.OnFragmentInteractionListener, CollectionFragment.OnFragmentInteractionListener
         {
     private Drawer result = null;
     Toolbar toolbar;
@@ -71,10 +69,9 @@ public class MainActivity extends AppCompatActivity   implements CollectionFragm
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
 
-                        BaseFragment fragment = CollectionFragment.newInstance();
+                        BaseFragment fragment = ViewComicFragment.newInstance();
                         if (position == 1){
-                            getSupportActionBar().hide();
-                            toolbar.setTitleTextColor(getResources().getColor(R.color.colorAccent));
+                            fragment = CollectionFragment.newInstance();
                             toolbar.setTitle(getString(R.string.seeCollection));
                         }
 
@@ -83,7 +80,7 @@ public class MainActivity extends AppCompatActivity   implements CollectionFragm
                             toolbar.setTitle(getString(R.string.addComic));
                         }
                         if (position == 4){
-                            fragment = AddComicFragment.newInstance();
+                            fragment = ViewComicFragment.newInstance();
                             toolbar.setTitle(getString(R.string.settings));
                         }
 
