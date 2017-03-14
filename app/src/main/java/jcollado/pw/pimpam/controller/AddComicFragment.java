@@ -10,6 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,6 +30,9 @@ public class AddComicFragment extends BaseFragment {
 
     @BindView(R.id.submitBut)
     Button submitBut;
+
+    @BindView(R.id.addComicText)
+    TextView addComicText;
 
     private OnFragmentInteractionListener mListener;
 
@@ -50,9 +56,10 @@ public class AddComicFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view =     inflater.inflate(R.layout.fragment_add_comic, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_comic, container, false);
 
         ButterKnife.bind(this, view);
+        Singleton.getInstance();
 
 
         // Inflate the layout for this fragment
@@ -94,12 +101,10 @@ public class AddComicFragment extends BaseFragment {
     }
 
     @OnClick(R.id.submitBut) void submit(){
-        FirebaseModule fb = new FirebaseModule();
-        Database db = new Database();
-        db.getComics().add(new Comic(nameField.getText().toString(), "Descripcion", "URL"));
-        db.getFavorites().add(new Comic(nameField.getText().toString(), "Descripcion", "URL"));
-        fb.setDatabase(db);
-        nameField.setText(fb.getComics("comics").get(0).toString());
+        Singleton.getInstance().getDatabase().addNewComic(new Comic());
+    }
 
+    @OnClick(R.id.refreshBut) void refresh(){
+        addComicText.setText(Singleton.getInstance().getDatabase().getComics().get(0).getName());
     }
 }

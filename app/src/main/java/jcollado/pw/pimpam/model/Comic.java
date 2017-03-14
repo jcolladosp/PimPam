@@ -10,6 +10,12 @@ public class Comic {
     private String description;
     private String imageURL;
 
+    public Comic(){
+        name = "";
+        description = "";
+        imageURL = "";
+    }
+
     public Comic(String name, String description, String imageURL) {
         this.name = name;
         this.description = description;

@@ -7,7 +7,7 @@
     <!-- TODO: Update blank fragment layout -->
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/addComicText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -19,7 +19,7 @@
         android:id="@+id/nameField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView"
+        android:layout_below="@+id/addComicText"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="47dp"
         android:ems="10"
@@ -34,4 +34,14 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="51dp"
         android:text="Submit" />
+
+    <Button
+        android:id="@+id/refreshBut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/submitBut"
+        android:layout_below="@+id/submitBut"
+        android:layout_marginTop="111dp"
+        android:text="Refresh" />
+
 </RelativeLayout>
