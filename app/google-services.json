@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "702819993491",
+    "firebase_url": "https://pim-pam-comics-ff8d4.firebaseio.com",
+    "project_id": "pim-pam-comics-ff8d4",
+    "storage_bucket": "pim-pam-comics-ff8d4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:702819993491:android:e7d9d7201b905612",
+        "android_client_info": {
+          "package_name": "jcollado.pw.pimpam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "702819993491-psd0d7brnuflpin8a9l3svhtjdhb4gfa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "jcollado.pw.pimpam",
+            "certificate_hash": "38d5a5594216ca912b0f1c5188ee1a61e36ea7e0"
+          }
+        },
+        {
+          "client_id": "702819993491-40jagd8r7eheaq0i5c5n3ba5gkkiuoeo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDB2KvEiilIJLUwRGLi4AjbOxEKzGSzmhY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "702819993491-40jagd8r7eheaq0i5c5n3ba5gkkiuoeo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

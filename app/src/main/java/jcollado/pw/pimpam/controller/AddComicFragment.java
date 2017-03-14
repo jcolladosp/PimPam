@@ -4,16 +4,29 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import jcollado.pw.pimpam.R;
+import jcollado.pw.pimpam.model.Comic;
+import jcollado.pw.pimpam.model.Database;
 import jcollado.pw.pimpam.utils.BaseFragment;
 
 
 public class AddComicFragment extends BaseFragment {
 
+    @BindView(R.id.nameField)
+    EditText nameField;
+
+    @BindView(R.id.submitBut)
+    Button submitBut;
 
     private OnFragmentInteractionListener mListener;
 
@@ -31,14 +44,20 @@ public class AddComicFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        View view =     inflater.inflate(R.layout.fragment_add_comic, container, false);
+
+        ButterKnife.bind(this, view);
+
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_comic, container, false);
+        return view ;
+
     }
 
 
@@ -72,5 +91,15 @@ public class AddComicFragment extends BaseFragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @OnClick(R.id.submitBut) void submit(){
+        FirebaseModule fb = new FirebaseModule();
+        Database db = new Database();
+        db.getComics().add(new Comic(nameField.getText().toString(), "Descripcion", "URL"));
+        db.getFavorites().add(new Comic(nameField.getText().toString(), "Descripcion", "URL"));
+        fb.setDatabase(db);
+        nameField.setText(fb.getComics("comics").get(0).toString());
+
     }
 }
