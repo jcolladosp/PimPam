@@ -73,6 +73,8 @@ public class MainActivity extends AppCompatActivity   implements CollectionFragm
 
                         BaseFragment fragment = CollectionFragment.newInstance();
                         if (position == 1){
+                            getSupportActionBar().hide();
+                            toolbar.setTitleTextColor(getResources().getColor(R.color.colorAccent));
                             toolbar.setTitle(getString(R.string.seeCollection));
                         }
 
