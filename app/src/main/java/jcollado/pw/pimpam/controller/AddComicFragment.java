@@ -105,6 +105,11 @@ public class AddComicFragment extends BaseFragment {
     }
 
     @OnClick(R.id.refreshBut) void refresh(){
-        addComicText.setText(Singleton.getInstance().getDatabase().getComics().get(0).getName());
+        if(Singleton.getDatabase().getComics().size() == 0){
+            addComicText.setText("Database not loaded yet");
+        }
+        else{
+            addComicText.setText("Database loaded successfully, nº of entries: " + Singleton.getDatabase().getComics().size());
+        }
     }
 }

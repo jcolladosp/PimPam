@@ -9,6 +9,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.EventListener;
 
 /**
  * Created by Yuki on 14/03/2017.
@@ -19,20 +20,23 @@ public class Database {
     private ArrayList<Comic> comics;
     private ArrayList<Comic> favorites;
 
-    private static FirebaseDatabase fdatabase;
+    private FirebaseDatabase fdatabase;
 
-    private static DatabaseReference myRef, myRef2;
+    private DatabaseReference myRef, myRef2;
+
+    public ValueEventListener eventListenerComics, eventListenerFavorites;
 
     public Database() {
         fdatabase = FirebaseDatabase.getInstance();
         myRef = fdatabase.getReference("comics");
         comics = new ArrayList<>();
-        myRef.addValueEventListener(new ValueEventListener() {
+        eventListenerComics = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                comics = new ArrayList<Comic>();
+                comics = new ArrayList<>();
+
                 Log.d("yuki", "running data change");
                 for(DataSnapshot data : dataSnapshot.getChildren())
                     comics.add(data.getValue(Comic.class));
@@ -43,7 +47,8 @@ public class Database {
                 // Failed to read value
                 Log.i("yuki", "Failed to read value. ",  error.toException());
             }
-        });
+        };
+        myRef.addValueEventListener(eventListenerComics);
 
         favorites = new ArrayList<>();
         myRef2 = fdatabase.getReference("favorites");
@@ -52,7 +57,7 @@ public class Database {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                favorites = new ArrayList<Comic>();
+                favorites = new ArrayList<>();
                 for(DataSnapshot data : dataSnapshot.getChildren())
                     favorites.add(data.getValue(Comic.class));
             }
@@ -96,4 +101,43 @@ public class Database {
         favorites.add(comic);
     }
 
+    public FirebaseDatabase getFdatabase() {
+        return fdatabase;
+    }
+
+    public void setFdatabase(FirebaseDatabase fdatabase) {
+        this.fdatabase = fdatabase;
+    }
+
+    public DatabaseReference getMyRef() {
+        return myRef;
+    }
+
+    public void setMyRef(DatabaseReference myRef) {
+        this.myRef = myRef;
+    }
+
+    public DatabaseReference getMyRef2() {
+        return myRef2;
+    }
+
+    public void setMyRef2(DatabaseReference myRef2) {
+        this.myRef2 = myRef2;
+    }
+
+    public ValueEventListener getEventListenerComics() {
+        return eventListenerComics;
+    }
+
+    public void setEventListenerComics(ValueEventListener eventListenerComics) {
+        this.eventListenerComics = eventListenerComics;
+    }
+
+    public ValueEventListener getEventListenerFavorites() {
+        return eventListenerFavorites;
+    }
+
+    public void setEventListenerFavorites(ValueEventListener eventListenerFavorites) {
+        this.eventListenerFavorites = eventListenerFavorites;
+    }
 }
