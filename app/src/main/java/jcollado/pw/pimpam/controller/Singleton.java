@@ -10,12 +10,14 @@ import com.google.firebase.database.ValueEventListener;
 
 import jcollado.pw.pimpam.model.Comic;
 import jcollado.pw.pimpam.model.Database;
+import jcollado.pw.pimpam.model.Factory;
 
 /**
  * Created by Yuki on 14/03/2017.
  */
 
 public class Singleton {
+
     private static final Singleton ourInstance = new Singleton();
 
     private static FirebaseModule firebaseModule;
@@ -27,7 +29,7 @@ public class Singleton {
     }
 
     private Singleton() {
-        database = new Database();
+        database = Factory.createDatabase();
         firebaseModule = new FirebaseModule();
     }
 
