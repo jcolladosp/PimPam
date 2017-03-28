@@ -9,6 +9,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,14 +50,13 @@ public class AddComicFragment extends BaseFragment {
     @BindView(R.id.nameField)
     EditText nameField;
 
-    @BindView(R.id.addComicBut)
-    Button submitBut;
-
     @BindView(R.id.descriptionText)
     TextView descriptionText;
 
     @BindView(R.id.comicIV)
     SquareImageView comicIV;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     private OnFragmentInteractionListener mListener;
 
@@ -83,7 +84,10 @@ public class AddComicFragment extends BaseFragment {
 
         ButterKnife.bind(this, view);
         Singleton.getInstance().getDatabase().getComics();
-
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
+        toolbar.setTitle("Añadir comic");
 
         // Inflate the layout for this fragment
         return view ;
@@ -123,22 +127,13 @@ public class AddComicFragment extends BaseFragment {
         }
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
-    @OnClick(R.id.addComicBut) void submit(){
+    @OnClick(R.id.addFab) void submit(){
         if(nameField.getText().toString().isEmpty()){
 
             return;
@@ -149,10 +144,6 @@ public class AddComicFragment extends BaseFragment {
             return;
         }
 
-        if(imageBitmap == null){
-
-            return;
-        }
 
 
         Singleton.getInstance().getDatabase().addNewComic(Factory.createComic(nameField.getText().toString(), descriptionText.getText().toString(), ""));

@@ -20,5 +20,7 @@
     <string name="news_image_camera">Cámara</string>
     <string name="news_image_gallery">Galería</string>
     <string name="warning_modal_title">Cambiar imagen</string>
+    <string name="name_add_comic">Nombre</string>
+    <string name="descrption_add_comic">Descripción</string>
 
 </resources>
