@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +19,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.w3c.dom.Text;
 
@@ -47,16 +55,18 @@ public class AddComicFragment extends BaseFragment {
     private boolean imageChanged = false;
     private Bitmap imageBitmap;
 
-    @BindView(R.id.nameField)
-    EditText nameField;
+    @BindView(R.id.nameED)
+    EditText nameED;
 
-    @BindView(R.id.descriptionText)
-    TextView descriptionText;
+    @BindView(R.id.editorialED)
+    TextView editorialED;
 
     @BindView(R.id.comicIV)
     SquareImageView comicIV;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    FirebaseStorage storage;
+    private Uri uri;
 
     private OnFragmentInteractionListener mListener;
 
@@ -88,6 +98,7 @@ public class AddComicFragment extends BaseFragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
         toolbar.setTitle("Añadir comic");
+        storage = FirebaseStorage.getInstance();
 
         // Inflate the layout for this fragment
         return view ;
@@ -123,6 +134,7 @@ public class AddComicFragment extends BaseFragment {
                 comicIV.setImageBitmap(imageBitmap);
             } else {
                 comicIV.setImageURI(data.getData());
+
             }
         }
     }
@@ -133,21 +145,53 @@ public class AddComicFragment extends BaseFragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    @OnClick(R.id.addFab) void submit(){
-        if(nameField.getText().toString().isEmpty()){
+    @OnClick(R.id.addFab) void submit() {
+        hideKeyboard();
+        if (nameED.getText().toString().equals("")) {
+            nameED.setError(getString(R.string.empty_name_comic));
 
-            return;
         }
+        if (editorialED.getText().toString().equals("")) {
+            editorialED.setError(getString(R.string.empty_editorial_comic));
 
-        if(descriptionText.getText().toString().isEmpty()){
+        } else {
+            onPreStartConnection(getString(R.string.loading));
 
-            return;
+            StorageReference storageRef = storage.getReferenceFromUrl("gs://pim-pam-comics-ff8d4.appspot.com");
+            StorageReference mountainImagesRef = storageRef.child("images/"+nameED.getText().toString());
+
+
+            comicIV.setDrawingCacheEnabled(true);
+            comicIV.buildDrawingCache();
+            Bitmap bitmap = comicIV.getDrawingCache();
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
+
+
+            UploadTask uploadTask = mountainImagesRef.putBytes(data);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Log.e("fire", exception.toString());
+                    // Handle unsuccessful uploads
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                @SuppressWarnings("VisibleForTests")
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                    uri = taskSnapshot.getDownloadUrl();
+
+                    Singleton.getInstance().getDatabase().addNewComic(Factory.createComic(nameED.getText().toString(), editorialED.getText().toString(), uri.toString()));
+                    stopRefreshing();
+                    Toast.makeText(getActivity(), "Comic añadido correctamente", Toast.LENGTH_SHORT).show();                }
+            });
+
+
+            // Singleton.getInstance().getDatabase().addNewComic(Factory.createComic(nameField.getText().toString(), descriptionText.getText().toString(), ""));
+            //Singleton.getFirebaseModule().uploadFile(bitmapToFile(imageBitmap));
         }
-
-
-
-       // Singleton.getInstance().getDatabase().addNewComic(Factory.createComic(nameField.getText().toString(), descriptionText.getText().toString(), ""));
-        //Singleton.getFirebaseModule().uploadFile(bitmapToFile(imageBitmap));
     }
 
     @OnClick(R.id.comicIV)
@@ -171,16 +215,10 @@ public class AddComicFragment extends BaseFragment {
         builder.show();
 
     }
+    private void stopRefreshing() {
 
-    private String bitmapToFile(Bitmap bitMap){
-        try {
-            File file = new File(nameField.getText().toString());
-            OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
-            bitMap.compress(Bitmap.CompressFormat.JPEG, 100, os);
-            os.close();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return nameField.getText().toString();
+        onConnectionFinished();
     }
+
+
 }

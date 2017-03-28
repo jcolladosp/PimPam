@@ -21,12 +21,15 @@
     <string name="news_image_gallery">Galería</string>
     <string name="warning_modal_title">Cambiar imagen</string>
     <string name="name_add_comic">Nombre</string>
-    <string name="descrption_add_comic">Descripción</string>
+    <string name="descrption_add_comic">Editorial</string>
 
     <string name="action_settings">Settings</string>
-    <string name="action_add_favourite">Add to Favourites</string>
-    <string name="action_play_next">Play Next</string>
+    <string name="action_add_favourite">Añadir a favoritos</string>
+    <string name="action_delete">Eliminar</string>
     <string name="backdrop_title">MI COLECCIÓN</string>
     <string name="backdrop_subtitle">Los comics de tu colección</string>
+    <string name="empty_name_comic">Por favor, introduzca un nombre.</string>
+    <string name="empty_editorial_comic">Por favor, introduzca una editorial.</string>
+    <string name="loading">Cargando…</string>
 
 </resources>

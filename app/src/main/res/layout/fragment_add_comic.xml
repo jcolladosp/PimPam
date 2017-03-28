@@ -72,18 +72,7 @@
             android:layout_height="match_parent">
 
             <EditText
-                android:id="@+id/descriptionText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/nameField"
-                android:layout_below="@+id/nameField"
-                android:layout_marginTop="28dp"
-                android:ems="10"
-                android:hint="@string/descrption_add_comic"
-                android:inputType="textPersonName" />
-
-            <EditText
-                android:id="@+id/nameField"
+                android:id="@+id/nameED"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -91,6 +80,17 @@
                 android:layout_marginTop="34dp"
                 android:ems="10"
                 android:hint="@string/name_add_comic"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/editorialED"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/nameED"
+                android:layout_below="@+id/nameED"
+                android:layout_marginTop="28dp"
+                android:ems="10"
+                android:hint="@string/descrption_add_comic"
                 android:inputType="textPersonName" />
 
         </RelativeLayout>

@@ -9,7 +9,6 @@ public class Comic {
     private String name;
     private String editorial;
     private String imageURL;
-    private int thumbnail;
 
     public Comic(){
         name = "";
@@ -17,10 +16,10 @@ public class Comic {
         imageURL = "";
     }
 
-    public Comic(String name, String editorial, int thumbnail) {
+    public Comic(String name, String editorial, String imageURL) {
         this.name = name;
         this.editorial = editorial;
-        this.thumbnail = thumbnail;
+        this.imageURL = imageURL;
     }
 
     public String getName() {
@@ -47,11 +46,5 @@ public class Comic {
         this.imageURL = imageURL;
     }
 
-    public int getThumbnail() {
-        return thumbnail;
-    }
 
-    public void setThumbnail(int thumbnail) {
-        this.thumbnail = thumbnail;
-    }
 }

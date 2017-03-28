@@ -17,7 +17,7 @@ import java.util.EventListener;
 
 public class Database {
 
-    private ArrayList<Comic> comics;
+    private static ArrayList<Comic> comics;
     private ArrayList<Comic> favorites;
 
     private FirebaseDatabase fdatabase;
@@ -76,7 +76,7 @@ public class Database {
         this.favorites = favorites;
     }
 
-    public ArrayList<Comic> getComics() {
+    public static ArrayList<Comic> getComics() {
         return comics;
     }
 

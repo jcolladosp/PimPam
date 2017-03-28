@@ -1,9 +1,11 @@
 package jcollado.pw.pimpam.controller;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.model.Comic;
+import jcollado.pw.pimpam.model.Database;
 import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.ComicCardAdapter;
 import android.content.res.Resources;
@@ -29,6 +32,11 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +46,8 @@ public class CollectionFragment extends BaseFragment {
     @BindView(R.id.toolbar) Toolbar toolbar;
 
     private CollectionFragment.OnFragmentInteractionListener mListener;
-
+    FirebaseDatabase database;
+    DatabaseReference myRef;
     private RecyclerView recyclerView;
     private ComicCardAdapter adapter;
     private List<Comic> comicList;
@@ -64,6 +73,8 @@ public class CollectionFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        database = FirebaseDatabase.getInstance();
+         myRef = database.getReference("comics");
         View view =     inflater.inflate(R.layout.fragment_collection, container, false);
         ButterKnife.bind(this, view);
 
@@ -132,34 +143,38 @@ public class CollectionFragment extends BaseFragment {
      * Adding few comics for testing
      */
     private void prepareComics() {
-        int[] covers = new int[]{
-                R.drawable.album1,
-                R.drawable.album2,
-                R.drawable.album3,
-                R.drawable.album4,
-                R.drawable.album5,
-                R.drawable.album6,
-                R.drawable.album7,
-                R.drawable.album8,
-                R.drawable.album9,
-                R.drawable.album10,
-                R.drawable.album11};
+
+        onPreStartConnection(getString(R.string.loading));
 
 
-        comicList.add(new Comic("True Romance", "Marvel", covers[0]));
-        comicList.add(new Comic("SDSSSSSSSSSS", "Marvel", covers[1]));
-        comicList.add(new Comic("SDFSD", "Marvel", covers[2]));
-        comicList.add(new Comic("DSGDGDS", "Marvel", covers[3]));
-        comicList.add(new Comic("Xscpae", "Marvel", covers[4]));
-        comicList.add(new Comic("SDFSSDF", "Marvel", covers[5]));
-        comicList.add(new Comic("DSGDDGDSG", "Marvel", covers[6]));
-        comicList.add(new Comic("FFDFDSF", "Marvel", covers[7]));
-        comicList.add(new Comic("DFSDFDSFSD", "Marvel", covers[8]));
-        comicList.add(new Comic("NNNNNNNNNNNN", "Marvel", covers[9]));
-        comicList.add(new Comic("FFFFFFFFFF", "Marvel", covers[10]));
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                clearList();
 
+                Activity activity = getActivity();
+                if(activity != null && isAdded()){
+                onPreStartConnection(getString(R.string.loading));}
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                for(DataSnapshot data : dataSnapshot.getChildren()){
+                    comicList.add(data.getValue(Comic.class));
 
-        adapter.notifyDataSetChanged();
+            }
+            Activity activity2 = getActivity();
+                if(activity2 != null && isAdded()){
+            stopRefreshing();}
+            adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w("Firebase", "Failed to read value.", error.toException());
+            }
+        });
+
     }
 
     /**
@@ -232,5 +247,13 @@ public class CollectionFragment extends BaseFragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+    private void stopRefreshing() {
 
+        onConnectionFinished();
+    }
+    public void clearList() {
+        int size = comicList.size();
+        comicList.clear();
+        adapter.notifyItemRangeRemoved(0, size);
+    }
 }

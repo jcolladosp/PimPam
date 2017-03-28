@@ -63,7 +63,7 @@ public class ComicCardAdapter extends RecyclerView.Adapter<ComicCardAdapter.MyVi
         holder.count.setText(comic.getEditorial());
 
         // loading album cover using Glide library
-        Glide.with(mContext).load(comic.getThumbnail()).into(holder.thumbnail);
+        Glide.with(mContext).load(comic.getImageURL()).placeholder(R.drawable.placeholder).into(holder.thumbnail);
 
         holder.overflow.setOnClickListener(new View.OnClickListener() {
             @Override
