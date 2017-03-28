@@ -146,8 +146,8 @@ public class AddComicFragment extends BaseFragment {
 
 
 
-        Singleton.getInstance().getDatabase().addNewComic(Factory.createComic(nameField.getText().toString(), descriptionText.getText().toString(), ""));
-        Singleton.getFirebaseModule().uploadFile(bitmapToFile(imageBitmap));
+       // Singleton.getInstance().getDatabase().addNewComic(Factory.createComic(nameField.getText().toString(), descriptionText.getText().toString(), ""));
+        //Singleton.getFirebaseModule().uploadFile(bitmapToFile(imageBitmap));
     }
 
     @OnClick(R.id.comicIV)

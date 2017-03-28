@@ -73,6 +73,8 @@ public class MainActivity extends AppCompatActivity   implements ViewComicFragme
                         if (position == 1){
                             fragment = CollectionFragment.newInstance();
                             toolbar.setTitle(getString(R.string.seeCollection));
+                            getSupportActionBar().hide();
+
                         }
 
                         if (position == 2){

@@ -6,7 +6,7 @@ package jcollado.pw.pimpam.model;
 
 public class Factory {
 
-    public static Comic createComic(String name, String description, String URL){
+    public static Comic createComic(String name, String description, int URL){
         Comic comic = new Comic(name, description, URL);
         return comic;
     }
