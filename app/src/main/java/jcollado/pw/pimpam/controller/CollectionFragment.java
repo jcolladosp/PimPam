@@ -74,7 +74,7 @@ public class CollectionFragment extends BaseFragment {
                              Bundle savedInstanceState) {
 
         database = FirebaseDatabase.getInstance();
-         myRef = database.getReference("comics");
+        myRef = database.getReference("comics");
         View view =     inflater.inflate(R.layout.fragment_collection, container, false);
         ButterKnife.bind(this, view);
 

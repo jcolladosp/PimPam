@@ -9,7 +9,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.EventListener;
+import java.util.List;
 
 /**
  * Created by Yuki on 14/03/2017.
@@ -17,8 +17,8 @@ import java.util.EventListener;
 
 public class Database {
 
-    private static ArrayList<Comic> comics;
-    private ArrayList<Comic> favorites;
+    private static ArrayList<Serie> series;
+    private ArrayList<Serie> favorites;
 
     private FirebaseDatabase fdatabase;
 
@@ -28,18 +28,18 @@ public class Database {
 
     public Database() {
         fdatabase = FirebaseDatabase.getInstance();
-        myRef = fdatabase.getReference("comics");
-        comics = new ArrayList<>();
+        myRef = fdatabase.getReference("series");
+        addNewSerie(new Serie("asfda", 1, 1));
+        series = new ArrayList<>();
         eventListenerComics = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                comics = new ArrayList<>();
+                series = new ArrayList<>();
 
-                Log.d("yuki", "running data change");
                 for(DataSnapshot data : dataSnapshot.getChildren())
-                    comics.add(data.getValue(Comic.class));
+                    series.add(data.getValue(Serie.class));
             }
 
             @Override
@@ -59,7 +59,7 @@ public class Database {
                 // whenever data at this location is updated.
                 favorites = new ArrayList<>();
                 for(DataSnapshot data : dataSnapshot.getChildren())
-                    favorites.add(data.getValue(Comic.class));
+                    favorites.add(data.getValue(Serie.class));
             }
 
             @Override
@@ -71,33 +71,44 @@ public class Database {
 
     }
 
-    public Database(ArrayList<Comic> comics, ArrayList<Comic> favorites) {
-        this.comics = comics;
+    public Database(ArrayList<Serie> series, ArrayList<Serie> favorites) {
+        this.series = series;
         this.favorites = favorites;
     }
 
-    public static ArrayList<Comic> getComics() {
-        return comics;
+    public static ArrayList<Serie> getSeries() {
+        return series;
     }
 
-    public void setComics(ArrayList<Comic> comics) {
-        this.comics = comics;
+    public void setComics(ArrayList<Serie> comics) {
+        this.series = comics;
     }
 
-    public ArrayList<Comic> getFavorites() {
+    public ArrayList<Serie> getFavorites() {
         return favorites;
     }
 
-    public void setFavorites(ArrayList<Comic> favorites) {
+    public void setFavorites(ArrayList<Serie> favorites) {
         this.favorites = favorites;
     }
 
-    public void addNewComic(Comic comic){
-        comics.add(comic);
-        myRef.push().setValue(comic);
+    public void addNewSerie(Serie serie){
+        series.add(serie);
+        myRef.child("test").setValue(serie);
     }
 
-    public void addNewFavorite(Comic comic){
+    public void addNewComic(Comic comic, Serie serie){
+        serie.getVolumenes().add(comic);
+        myRef.child("comic").setValue(comic);
+    }
+
+    public List<String> getAllSeriesName(){
+        ArrayList<String> names = new ArrayList<>();
+        for(Serie s : series) names.add(s.getName());
+        return names;
+    }
+
+    public void addNewFavorite(Serie comic){
         favorites.add(comic);
     }
 
@@ -109,35 +120,4 @@ public class Database {
         this.fdatabase = fdatabase;
     }
 
-    public DatabaseReference getMyRef() {
-        return myRef;
-    }
-
-    public void setMyRef(DatabaseReference myRef) {
-        this.myRef = myRef;
-    }
-
-    public DatabaseReference getMyRef2() {
-        return myRef2;
-    }
-
-    public void setMyRef2(DatabaseReference myRef2) {
-        this.myRef2 = myRef2;
-    }
-
-    public ValueEventListener getEventListenerComics() {
-        return eventListenerComics;
-    }
-
-    public void setEventListenerComics(ValueEventListener eventListenerComics) {
-        this.eventListenerComics = eventListenerComics;
-    }
-
-    public ValueEventListener getEventListenerFavorites() {
-        return eventListenerFavorites;
-    }
-
-    public void setEventListenerFavorites(ValueEventListener eventListenerFavorites) {
-        this.eventListenerFavorites = eventListenerFavorites;
-    }
 }

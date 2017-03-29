@@ -9,15 +9,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,21 +27,13 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import org.w3c.dom.Text;
-
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jcollado.pw.pimpam.R;
-import jcollado.pw.pimpam.model.Comic;
-import jcollado.pw.pimpam.model.Database;
 import jcollado.pw.pimpam.model.Factory;
 import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.Functions;
@@ -65,6 +57,8 @@ public class AddComicFragment extends BaseFragment {
     SquareImageView comicIV;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.serieSpinner)
+    Spinner serieSpinner;
     FirebaseStorage storage;
     private Uri uri;
 
@@ -93,13 +87,18 @@ public class AddComicFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_add_comic, container, false);
 
         ButterKnife.bind(this, view);
-        Singleton.getInstance().getDatabase().getComics();
+        Singleton.getInstance().getDatabase().getSeries();
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
         toolbar.setTitle("Añadir comic");
         storage = FirebaseStorage.getInstance();
-
+        ArrayList<String> spinnerList = new ArrayList<>();
+        spinnerList.add(getString(R.string.newSerie));
+        for(String s :  Singleton.getDatabase().getAllSeriesName());
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, spinnerList);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        serieSpinner.setAdapter(dataAdapter);
         // Inflate the layout for this fragment
         return view ;
 
@@ -183,7 +182,7 @@ public class AddComicFragment extends BaseFragment {
                     // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                     uri = taskSnapshot.getDownloadUrl();
 
-                    Singleton.getInstance().getDatabase().addNewComic(Factory.createComic(nameED.getText().toString(), editorialED.getText().toString(), uri.toString()));
+                    Factory.createComic(nameED.getText().toString(), editorialED.getText().toString(), uri.toString(), 0, 0, /*serie*/ null);
                     stopRefreshing();
                     Toast.makeText(getActivity(), "Comic añadido correctamente", Toast.LENGTH_SHORT).show();                }
             });

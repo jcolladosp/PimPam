@@ -86,12 +86,21 @@
                 android:id="@+id/editorialED"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/nameED"
-                android:layout_below="@+id/nameED"
                 android:layout_marginTop="28dp"
                 android:ems="10"
                 android:hint="@string/descrption_add_comic"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:layout_below="@+id/nameED"
+                android:layout_alignStart="@+id/nameED" />
+
+            <Spinner
+                android:id="@+id/serieSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/editorialED"
+                android:layout_margin="28dp" />
 
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>

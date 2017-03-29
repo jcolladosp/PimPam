@@ -9,6 +9,8 @@ public class Comic {
     private String name;
     private String editorial;
     private String imageURL;
+    private int volumen;
+    private int year;
 
     public Comic(){
         name = "";
@@ -16,10 +18,12 @@ public class Comic {
         imageURL = "";
     }
 
-    public Comic(String name, String editorial, String imageURL) {
+    public Comic(String name, String editorial, String imageURL, int volumen, int year) {
         this.name = name;
         this.editorial = editorial;
         this.imageURL = imageURL;
+        this.volumen = volumen;
+        this.year = year;
     }
 
     public String getName() {
