@@ -29,7 +29,7 @@ public class Database {
     public Database() {
         fdatabase = FirebaseDatabase.getInstance();
         myRef = fdatabase.getReference("series");
-        addNewSerie(new Serie("asfda", 1, 1));
+//        addNewSerie(new Serie("asfda", 1, 1));
         series = new ArrayList<>();
         eventListenerComics = new ValueEventListener() {
             @Override
@@ -49,25 +49,6 @@ public class Database {
             }
         };
         myRef.addValueEventListener(eventListenerComics);
-
-        favorites = new ArrayList<>();
-        myRef2 = fdatabase.getReference("favorites");
-        myRef2.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                favorites = new ArrayList<>();
-                for(DataSnapshot data : dataSnapshot.getChildren())
-                    favorites.add(data.getValue(Serie.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.i("yuki", "Failed to read value. ",  error.toException());
-            }
-        });
 
     }
 

@@ -1,8 +1,10 @@
 package jcollado.pw.pimpam.controller;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -16,11 +18,14 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 
+import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.model.Comic;
 import jcollado.pw.pimpam.model.Database;
+import jcollado.pw.pimpam.utils.BaseFragment;
 
 /**
  * Created by Yuki on 14/03/2017.
@@ -41,25 +46,36 @@ public class FirebaseModule {
         myRef.setValue(database);
     }
 
-    public void uploadFile(String dir){
-        Uri file = Uri.fromFile(new File(dir));
-        StorageReference riversRef = storageRef.child("images/" + "1.jpg");
+    public String uploadBitmap(Bitmap bitmap, String imagename, final BaseFragment fragment){
+        fragment.onPreStartConnection(fragment.getString(R.string.loading));
 
-        riversRef.putFile(file)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+        final String[] downloadURL = new String[1];
+        StorageReference ImagesRef = storageRef.child("images/"+imagename);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+        UploadTask uploadTask = ImagesRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Log.e("fire", exception.toString());
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            @SuppressWarnings("VisibleForTests")
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                downloadURL[0] = taskSnapshot.getDownloadUrl().toString();
+                fragment.onConnectionFinished();
 
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
-                        // ...
-                    }
-                });
+                Toast.makeText(fragment.getActivity(), fragment.getString(R.string.comic_addded_succesfull), Toast.LENGTH_SHORT).show();
+
+        }
+        });
+        return downloadURL[0];
     }
+
 
     public void downloadFile(String name){
         try {

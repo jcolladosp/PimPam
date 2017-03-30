@@ -2,7 +2,7 @@
     <string name="app_name">PimPam</string>
 
     <!-- Drawer -->
-    <string name="addComic">Añadir comic</string>
+    <string name="addComic">Añadir cómic</string>
     <string name="seeCollection">Mi Colección</string>
     <string name="settings">Ajustes</string>
     <string name="placeholderName">Andres Paul</string>
@@ -32,4 +32,5 @@
     <string name="empty_editorial_comic">Por favor, introduzca una editorial.</string>
     <string name="loading">Cargando…</string>
     <string name="newSerie">Nueva Serie...</string>
+    <string name="comic_addded_succesfull">Comic añadido correctamente</string>
 </resources>

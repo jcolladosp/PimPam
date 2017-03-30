@@ -61,7 +61,7 @@ public class AddComicFragment extends BaseFragment {
     Spinner serieSpinner;
     FirebaseStorage storage;
     private Uri uri;
-
+    ArrayList<String> spinnerList;
     private OnFragmentInteractionListener mListener;
 
     public AddComicFragment() {
@@ -85,42 +85,23 @@ public class AddComicFragment extends BaseFragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_add_comic, container, false);
-
         ButterKnife.bind(this, view);
-        Singleton.getInstance().getDatabase().getSeries();
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
-        toolbar.setTitle("Añadir comic");
+
+        prepareSpinner();
+        prepareToolbar();
+
+        //Singleton.getInstance().getDatabase().getSeries();
+        // for(String s :  Singleton.getDatabase().getAllSeriesName());
+
         storage = FirebaseStorage.getInstance();
-        ArrayList<String> spinnerList = new ArrayList<>();
-        spinnerList.add(getString(R.string.newSerie));
-        for(String s :  Singleton.getDatabase().getAllSeriesName());
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, spinnerList);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        serieSpinner.setAdapter(dataAdapter);
-        // Inflate the layout for this fragment
+
+
+
         return view ;
 
     }
 
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -139,10 +120,6 @@ public class AddComicFragment extends BaseFragment {
     }
 
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 
     @OnClick(R.id.addFab) void submit() {
         hideKeyboard();
@@ -154,42 +131,16 @@ public class AddComicFragment extends BaseFragment {
             editorialED.setError(getString(R.string.empty_editorial_comic));
 
         } else {
-            onPreStartConnection(getString(R.string.loading));
-
-            StorageReference storageRef = storage.getReferenceFromUrl("gs://pim-pam-comics-ff8d4.appspot.com");
-            StorageReference mountainImagesRef = storageRef.child("images/"+nameED.getText().toString());
-
 
             comicIV.setDrawingCacheEnabled(true);
             comicIV.buildDrawingCache();
             Bitmap bitmap = comicIV.getDrawingCache();
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            byte[] data = baos.toByteArray();
+
+            Singleton.getFirebaseModule().uploadBitmap(bitmap,nameED.getText().toString(),this);
 
 
-            UploadTask uploadTask = mountainImagesRef.putBytes(data);
-            uploadTask.addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    Log.e("fire", exception.toString());
-                    // Handle unsuccessful uploads
-                }
-            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                @SuppressWarnings("VisibleForTests")
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                    uri = taskSnapshot.getDownloadUrl();
+            // Factory.createComic(nameED.getText().toString(), editorialED.getText().toString(), uri.toString(), 0, 0, /*serie*/ null);
 
-                    Factory.createComic(nameED.getText().toString(), editorialED.getText().toString(), uri.toString(), 0, 0, /*serie*/ null);
-                    stopRefreshing();
-                    Toast.makeText(getActivity(), "Comic añadido correctamente", Toast.LENGTH_SHORT).show();                }
-            });
-
-
-            // Singleton.getInstance().getDatabase().addNewComic(Factory.createComic(nameField.getText().toString(), descriptionText.getText().toString(), ""));
-            //Singleton.getFirebaseModule().uploadFile(bitmapToFile(imageBitmap));
         }
     }
 
@@ -218,6 +169,40 @@ public class AddComicFragment extends BaseFragment {
 
         onConnectionFinished();
     }
+    private void prepareSpinner(){
+        spinnerList = new ArrayList<>();
+        spinnerList.add(getString(R.string.newSerie));
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, spinnerList);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        serieSpinner.setAdapter(dataAdapter);
+    }
+    private void prepareToolbar(){
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
 
+        toolbar.setTitle(getString(R.string.addComic));
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+    }
 
 }
