@@ -75,7 +75,7 @@ public class Database {
 
     public void addNewSerie(Serie serie){
         series.add(serie);
-        myRef.child("test").setValue(serie);
+        myRef.child("test2").setValue(serie);
     }
 
     public void addNewComic(Comic comic, Serie serie){

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -34,7 +36,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jcollado.pw.pimpam.R;
+import jcollado.pw.pimpam.model.Comic;
+import jcollado.pw.pimpam.model.Database;
 import jcollado.pw.pimpam.model.Factory;
+import jcollado.pw.pimpam.model.Serie;
 import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.Functions;
 import jcollado.pw.pimpam.widgets.SquareImageView;
@@ -57,12 +62,14 @@ public class AddComicFragment extends BaseFragment {
     SquareImageView comicIV;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.serieSpinner)
-    Spinner serieSpinner;
+    @BindView(R.id.serieAC)
+    AutoCompleteTextView serieAC;
+
     FirebaseStorage storage;
     private Uri uri;
     ArrayList<String> spinnerList;
     private OnFragmentInteractionListener mListener;
+    String[] languages={"Android ","java","IOS","SQL","JDBC","Web services"};
 
     public AddComicFragment() {
         // Required empty public constructor
@@ -135,11 +142,13 @@ public class AddComicFragment extends BaseFragment {
             comicIV.setDrawingCacheEnabled(true);
             comicIV.buildDrawingCache();
             Bitmap bitmap = comicIV.getDrawingCache();
+            Serie e = new Serie("Prueba",1,2);
+            e.addComicToSerie(new Comic("Hola","Hola","Hola",1,1));
+            Singleton.getDatabase().addNewSerie(e);
+            //Factory.createSerie("Prueba",1,2).addComicToSerie(new Comic("Hola","Hola","Hola",1,1));
 
-            Singleton.getFirebaseModule().uploadBitmap(bitmap,nameED.getText().toString(),this);
-
-
-            // Factory.createComic(nameED.getText().toString(), editorialED.getText().toString(), uri.toString(), 0, 0, /*serie*/ null);
+            //Singleton.getFirebaseModule().uploadBitmap(bitmap,nameED.getText().toString(),this);
+            //Factory.createComic(nameED.getText().toString(), editorialED.getText().toString(), uri.toString(), 0, 0, /*serie*/ null);
 
         }
     }
@@ -170,11 +179,12 @@ public class AddComicFragment extends BaseFragment {
         onConnectionFinished();
     }
     private void prepareSpinner(){
-        spinnerList = new ArrayList<>();
-        spinnerList.add(getString(R.string.newSerie));
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, spinnerList);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        serieSpinner.setAdapter(dataAdapter);
+
+        ArrayAdapter adapter = new
+                ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,languages);
+
+        serieAC.setAdapter(adapter);
+        serieAC.setThreshold(1);
     }
     private void prepareToolbar(){
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);

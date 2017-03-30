@@ -22,7 +22,7 @@ public class Serie {
         this.name = name;
         this.startYear = startYear;
         this.endYear = endYear;
-        this.volumenes = volumenes;
+        volumenes = new ArrayList<>();
     }
 
     public String getName() {
@@ -56,4 +56,8 @@ public class Serie {
     public void setVolumenes(ArrayList<Comic> volumenes) {
         this.volumenes = volumenes;
     }
+
+    public void addComicToSerie(Comic c){volumenes.add(c);}
+
+    public void deleteComicOfSerie(Comic c){volumenes.remove(c);}
 }

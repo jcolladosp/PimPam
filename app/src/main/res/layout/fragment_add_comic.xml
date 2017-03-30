@@ -93,14 +93,16 @@
                 android:layout_below="@+id/nameED"
                 android:layout_alignStart="@+id/nameED" />
 
-            <Spinner
-                android:id="@+id/serieSpinner"
-                android:layout_width="match_parent"
+            <AutoCompleteTextView
+                android:id="@+id/serieAC"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true"
+                android:layout_alignLeft="@+id/editorialED"
+                android:layout_alignStart="@+id/editorialED"
                 android:layout_below="@+id/editorialED"
-                android:layout_margin="28dp" />
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:hint="@string/serie" />
 
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>

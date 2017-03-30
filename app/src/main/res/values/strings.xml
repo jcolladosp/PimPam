@@ -31,6 +31,7 @@
     <string name="empty_name_comic">Por favor, introduzca un nombre.</string>
     <string name="empty_editorial_comic">Por favor, introduzca una editorial.</string>
     <string name="loading">Cargando…</string>
-    <string name="newSerie">Nueva Serie...</string>
+    <string name="serie">Serie</string>
     <string name="comic_addded_succesfull">Comic añadido correctamente</string>
+
 </resources>
