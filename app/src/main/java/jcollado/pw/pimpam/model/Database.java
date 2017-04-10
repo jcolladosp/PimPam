@@ -49,9 +49,6 @@ public class Database {
             }
         };
         myRef.addValueEventListener(eventListenerComics);
-
-
-
     }
 
     public Database(ArrayList<Serie> series, ArrayList<Serie> favorites) {

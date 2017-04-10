@@ -36,13 +36,12 @@
                 app:srcCompat="@drawable/placeholder" />
 
 
-
             <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
+                android:id="@+id/toolbar2"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:layout_collapseMode="pin" />
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
 
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -69,40 +68,71 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
 
-            <EditText
-                android:id="@+id/nameED"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="34dp"
-                android:ems="10"
-                android:hint="@string/name_add_comic"
-                android:inputType="textPersonName" />
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/name_input_layout"
+                android:layout_width="match_parent"
+                android:layout_marginTop="22dp"
+                android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/editorialED"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
-                android:ems="10"
-                android:hint="@string/descrption_add_comic"
-                android:inputType="textPersonName"
-                android:layout_below="@+id/nameED"
-                android:layout_alignStart="@+id/nameED" />
+                <EditText
+                    android:id="@+id/nameED"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:ems="10"
+                    android:hint="@string/name_add_comic"
+                    android:inputType="textPersonName" />
+            </android.support.design.widget.TextInputLayout>
 
-            <AutoCompleteTextView
-                android:id="@+id/serieAC"
-                android:layout_width="wrap_content"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/editorial_input_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/editorialED"
-                android:layout_alignStart="@+id/editorialED"
-                android:layout_below="@+id/editorialED"
-                android:layout_marginTop="10dp"
-                android:ems="10"
-                android:hint="@string/serie" />
+                android:layout_below="@+id/name_input_layout"
+                android:layout_marginTop="5dp">
+
+                <EditText
+                    android:id="@+id/editorialED"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@+id/name_input_layout"
+                    android:layout_alignStart="@+id/name_input_layout"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:ems="10"
+                    android:hint="@string/descrption_add_comic"
+                    android:inputType="textPersonName" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/serie_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/editorial_input_layout"
+                android:layout_alignStart="@+id/editorial_input_layout"
+                android:layout_below="@+id/editorial_input_layout"
+                android:layout_marginTop="5dp">
+
+                <AutoCompleteTextView
+                    android:id="@+id/serieAC"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="7dp"
+                    android:ems="10"
+                    android:hint="@string/serie" />
+
+            </android.support.design.widget.TextInputLayout>
+
 
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>

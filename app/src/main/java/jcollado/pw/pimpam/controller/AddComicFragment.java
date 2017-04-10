@@ -60,7 +60,7 @@ public class AddComicFragment extends BaseFragment {
 
     @BindView(R.id.comicIV)
     SquareImageView comicIV;
-    @BindView(R.id.toolbar)
+    @BindView(R.id.toolbar2)
     Toolbar toolbar;
     @BindView(R.id.serieAC)
     AutoCompleteTextView serieAC;
@@ -97,13 +97,11 @@ public class AddComicFragment extends BaseFragment {
         prepareSpinner();
         prepareToolbar();
 
+
         //Singleton.getInstance().getDatabase().getSeries();
         // for(String s :  Singleton.getDatabase().getAllSeriesName());
 
         storage = FirebaseStorage.getInstance();
-
-
-
         return view ;
 
     }
@@ -180,8 +178,7 @@ public class AddComicFragment extends BaseFragment {
     }
     private void prepareSpinner(){
 
-        ArrayAdapter adapter = new
-                ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,languages);
+        ArrayAdapter adapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,languages);
 
         serieAC.setAdapter(adapter);
         serieAC.setThreshold(1);
@@ -189,7 +186,7 @@ public class AddComicFragment extends BaseFragment {
     private void prepareToolbar(){
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
 
         toolbar.setTitle(getString(R.string.addComic));
     }

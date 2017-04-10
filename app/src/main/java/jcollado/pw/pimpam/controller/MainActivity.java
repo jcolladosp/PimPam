@@ -25,7 +25,9 @@ public class MainActivity extends AppCompatActivity   implements ViewComicFragme
     private Drawer result = null;
     Toolbar toolbar;
 
-    @Override
+
+
+            @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -35,11 +37,15 @@ public class MainActivity extends AppCompatActivity   implements ViewComicFragme
         setNavigationDrawer();
 
     }
+    public Drawer getResult(){
+        return result;
+    }
 
     private void setNavigationDrawer(){
 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
 
 
         // Create the AccountHeader
@@ -73,14 +79,15 @@ public class MainActivity extends AppCompatActivity   implements ViewComicFragme
                         if (position == 1){
                             fragment = CollectionFragment.newInstance();
                             toolbar.setTitle(getString(R.string.seeCollection));
+
                             getSupportActionBar().hide();
 
                         }
 
                         if (position == 2){
                             fragment = AddComicFragment.newInstance();
-                            toolbar.setTitle(getString(R.string.addComic));
                             getSupportActionBar().hide();
+
 
                         }
                         if (position == 4){
