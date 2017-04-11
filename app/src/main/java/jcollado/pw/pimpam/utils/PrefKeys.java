@@ -3,7 +3,9 @@ package jcollado.pw.pimpam.utils;
 public enum PrefKeys {
     NAME("MisPreferencias"),
     ID("id"),
-    IDEMPRESA("idEmpresa");
+    EMAIL("email"),
+    PICURL("picurl"),
+   LOGGED("logged");
 
     private String value;
 

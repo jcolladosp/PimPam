@@ -20,6 +20,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.utils.BaseActivity;
 import jcollado.pw.pimpam.utils.BaseFragment;
+import jcollado.pw.pimpam.utils.Functions;
 
 public class MainActivity extends BaseActivity implements ViewComicFragment.OnFragmentInteractionListener,AddComicFragment.OnFragmentInteractionListener, CollectionFragment.OnFragmentInteractionListener
         {
@@ -54,7 +55,7 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
                 .withSelectionListEnabledForSingleProfile(false)
                 .withOnlyMainProfileImageVisible(true)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(getString(R.string.placeholderName)).withIcon(getResources().getDrawable(R.drawable.profile))
+                        new ProfileDrawerItem().withName(Functions.getUserName(MainActivity.this)).withEmail(Functions.getUserEmail(MainActivity.this)).withIcon(Functions.getProfilePictureURL(MainActivity.this))
                 )
 
                 .build();

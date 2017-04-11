@@ -12,6 +12,9 @@ import android.net.Uri;
 import android.telephony.TelephonyManager;
 import android.util.Base64;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -59,6 +62,13 @@ public class Functions {
         });
         return builder;
     }
+    public String getUserID(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+                return user.getUid();
+        }
+        return null;
+    }
 
 
     public static AlertDialog.Builder getModalError(Context context) {
@@ -80,11 +90,7 @@ public class Functions {
     }
 
 
-    public static boolean validateNifNie(String nifNie) {
-        Pattern pattern = Pattern.compile("(([X-Z]{1})([-]?)(\\d{7})([-]?)([A-Z]{1}))|((\\d{8})([-]?)([A-Z]{1}))");
-        Matcher matcher = pattern.matcher(nifNie.toUpperCase());
-        return matcher.matches();
-    }
+
 
     public static AlertDialog.Builder getModal(String title, String body, String cancelText, final Context context) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -133,14 +139,6 @@ public class Functions {
 
 
 
-    public static String capitalizeString(String string) {
-        return string.substring(0, 1).toUpperCase() + string.substring(1).toLowerCase();
-    }
-
-    public static Boolean isYearLeapYear(int year) {
-        return ((year % 100 != 0) && (year % 4 == 0)) || year % 400 == 0;
-    }
-
     public static int getImageFromString(String string, Context context) {
         return context.getResources().getIdentifier("drawable/" + string.toLowerCase(), null, context.getPackageName());
     }
@@ -160,8 +158,17 @@ public class Functions {
     public static String getID(Context context) {
         return getPrefs(context).getString(PrefKeys.ID.toString(), "");
     }
-    public static String getCompanyID(Context context) {
-        return getPrefs(context).getString(PrefKeys.IDEMPRESA.toString(), "");
+    public static String getUserName(Context context) {
+        return getPrefs(context).getString(PrefKeys.NAME.toString(), "");
+    }
+    public static String getProfilePictureURL(Context context) {
+        return getPrefs(context).getString(PrefKeys.PICURL.toString(), "");
+    }
+    public static String getUserEmail(Context context) {
+        return getPrefs(context).getString(PrefKeys.EMAIL.toString(), "");
+    }
+    public static boolean isLogged(Context context) {
+        return getPrefs(context).getBoolean(PrefKeys.LOGGED.toString(), false);
     }
 
 

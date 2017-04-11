@@ -1,6 +1,9 @@
 package jcollado.pw.pimpam.controller;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,12 +16,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.utils.BaseActivity;
+import jcollado.pw.pimpam.utils.Functions;
+import jcollado.pw.pimpam.utils.PrefKeys;
 import mehdi.sakout.fancybuttons.FancyButton;
 
 public class AuthActivity extends BaseActivity {
@@ -28,33 +34,67 @@ public class AuthActivity extends BaseActivity {
     EditText emailED;
     @BindView(R.id.passwordED)
     EditText passwordED;
+    @BindView(R.id.nameED)
+    EditText nameED;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private FirebaseUser user;
+    private Uri uriPic;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
+        uriPic = Uri.parse("https://pixel.nymag.com/imgs/daily/vulture/2016/07/21/bojack-horseman/21-bojack-12.w710.h473.2x.jpg");
         ButterKnife.bind(this);
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
+                user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(nameED.getText().toString())
+                            .setPhotoUri(uriPic)
+                            .build();
+
+                    user.updateProfile(profileUpdates)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                      addToPrefs(user);
+                                    }
+                                }
+                            });
+
                     Log.d("auth", "onAuthStateChanged:signed_in:" + user.getUid());
+
                 } else {
                     // User is signed out
                     Log.d("auth", "onAuthStateChanged:signed_out");
                 }
-                // ...
             }
         };
 
 
     }
 
+    private void addToPrefs( FirebaseUser user ){
+
+        SharedPreferences.Editor editor = Functions.getPrefs(AuthActivity.this).edit();
+        editor.putString(PrefKeys.ID.toString(), user.getUid());
+        editor.putString(PrefKeys.EMAIL.toString(),  user.getEmail());
+        editor.putString(PrefKeys.PICURL.toString(), uriPic.toString());
+        editor.putString(PrefKeys.NAME.toString(),  nameED.getText().toString());
+
+        editor.putBoolean(PrefKeys.LOGGED.toString(), true);
+        editor.commit();
+
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(i);
+    }
     @Override
     public void onStart() {
         super.onStart();
@@ -93,6 +133,7 @@ public class AuthActivity extends BaseActivity {
     }
     @OnClick(R.id.btn_login)
     void onLoginAccount() {
+        onPreStartConnection(getString(R.string.loading));
         mAuth.signInWithEmailAndPassword(emailED.getText().toString(),  passwordED.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -110,7 +151,33 @@ public class AuthActivity extends BaseActivity {
                     }
                     }
                 });
+        stopRefreshing();
+
     }
+
+    @OnClick(R.id.btn_restore_password)
+    void onRestorePassword(){
+        onPreStartConnection(getString(R.string.loading));
+
+        mAuth.sendPasswordResetEmail(emailED.getText().toString())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            AlertDialog.Builder successRestoreAlert = Functions.getModal(getString(R.string.succesful_restored_pass),getString(R.string.ok),AuthActivity.this);
+                            successRestoreAlert.show();
+
+                        }
+                        else{
+                            AlertDialog.Builder errorRestoreAlert = Functions.getModalError(AuthActivity.this);
+                            errorRestoreAlert.show();
+                        }
+                        stopRefreshing();
+
+                    }
+                });
+    }
+
     @Override
     public void onBackPressed() {
         Intent a = new Intent(Intent.ACTION_MAIN);

@@ -42,6 +42,9 @@
     <string name="register_succesful">Registro completado correctamente</string>
     <string name="login_succesful">Sesión iniciada correctamente</string>
     <string name="login_failed">Error en el inicio de sesion</string>
+    <string name="restore_password">He olvidado la contraseña</string>
+    <string name="succesful_restored_pass">Hemos enviado un email a tu correo electronico para recuperar tu contraseña.</string>
+
     <string name="icon_signup">&#xf234;</string>
     <string name="icon_login">&#xf007;</string>
 
