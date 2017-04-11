@@ -33,5 +33,13 @@
     <string name="loading">Cargando…</string>
     <string name="serie">Serie</string>
     <string name="comic_addded_succesfull">Comic añadido correctamente</string>
+    <string name="email_field">Email</string>
+    <string name="password_field">Contraseña</string>
+    <string name="login_button">Iniciar sesión</string>
+    <string name="signup_button">Crear una cuenta</string>
+    <string name="icon_signup">&#xf234;</string>
+    <string name="icon_login">&#xf007;</string>
+
+
 
 </resources>

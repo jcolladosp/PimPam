@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="jcollado.pw.pimpam.controller.AuthActivity">
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/email_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp">
+
+        <EditText
+            android:id="@+id/emailED"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:ems="10"
+            android:hint="@string/email_field"
+            android:inputType="textPersonName" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/password_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/email_input_layout"
+        android:layout_marginTop="22dp">
+
+        <EditText
+            android:id="@+id/passwordED"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:ems="10"
+            android:hint="@string/password_field"
+            android:inputType="textPassword" />
+    </android.support.design.widget.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/password_input_layout"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:paddingBottom="30dp"
+        android:paddingTop="30dp">
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/btn_create_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:padding="10dp"
+            fancy:fb_borderColor="#FFFFFF"
+            fancy:fb_borderWidth="1dp"
+            fancy:fb_defaultColor="#ff5f69"
+            fancy:fb_fontIconResource="@string/icon_signup"
+            fancy:fb_focusColor="#ff838b"
+            fancy:fb_radius="30dp"
+            fancy:fb_text="@string/signup_button"
+            fancy:fb_textColor="#FFFFFF">
+
+        </mehdi.sakout.fancybuttons.FancyButton>
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/btn_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            fancy:fb_borderColor="#FFFFFF"
+            fancy:fb_borderWidth="1dp"
+            fancy:fb_defaultColor="#ff5f69"
+            fancy:fb_focusColor="#ff838b"
+            fancy:fb_fontIconResource="@string/icon_login"
+            fancy:fb_iconPosition="left"
+            fancy:fb_radius="30dp"
+            fancy:fb_text="@string/login_button"
+            fancy:fb_textColor="#FFFFFF" />
+
+    </LinearLayout>
+
+</RelativeLayout>
