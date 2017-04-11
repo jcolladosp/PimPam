@@ -18,17 +18,16 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import jcollado.pw.pimpam.R;
+import jcollado.pw.pimpam.utils.BaseActivity;
 import jcollado.pw.pimpam.utils.BaseFragment;
 
-public class MainActivity extends AppCompatActivity   implements ViewComicFragment.OnFragmentInteractionListener,AddComicFragment.OnFragmentInteractionListener, CollectionFragment.OnFragmentInteractionListener
+public class MainActivity extends BaseActivity implements ViewComicFragment.OnFragmentInteractionListener,AddComicFragment.OnFragmentInteractionListener, CollectionFragment.OnFragmentInteractionListener
         {
     private Drawer result = null;
     Toolbar toolbar;
 
-
-
-            @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 

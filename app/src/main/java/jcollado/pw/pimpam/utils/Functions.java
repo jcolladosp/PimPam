@@ -60,9 +60,7 @@ public class Functions {
         return builder;
     }
 
-    public static boolean validateEmail(String email) {
-        return email.matches("[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\\.+[a-z]+");
-    }
+
     public static AlertDialog.Builder getModalError(Context context) {
         return Functions.getModal(R.string.error_general, context);
     }

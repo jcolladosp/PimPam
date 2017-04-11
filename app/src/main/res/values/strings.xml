@@ -37,6 +37,11 @@
     <string name="password_field">Contraseña</string>
     <string name="login_button">Iniciar sesión</string>
     <string name="signup_button">Crear una cuenta</string>
+    <string name="auth_failed">Error en el registro.</string>
+    <string name="password_length">La contraseña debe tener 6 carácteres como mínimo.</string>
+    <string name="register_succesful">Registro completado correctamente</string>
+    <string name="login_succesful">Sesión iniciada correctamente</string>
+    <string name="login_failed">Error en el inicio de sesion</string>
     <string name="icon_signup">&#xf234;</string>
     <string name="icon_login">&#xf007;</string>
 

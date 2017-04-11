@@ -2,6 +2,7 @@ package jcollado.pw.pimpam.controller;
 
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,6 +23,7 @@ public class Singleton {
 
     private static FirebaseModule firebaseModule;
 
+
     private static Database database;
 
     public static Singleton getInstance() {
@@ -31,6 +33,7 @@ public class Singleton {
     private Singleton() {
         database = Factory.createDatabase();
         firebaseModule = new FirebaseModule();
+
     }
 
     public static FirebaseModule getFirebaseModule() {
@@ -48,5 +51,6 @@ public class Singleton {
     public static void setDatabase(Database database) {
         Singleton.database = database;
     }
+
 
 }
