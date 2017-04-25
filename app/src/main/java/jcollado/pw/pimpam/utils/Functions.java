@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.telephony.TelephonyManager;
 import android.util.Base64;
+import android.util.TypedValue;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -171,6 +173,13 @@ public class Functions {
         return getPrefs(context).getBoolean(PrefKeys.LOGGED.toString(), false);
     }
 
+    /**
+     * Converting dp to pixel
+     */
+    public static int dpToPx(int dp,Context context) {
+        Resources r = context.getResources();
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    }
 
     public static Intent sendEmail(String to,String subject) {
 
