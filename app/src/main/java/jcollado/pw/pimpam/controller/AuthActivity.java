@@ -39,13 +39,11 @@ public class AuthActivity extends BaseActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseUser user;
-    private Uri uriPic;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
-        uriPic = Uri.parse("https://pixel.nymag.com/imgs/daily/vulture/2016/07/21/bojack-horseman/21-bojack-12.w710.h473.2x.jpg");
         ButterKnife.bind(this);
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -54,47 +52,16 @@ public class AuthActivity extends BaseActivity {
                 user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                            .setDisplayName(nameED.getText().toString())
-                            .setPhotoUri(uriPic)
-                            .build();
-
-                    user.updateProfile(profileUpdates)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                      addToPrefs(user);
-                                    }
-                                }
-                            });
-
-                    Log.d("auth", "onAuthStateChanged:signed_in:" + user.getUid());
-
+                    addToPrefs(user);
                 } else {
                     // User is signed out
-                    Log.d("auth", "onAuthStateChanged:signed_out");
+                    // Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
+                // ...
             }
         };
-
-
     }
 
-    private void addToPrefs( FirebaseUser user ){
-
-        SharedPreferences.Editor editor = Functions.getPrefs(AuthActivity.this).edit();
-        editor.putString(PrefKeys.ID.toString(), user.getUid());
-        editor.putString(PrefKeys.EMAIL.toString(),  user.getEmail());
-        editor.putString(PrefKeys.PICURL.toString(), uriPic.toString());
-        editor.putString(PrefKeys.NAME.toString(),  nameED.getText().toString());
-
-        editor.putBoolean(PrefKeys.LOGGED.toString(), true);
-        editor.commit();
-
-        Intent i = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(i);
-    }
     @Override
     public void onStart() {
         super.onStart();
@@ -107,6 +74,24 @@ public class AuthActivity extends BaseActivity {
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
+    }
+
+    private void addToPrefs( FirebaseUser user ){
+
+        SharedPreferences.Editor editor = Functions.getPrefs(AuthActivity.this).edit();
+        editor.putString(PrefKeys.ID.toString(), user.getUid());
+        editor.putString(PrefKeys.EMAIL.toString(),  user.getEmail());
+        editor.putString(PrefKeys.PICURL.toString(), "");
+        editor.putString(PrefKeys.NAME.toString(),  nameED.getText().toString());
+
+        editor.putBoolean(PrefKeys.LOGGED.toString(), true);
+        editor.commit();
+
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(i);
+    }
+    private void authStateListener(){
+
     }
 
     @OnClick(R.id.btn_create_account)
@@ -125,6 +110,7 @@ public class AuthActivity extends BaseActivity {
                         } else {
 
                             Toast.makeText(AuthActivity.this, R.string.register_succesful, Toast.LENGTH_SHORT).show();
+
                         }
                         stopRefreshing();
 
@@ -186,6 +172,7 @@ public class AuthActivity extends BaseActivity {
         startActivity(a);
 
     }
+
     private void stopRefreshing() {
 
         onConnectionFinished();
