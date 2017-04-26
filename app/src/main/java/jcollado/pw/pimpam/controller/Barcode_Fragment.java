@@ -50,7 +50,7 @@ public class Barcode_Fragment extends BaseFragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
 
-        return inflater.inflate(R.layout.fragment_barcode_, container, false);
+        return view;
     }
 
 
