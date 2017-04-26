@@ -22,7 +22,7 @@ import jcollado.pw.pimpam.utils.BaseActivity;
 import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.Functions;
 
-public class MainActivity extends BaseActivity implements ViewComicFragment.OnFragmentInteractionListener,AddComicFragment.OnFragmentInteractionListener, CollectionFragment.OnFragmentInteractionListener
+public class MainActivity extends BaseActivity implements ViewComicFragment.OnFragmentInteractionListener,AddComicFragment.OnFragmentInteractionListener, CollectionFragment.OnFragmentInteractionListener , Barcode_Fragment.OnFragmentInteractionListener
         {
     private Drawer result = null;
     Toolbar toolbar;
@@ -61,6 +61,7 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
                 .build();
         PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(1).withName(getString(R.string.seeCollection)).withIcon(FontAwesome.Icon.faw_book);
         SecondaryDrawerItem item2 = new SecondaryDrawerItem().withIdentifier(2).withName(getString(R.string.addComic)).withIcon(FontAwesome.Icon.faw_plus_circle);
+        SecondaryDrawerItem barcode = new SecondaryDrawerItem().withIdentifier(4).withName("Barcode").withIcon(FontAwesome.Icon.faw_barcode);
         SecondaryDrawerItem ajustes = new SecondaryDrawerItem().withIdentifier(3).withName(getString(R.string.settings)).withIcon(FontAwesome.Icon.faw_cog);
 
 
@@ -70,7 +71,7 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .withAccountHeader(headerResult)
-                .addDrawerItems(item1,item2, new DividerDrawerItem(),ajustes)
+                .addDrawerItems(item1,item2,barcode, new DividerDrawerItem(),ajustes)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
@@ -90,10 +91,18 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
 
 
                         }
-                        if (position == 4){
+
+                        if (position == 3) {
+                            fragment = Barcode_Fragment.newInstance();
+                            getSupportActionBar().hide();
+                        }
+
+                        if (position == 5){
                             fragment = ViewComicFragment.newInstance();
                             getSupportActionBar().hide();
                         }
+
+
 
                         getSupportFragmentManager()
                                 .beginTransaction()
