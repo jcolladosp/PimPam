@@ -140,9 +140,9 @@ public class AddComicFragment extends BaseFragment {
             comicIV.setDrawingCacheEnabled(true);
             comicIV.buildDrawingCache();
             Bitmap bitmap = comicIV.getDrawingCache();
-            Serie e = new Serie("Prueba",1,2);
-            e.addComicToSerie(new Comic("Hola","Hola","Hola",1,1));
-            Singleton.getDatabase().addNewSerie(e);
+
+            Singleton.getInstance().getDatabase().addNewComic(new Comic("hola","gola","gola",1,1,null));
+
             //Factory.createSerie("Prueba",1,2).addComicToSerie(new Comic("Hola","Hola","Hola",1,1));
 
             //Singleton.getFirebaseModule().uploadBitmap(bitmap,nameED.getText().toString(),this);

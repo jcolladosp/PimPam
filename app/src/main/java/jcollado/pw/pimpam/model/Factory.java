@@ -10,13 +10,13 @@ public class Factory {
 
     public static Serie createSerie(String name, int startYear, int endYear){
         Serie serie = new Serie(name, startYear, endYear);
-        Singleton.getDatabase().addNewSerie(serie);
+        Singleton.getInstance().getDatabase().addNewSerie(serie);
         return serie;
     }
 
     public static Comic createComic(String name, String editorial, String imageURL, int volumen, int year, Serie serie){
-        Comic comic = new Comic(name,editorial, imageURL,volumen,year);
-        Singleton.getDatabase().addNewComic(comic, serie);
+        Comic comic = new Comic(name,editorial, imageURL,volumen,year,serie);
+        Singleton.getInstance().getDatabase().addNewComic(comic);
         return comic;
     }
 

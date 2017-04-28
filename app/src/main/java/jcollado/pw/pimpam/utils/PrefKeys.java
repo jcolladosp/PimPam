@@ -5,7 +5,8 @@ public enum PrefKeys {
     ID("id"),
     EMAIL("email"),
     PICURL("picurl"),
-   LOGGED("logged");
+   LOGGED("logged"),
+    COMICS("comics");
 
     private String value;
 

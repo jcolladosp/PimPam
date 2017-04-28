@@ -45,7 +45,8 @@ public class AuthActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
         ButterKnife.bind(this);
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = Singleton.getInstance().getFirebaseModule().getmAuth();
+
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {

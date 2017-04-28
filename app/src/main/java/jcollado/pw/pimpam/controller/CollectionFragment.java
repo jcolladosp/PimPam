@@ -168,7 +168,7 @@ public class CollectionFragment extends BaseFragment {
                 if(activity2 != null && isAdded()){
             stopRefreshing();}
 
-                comicList.add(new Comic("Stranger Things","Netflix","https://cdn.bleedingcool.net/wp-content/uploads/2016/08/stranger12x18-600x900.jpg",1,1));
+                comicList.add(new Comic("Stranger Things","Netflix","https://cdn.bleedingcool.net/wp-content/uploads/2016/08/stranger12x18-600x900.jpg",1,1,null));
 
                 adapter.notifyDataSetChanged();
 

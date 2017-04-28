@@ -34,20 +34,39 @@ import jcollado.pw.pimpam.utils.BaseFragment;
 
 public class FirebaseModule {
 
+
     private FirebaseDatabase database;
     private StorageReference storageRef;
+    private FirebaseAuth mAuth;
+    private DatabaseReference myRef;
 
     public FirebaseModule(){
         database = FirebaseDatabase.getInstance();
         storageRef = FirebaseStorage.getInstance().getReference();
-
+        mAuth = FirebaseAuth.getInstance();
     }
 
-    public void setDatabase(Database database){
-        DatabaseReference myRef = this.database.getReference("");
-        myRef.setValue(database);
+
+    public FirebaseDatabase getDatabase() {
+        return database;
     }
 
+    public StorageReference getStorageRef() {
+        return storageRef;
+    }
+
+    public FirebaseAuth getmAuth() {
+        return mAuth;
+    }
+
+    public DatabaseReference getDatabaseReference(){
+        return myRef;
+
+    }
+    public void setReference(){
+        myRef = this.database.getReference(mAuth.getCurrentUser().getUid());
+
+    }
     public String uploadBitmap(Bitmap bitmap, String imagename, final BaseFragment fragment){
         fragment.onPreStartConnection(fragment.getString(R.string.loading));
 

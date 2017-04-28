@@ -11,35 +11,39 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import jcollado.pw.pimpam.controller.Singleton;
+import jcollado.pw.pimpam.utils.PrefKeys;
+
 /**
  * Created by Yuki on 14/03/2017.
  */
 
 public class Database {
 
+    private static ArrayList<Comic> comics;
     private static ArrayList<Serie> series;
-    private ArrayList<Serie> favorites;
 
     private FirebaseDatabase fdatabase;
 
-    private DatabaseReference myRef, myRef2;
+    private DatabaseReference myRef;
 
-    public ValueEventListener eventListenerComics, eventListenerFavorites;
+    public ValueEventListener eventListenerComics;
 
     public Database() {
-        fdatabase = FirebaseDatabase.getInstance();
-        myRef = fdatabase.getReference("series");
-//        addNewSerie(new Serie("asfda", 1, 1));
-        series = new ArrayList<>();
+        Singleton.getInstance().getFirebaseModule().setReference();
+        fdatabase = Singleton.getInstance().getFirebaseModule().getDatabase();
+        myRef = Singleton.getInstance().getFirebaseModule().getDatabaseReference();
+
+        comics = new ArrayList<>();
         eventListenerComics = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                series = new ArrayList<>();
+                comics = new ArrayList<>();
 
                 for(DataSnapshot data : dataSnapshot.getChildren())
-                    series.add(data.getValue(Serie.class));
+                    comics.add(data.getValue(Comic.class));
             }
 
             @Override
@@ -51,9 +55,9 @@ public class Database {
         myRef.addValueEventListener(eventListenerComics);
     }
 
-    public Database(ArrayList<Serie> series, ArrayList<Serie> favorites) {
+    public Database(ArrayList<Serie> series, ArrayList<Comic> comics) {
         this.series = series;
-        this.favorites = favorites;
+        this.comics = comics;
     }
 
     public static ArrayList<Serie> getSeries() {
@@ -64,22 +68,15 @@ public class Database {
         this.series = comics;
     }
 
-    public ArrayList<Serie> getFavorites() {
-        return favorites;
-    }
-
-    public void setFavorites(ArrayList<Serie> favorites) {
-        this.favorites = favorites;
-    }
 
     public void addNewSerie(Serie serie){
         series.add(serie);
         myRef.child("test2").setValue(serie);
     }
 
-    public void addNewComic(Comic comic, Serie serie){
-        serie.getVolumenes().add(comic);
-        myRef.child("comic").setValue(comic);
+    public void addNewComic(Comic comic){
+
+        myRef.child(PrefKeys.COMICS.toString()).setValue(comic);
     }
 
     public List<String> getAllSeriesName(){
@@ -88,16 +85,5 @@ public class Database {
         return names;
     }
 
-    public void addNewFavorite(Serie comic){
-        favorites.add(comic);
-    }
-
-    public FirebaseDatabase getFdatabase() {
-        return fdatabase;
-    }
-
-    public void setFdatabase(FirebaseDatabase fdatabase) {
-        this.fdatabase = fdatabase;
-    }
 
 }

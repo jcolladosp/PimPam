@@ -21,36 +21,28 @@ public class Singleton {
 
     private static final Singleton ourInstance = new Singleton();
 
-    private static FirebaseModule firebaseModule;
+    private  FirebaseModule firebaseModule;
 
-
-    private static Database database;
+    private  Database database;
 
     public static Singleton getInstance() {
         return ourInstance;
     }
 
     private Singleton() {
-        database = Factory.createDatabase();
-        firebaseModule = new FirebaseModule();
 
+        firebaseModule = new FirebaseModule();
+        database = new Database();
     }
 
-    public static FirebaseModule getFirebaseModule() {
+    public  FirebaseModule getFirebaseModule() {
         return firebaseModule;
     }
 
-    public static void setFirebaseModule(FirebaseModule firebaseModule) {
-        Singleton.firebaseModule = firebaseModule;
-    }
+    public  Database getDatabase(){ return database;}
 
-    public static Database getDatabase() {
-        return database;
-    }
 
-    public static void setDatabase(Database database) {
-        Singleton.database = database;
-    }
+
 
 
 }
