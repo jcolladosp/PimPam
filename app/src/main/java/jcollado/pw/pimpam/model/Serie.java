@@ -1,5 +1,7 @@
 package jcollado.pw.pimpam.model;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.ArrayList;
 
 /**
@@ -12,10 +14,14 @@ public class Serie {
     private int startYear;
     private int endYear;
 
+    private ArrayList<String> volumenesName;
+
     private ArrayList<Comic> volumenes;
 
-    public Serie() {
-
+    public Serie(){
+        volumenes = new ArrayList<>();
+        volumenesName = new ArrayList<>();
+        name = new String();
     }
 
     public Serie(String name, int startYear, int endYear) {
@@ -23,6 +29,15 @@ public class Serie {
         this.startYear = startYear;
         this.endYear = endYear;
         volumenes = new ArrayList<>();
+        volumenesName = new ArrayList<>();
+    }
+
+    public Serie(String name, int startYear, int endYear, ArrayList<String> volumenesName, ArrayList<Comic> volumenes) {
+        this.name = name;
+        this.startYear = startYear;
+        this.endYear = endYear;
+        this.volumenesName = volumenesName;
+        this.volumenes = volumenes;
     }
 
     public String getName() {
@@ -49,6 +64,7 @@ public class Serie {
         this.endYear = endYear;
     }
 
+    @Exclude
     public ArrayList<Comic> getVolumenes() {
         return volumenes;
     }
@@ -57,7 +73,23 @@ public class Serie {
         this.volumenes = volumenes;
     }
 
-    public void addComicToSerie(Comic c){volumenes.add(c);}
+    public ArrayList<String> getVolumenesName() {
+        return volumenesName;
+    }
 
-    public void deleteComicOfSerie(Comic c){volumenes.remove(c);}
+    public void setVolumenesName(ArrayList<String> volumenesName) {
+        this.volumenesName = volumenesName;
+    }
+
+    public void addComicToSerie(Comic c){
+        volumenes.add(c);
+        volumenesName.add(c.getName());
+    }
+
+    public void deleteComicOfSerie(Comic c){
+        volumenes.remove(c);
+        volumenes.remove(c.getName());
+    }
+
+
 }

@@ -7,29 +7,19 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -37,11 +27,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.model.Comic;
-import jcollado.pw.pimpam.model.Database;
 import jcollado.pw.pimpam.model.Factory;
 import jcollado.pw.pimpam.model.Serie;
 import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.Functions;
+import jcollado.pw.pimpam.utils.Singleton;
 import jcollado.pw.pimpam.widgets.SquareImageView;
 
 
@@ -141,9 +131,20 @@ public class AddComicFragment extends BaseFragment {
             comicIV.buildDrawingCache();
             Bitmap bitmap = comicIV.getDrawingCache();
 
-            Singleton.getInstance().getDatabase().addNewComic(new Comic("hola","gola","gola",1,1,null));
+            Comic comicToAdd = Factory.createComic(nameED.getText().toString(),editorialED.getText().toString(),"",1,1,null);
 
-            //Factory.createSerie("Prueba",1,2).addComicToSerie(new Comic("Hola","Hola","Hola",1,1));
+            Serie serie = Singleton.getInstance().getDatabase().getSerieByName(serieAC.getText().toString());
+            nameED.setText(Integer.toString(Singleton.getInstance().getDatabase().getSeries().get(0).getVolumenesName().size()));
+            if(serie == null) {
+                serie = Factory.createSerie(serieAC.getText().toString(), 0, 0);
+            }
+            serie.addComicToSerie(comicToAdd);
+            Singleton.getInstance().getDatabase().serieToDatabase(serie);
+
+            comicToAdd.setSerie(serie);
+
+            Singleton.getInstance().getDatabase().comicToDatabase(comicToAdd);
+
 
             //Singleton.getFirebaseModule().uploadBitmap(bitmap,nameED.getText().toString(),this);
             //Factory.createComic(nameED.getText().toString(), editorialED.getText().toString(), uri.toString(), 0, 0, /*serie*/ null);

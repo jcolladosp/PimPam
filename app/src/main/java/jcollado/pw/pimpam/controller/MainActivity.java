@@ -21,6 +21,7 @@ import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.utils.BaseActivity;
 import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.Functions;
+import jcollado.pw.pimpam.utils.Singleton;
 
 public class MainActivity extends BaseActivity implements ViewComicFragment.OnFragmentInteractionListener,AddComicFragment.OnFragmentInteractionListener, CollectionFragment.OnFragmentInteractionListener , Barcode_Fragment.OnFragmentInteractionListener
         {
@@ -35,6 +36,8 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setNavigationDrawer();
+
+        Singleton.getInstance().getFirebaseModule().setConnectionDatabase();
 
     }
     public Drawer getResult(){

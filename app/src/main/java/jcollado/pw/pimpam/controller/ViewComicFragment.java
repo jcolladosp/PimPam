@@ -42,7 +42,7 @@ public class ViewComicFragment extends BaseFragment {
 
     public static ViewComicFragment newInstance() {
         ViewComicFragment fragment = new ViewComicFragment();
-               return fragment;
+        return fragment;
     }
 
     @Override

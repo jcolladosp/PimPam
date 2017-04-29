@@ -3,9 +3,7 @@ package jcollado.pw.pimpam.controller;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
@@ -16,7 +14,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,6 +22,7 @@ import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.utils.BaseActivity;
 import jcollado.pw.pimpam.utils.Functions;
 import jcollado.pw.pimpam.utils.PrefKeys;
+import jcollado.pw.pimpam.utils.Singleton;
 import mehdi.sakout.fancybuttons.FancyButton;
 
 public class AuthActivity extends BaseActivity {

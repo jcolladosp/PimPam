@@ -1,4 +1,4 @@
-package jcollado.pw.pimpam.controller;
+package jcollado.pw.pimpam.utils;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -34,18 +34,16 @@ import jcollado.pw.pimpam.utils.BaseFragment;
 
 public class FirebaseModule {
 
-
-    private FirebaseDatabase database;
+    private final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private StorageReference storageRef;
     private FirebaseAuth mAuth;
     private DatabaseReference myRef;
 
     public FirebaseModule(){
-        database = FirebaseDatabase.getInstance();
         storageRef = FirebaseStorage.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
+        if(mAuth.getCurrentUser() != null) myRef = database.getReference(mAuth.getCurrentUser().getUid());
     }
-
 
     public FirebaseDatabase getDatabase() {
         return database;
@@ -63,10 +61,7 @@ public class FirebaseModule {
         return myRef;
 
     }
-    public void setReference(){
-        myRef = this.database.getReference(mAuth.getCurrentUser().getUid());
 
-    }
     public String uploadBitmap(Bitmap bitmap, String imagename, final BaseFragment fragment){
         fragment.onPreStartConnection(fragment.getString(R.string.loading));
 
@@ -97,7 +92,6 @@ public class FirebaseModule {
         return downloadURL[0];
     }
 
-
     public void downloadFile(String name){
         try {
             File localFile = File.createTempFile("images", "jpg");
@@ -118,5 +112,10 @@ public class FirebaseModule {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    public void setConnectionDatabase(){
+        myRef = database.getReference(mAuth.getCurrentUser().getUid());
+        Singleton.getInstance().getDatabase().setConnections();
     }
 }
