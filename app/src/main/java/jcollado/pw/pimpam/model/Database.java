@@ -103,6 +103,9 @@ public class Database {
     public void serieToDatabase(Serie serie){
         myRef.child(PrefKeys.SERIES.toString()).child(serie.getName()).setValue(serie);
     }
+    public void userToDatabase(UserInfo user){
+        myRef.child(PrefKeys.USERINFO.toString()).setValue(user);
+    }
 
     public void comicToDatabase(Comic comic){
         myRef.child(PrefKeys.COMICS.toString()).child(comic.getName()).setValue(comic);

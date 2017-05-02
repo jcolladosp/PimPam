@@ -64,13 +64,6 @@ public class Functions {
         });
         return builder;
     }
-    public String getUserID(){
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-                return user.getUid();
-        }
-        return null;
-    }
 
 
     public static AlertDialog.Builder getModalError(Context context) {
@@ -157,20 +150,40 @@ public class Functions {
     }
 
 
-    public static String getID(Context context) {
-        return getPrefs(context).getString(PrefKeys.ID.toString(), "");
+    public static String getUniqueID() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            return user.getUid();
+        }
+        return null;
     }
-    public static String getUserName(Context context) {
-        return getPrefs(context).getString(PrefKeys.NAME.toString(), "");
+    public static String getUserName() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            return user.getDisplayName();
+        }
+        return null;
     }
-    public static String getProfilePictureURL(Context context) {
-        return getPrefs(context).getString(PrefKeys.PICURL.toString(), "");
+    public static Uri getProfilePictureURL() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            return user.getPhotoUrl();
+        }
+        return null;
     }
-    public static String getUserEmail(Context context) {
-        return getPrefs(context).getString(PrefKeys.EMAIL.toString(), "");
+    public static String getUserEmail() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            return user.getEmail();
+        }
+        return null;
     }
     public static boolean isLogged(Context context) {
-        return getPrefs(context).getBoolean(PrefKeys.LOGGED.toString(), false);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            return true;
+        }
+        return false;
     }
 
     /**

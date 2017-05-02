@@ -126,4 +126,9 @@ public class ViewComicFragment extends BaseFragment {
             builder.show();
 
     }
+
+    @OnClick(R.id.doneFab)
+    public void onDone(){
+        MainActivity.openDrawer();
+    }
 }

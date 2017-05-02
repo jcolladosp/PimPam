@@ -3,6 +3,7 @@ package jcollado.pw.pimpam.controller;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,7 +53,10 @@ public class AuthActivity extends BaseActivity {
                 user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
-                    addToPrefs(user);
+                    Singleton.getInstance().getFirebaseModule().setConnectionDatabase();
+                    addUserInfo(user);
+
+
                 } else {
                     // User is signed out
                     // Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -75,23 +80,31 @@ public class AuthActivity extends BaseActivity {
         }
     }
 
-    private void addToPrefs( FirebaseUser user ){
+    private void addUserInfo( FirebaseUser user ){
+        String mail =  user.getEmail();
+        Uri picUri = Uri.parse("https://s-media-cache-ak0.pinimg.com/originals/d3/cf/69/d3cf690f988f41fd1894526e78c1e1f8.png");
+        String name = nameED.getText().toString();
 
-        SharedPreferences.Editor editor = Functions.getPrefs(AuthActivity.this).edit();
-        editor.putString(PrefKeys.ID.toString(), user.getUid());
-        editor.putString(PrefKeys.EMAIL.toString(),  user.getEmail());
-        editor.putString(PrefKeys.PICURL.toString(), "");
-        editor.putString(PrefKeys.NAME.toString(),  nameED.getText().toString());
 
-        editor.putBoolean(PrefKeys.LOGGED.toString(), true);
-        editor.commit();
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(name)
+                .setPhotoUri(picUri)
+                .build();
 
-        Intent i = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(i);
+        user.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                            startActivity(i);
+                        }
+                    }
+                });
+
+
     }
-    private void authStateListener(){
 
-    }
 
     @OnClick(R.id.btn_create_account)
     void onCreateAccount() {

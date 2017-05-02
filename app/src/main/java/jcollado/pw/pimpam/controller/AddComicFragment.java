@@ -56,7 +56,7 @@ public class AddComicFragment extends BaseFragment {
     AutoCompleteTextView serieAC;
 
     FirebaseStorage storage;
-    private Uri uri;
+    String imageURL;
     ArrayList<String> spinnerList;
     private OnFragmentInteractionListener mListener;
     String[] languages={"Android ","java","IOS","SQL","JDBC","Web services"};
@@ -134,7 +134,7 @@ public class AddComicFragment extends BaseFragment {
             Comic comicToAdd = Factory.createComic(nameED.getText().toString(),editorialED.getText().toString(),"",1,1,null);
 
             Serie serie = Singleton.getInstance().getDatabase().getSerieByName(serieAC.getText().toString());
-            nameED.setText(Integer.toString(Singleton.getInstance().getDatabase().getSeries().get(0).getVolumenesName().size()));
+//            nameED.setText(Integer.toString(Singleton.getInstance().getDatabase().getSeries().get(0).getVolumenesName().size()));
             if(serie == null) {
                 serie = Factory.createSerie(serieAC.getText().toString(), 0, 0);
             }
@@ -146,7 +146,7 @@ public class AddComicFragment extends BaseFragment {
             Singleton.getInstance().getDatabase().comicToDatabase(comicToAdd);
 
 
-            //Singleton.getFirebaseModule().uploadBitmap(bitmap,nameED.getText().toString(),this);
+            imageURL = Singleton.getInstance().getFirebaseModule().uploadBitmap(bitmap,nameED.getText().toString(),this);
             //Factory.createComic(nameED.getText().toString(), editorialED.getText().toString(), uri.toString(), 0, 0, /*serie*/ null);
 
         }

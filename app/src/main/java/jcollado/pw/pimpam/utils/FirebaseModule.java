@@ -24,6 +24,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import jcollado.pw.pimpam.R;
+import jcollado.pw.pimpam.controller.MainActivity;
 import jcollado.pw.pimpam.model.Comic;
 import jcollado.pw.pimpam.model.Database;
 import jcollado.pw.pimpam.utils.BaseFragment;
@@ -42,7 +43,7 @@ public class FirebaseModule {
     public FirebaseModule(){
         storageRef = FirebaseStorage.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
-        if(mAuth.getCurrentUser() != null) myRef = database.getReference(mAuth.getCurrentUser().getUid());
+        if(mAuth.getCurrentUser() != null) myRef = database.getReference(Functions.getUniqueID());
     }
 
     public FirebaseDatabase getDatabase() {
@@ -115,7 +116,7 @@ public class FirebaseModule {
     }
 
     public void setConnectionDatabase(){
-        myRef = database.getReference(mAuth.getCurrentUser().getUid());
+        myRef = database.getReference(Functions.getUniqueID());
         Singleton.getInstance().getDatabase().setConnections();
     }
 }

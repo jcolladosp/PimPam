@@ -1,12 +1,25 @@
 package jcollado.pw.pimpam.controller;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
+import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -16,7 +29,11 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
+import com.mikepenz.materialdrawer.util.DrawerImageLoader;
+import com.mikepenz.materialdrawer.util.DrawerUIUtils;
 
+import butterknife.OnClick;
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.utils.BaseActivity;
 import jcollado.pw.pimpam.utils.BaseFragment;
@@ -25,7 +42,7 @@ import jcollado.pw.pimpam.utils.Singleton;
 
 public class MainActivity extends BaseActivity implements ViewComicFragment.OnFragmentInteractionListener,AddComicFragment.OnFragmentInteractionListener, CollectionFragment.OnFragmentInteractionListener , Barcode_Fragment.OnFragmentInteractionListener
         {
-    private Drawer result = null;
+    public static Drawer result = null;
     Toolbar toolbar;
 
     @Override
@@ -37,18 +54,22 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
         setSupportActionBar(toolbar);
         setNavigationDrawer();
 
-        Singleton.getInstance().getFirebaseModule().setConnectionDatabase();
 
     }
-    public Drawer getResult(){
-        return result;
+    public static void openDrawer(){
+        result.openDrawer();
+
+
+
+
     }
 
     private void setNavigationDrawer(){
 
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-
+        String displayName = Singleton.getInstance().getFirebaseModule().getmAuth().getCurrentUser().getDisplayName();
+        String userEmail = Singleton.getInstance().getFirebaseModule().getmAuth().getCurrentUser().getEmail();
+        Uri icon = Singleton.getInstance().getFirebaseModule().getmAuth().getCurrentUser().getPhotoUrl();
 
 
         // Create the AccountHeader
@@ -58,7 +79,7 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
                 .withSelectionListEnabledForSingleProfile(false)
                 .withOnlyMainProfileImageVisible(true)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(Functions.getUserName(MainActivity.this)).withEmail(Functions.getUserEmail(MainActivity.this)).withIcon(Functions.getProfilePictureURL(MainActivity.this))
+                        new ProfileDrawerItem().withName(displayName).withEmail(userEmail).withIcon(icon)
                 )
 
                 .build();
@@ -123,4 +144,12 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
             public void onFragmentInteraction(Uri uri) {
 
             }
+
+
+
+            @OnClick(R.id.button2) void pruebaUser(){
+
+            }
+
+
         }
