@@ -10,11 +10,19 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
 import butterknife.BindView;
@@ -23,11 +31,10 @@ import butterknife.OnClick;
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.utils.BaseActivity;
 import jcollado.pw.pimpam.utils.Functions;
-import jcollado.pw.pimpam.utils.PrefKeys;
 import jcollado.pw.pimpam.utils.Singleton;
 import mehdi.sakout.fancybuttons.FancyButton;
 
-public class AuthActivity extends BaseActivity {
+public class AuthActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener {
     @BindView(R.id.btn_create_account)
     FancyButton createAccountButton;
     @BindView(R.id.emailED)
@@ -39,6 +46,10 @@ public class AuthActivity extends BaseActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseUser user;
+    private GoogleApiClient mGoogleApiClient;
+    private static final int RC_SIGN_IN = 9001;
+
+    private boolean notGoogle = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,23 +58,10 @@ public class AuthActivity extends BaseActivity {
         ButterKnife.bind(this);
         mAuth = Singleton.getInstance().getFirebaseModule().getmAuth();
 
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Singleton.getInstance().getFirebaseModule().setConnectionDatabase();
-                    addUserInfo(user);
+        authListener();
+        configGoogle();
 
 
-                } else {
-                    // User is signed out
-                    // Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-                // ...
-            }
-        };
     }
 
     @Override
@@ -79,9 +77,46 @@ public class AuthActivity extends BaseActivity {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
+private void configGoogle(){
+    // Configure Google Sign In
+    GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build();
 
+    mGoogleApiClient = new GoogleApiClient.Builder(this)
+            .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+            .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+            .build();
+}
+
+private void authListener(){
+    mAuthListener = new FirebaseAuth.AuthStateListener() {
+        @Override
+        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+            user = firebaseAuth.getCurrentUser();
+            if (user != null) {
+                // User is signed in
+                Singleton.getInstance().getFirebaseModule().setConnectionDatabase();
+                if(notGoogle){
+                    addUserInfo(user);
+
+                }
+                else{
+                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(i);
+                }
+
+
+            } else {
+                // User is signed out
+                // Log.d(TAG, "onAuthStateChanged:signed_out");
+            }
+            // ...
+        }
+    };
+}
     private void addUserInfo( FirebaseUser user ){
-        String mail =  user.getEmail();
         Uri picUri = Uri.parse("https://s-media-cache-ak0.pinimg.com/originals/d3/cf/69/d3cf690f988f41fd1894526e78c1e1f8.png");
         String name = nameED.getText().toString();
 
@@ -109,7 +144,7 @@ public class AuthActivity extends BaseActivity {
     @OnClick(R.id.btn_create_account)
     void onCreateAccount() {
         onPreStartConnection(getString(R.string.loading));
-
+        notGoogle = true;
         mAuth.createUserWithEmailAndPassword(emailED.getText().toString(), passwordED.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -177,6 +212,30 @@ public class AuthActivity extends BaseActivity {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()) {
+                // Google Sign In was successful, authenticate with Firebase
+                Toast.makeText(AuthActivity.this, R.string.register_succesful, Toast.LENGTH_SHORT).show();
+                GoogleSignInAccount account = result.getSignInAccount();
+                firebaseAuthWithGoogle(account);
+            } else {
+                // Google Sign In failed, update UI appropriately
+                // ...
+            }
+        }
+    }
+    @OnClick(R.id.btn_google)
+    void signInGoogle() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
     public void onBackPressed() {
         Intent a = new Intent(Intent.ACTION_MAIN);
         a.addCategory(Intent.CATEGORY_HOME);
@@ -184,11 +243,39 @@ public class AuthActivity extends BaseActivity {
         startActivity(a);
 
     }
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        Log.d("google", "firebaseAuthWithGoogle:" + acct.getId());
 
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d("google", "signInWithCredential:onComplete:" + task.isSuccessful());
+
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Log.w("google", "signInWithCredential", task.getException());
+                            Toast.makeText(AuthActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        // ...
+                    }
+                });
+    }
     private void stopRefreshing() {
 
         onConnectionFinished();
     }
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
+        // be available.
+        Log.d("google", "onConnectionFailed:" + connectionResult);
+    }
+
 }
 
 
