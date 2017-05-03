@@ -44,9 +44,13 @@ public class AddComicFragment extends BaseFragment {
 
     @BindView(R.id.nameED)
     EditText nameED;
-
+    @BindView(R.id.anyoED)
+    EditText anyoED;
     @BindView(R.id.editorialED)
     TextView editorialED;
+    @BindView(R.id.numeroED)
+    EditText numeroED;
+
 
     @BindView(R.id.comicIV)
     SquareImageView comicIV;
@@ -57,7 +61,7 @@ public class AddComicFragment extends BaseFragment {
 
     FirebaseStorage storage;
     String imageURL;
-    ArrayList<String> spinnerList;
+
     private OnFragmentInteractionListener mListener;
     String[] languages={"Android ","java","IOS","SQL","JDBC","Web services"};
 
@@ -130,23 +134,28 @@ public class AddComicFragment extends BaseFragment {
             comicIV.setDrawingCacheEnabled(true);
             comicIV.buildDrawingCache();
             Bitmap bitmap = comicIV.getDrawingCache();
+            imageURL = Singleton.getInstance().getFirebaseModule().uploadBitmap(bitmap,nameED.getText().toString(),this);
 
-            Comic comicToAdd = Factory.createComic(nameED.getText().toString(),editorialED.getText().toString(),"",1,1,null);
+
 
             Serie serie = Singleton.getInstance().getDatabase().getSerieByName(serieAC.getText().toString());
 //            nameED.setText(Integer.toString(Singleton.getInstance().getDatabase().getSeries().get(0).getVolumenesName().size()));
             if(serie == null) {
                 serie = Factory.createSerie(serieAC.getText().toString(), 0, 0);
             }
+
+
+            Comic comicToAdd = Factory.createComic(nameED.getText().toString(),editorialED.getText().toString(),
+                    imageURL,Integer.parseInt(numeroED.getText().toString()),
+                    Integer.parseInt(anyoED.getText().toString()),serie);
+            
             serie.addComicToSerie(comicToAdd);
+
             Singleton.getInstance().getDatabase().serieToDatabase(serie);
-
-            comicToAdd.setSerie(serie);
-
             Singleton.getInstance().getDatabase().comicToDatabase(comicToAdd);
 
 
-            imageURL = Singleton.getInstance().getFirebaseModule().uploadBitmap(bitmap,nameED.getText().toString(),this);
+
             //Factory.createComic(nameED.getText().toString(), editorialED.getText().toString(), uri.toString(), 0, 0, /*serie*/ null);
 
         }

@@ -32,6 +32,8 @@
     <string name="empty_editorial_comic">Por favor, introduzca una editorial.</string>
     <string name="loading">Cargando…</string>
     <string name="serie">Serie</string>
+    <string name="numero">Número</string>
+    <string name="anyo">Año</string>
     <string name="comic_addded_succesfull">Comic añadido correctamente</string>
     <string name="email_field">Email</string>
     <string name="password_field">Contraseña</string>

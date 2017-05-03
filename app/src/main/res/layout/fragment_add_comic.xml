@@ -73,52 +73,12 @@
             android:focusableInTouchMode="true">
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/name_input_layout"
-                android:layout_width="match_parent"
-                android:layout_marginTop="22dp"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/nameED"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginRight="30dp"
-                    android:ems="10"
-                    android:hint="@string/name_add_comic"
-                    android:inputType="textPersonName" />
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/editorial_input_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/name_input_layout"
-                android:layout_marginTop="5dp">
-
-                <EditText
-                    android:id="@+id/editorialED"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignEnd="@+id/name_input_layout"
-                    android:layout_alignStart="@+id/name_input_layout"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginRight="30dp"
-                    android:ems="10"
-                    android:hint="@string/descrption_add_comic"
-                    android:inputType="textPersonName" />
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
                 android:id="@+id/serie_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/editorial_input_layout"
-                android:layout_alignStart="@+id/editorial_input_layout"
-                android:layout_below="@+id/editorial_input_layout"
-                android:layout_marginTop="5dp">
+                android:layout_alignEnd="@+id/anyoeditorial_input_layout"
+                android:layout_alignStart="@+id/anyoeditorial_input_layout"
+                android:layout_marginTop="22dp">
 
                 <AutoCompleteTextView
                     android:id="@+id/serieAC"
@@ -131,6 +91,103 @@
                     android:ems="10"
                     android:hint="@string/serie" />
 
+            </android.support.design.widget.TextInputLayout>
+
+            <RelativeLayout
+                android:id="@+id/middleRL"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/serie_input_layout"
+                android:layout_marginTop="5dp"
+                android:weightSum="2">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/numero_input_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="30dp"
+                    android:layout_toLeftOf="@id/anchor"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/numeroED"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignEnd="@+id/name_input_layout"
+                        android:layout_alignStart="@+id/name_input_layout"
+                        android:layout_marginRight="5dp"
+                        android:ems="10"
+                        android:hint="@string/numero"
+                        android:inputType="number" />
+                </android.support.design.widget.TextInputLayout>
+
+                <View
+                    android:id="@+id/anchor"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_centerInParent="true" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/anyoeditorial_input_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="30dp"
+                    android:layout_toRightOf="@id/anchor">
+
+                    <EditText
+                        android:id="@+id/anyoED"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignEnd="@+id/name_input_layout"
+                        android:layout_alignStart="@+id/name_input_layout"
+                        android:layout_marginLeft="5dp"
+                        android:ems="10"
+                        android:hint="@string/anyo"
+                        android:inputType="number" />
+                </android.support.design.widget.TextInputLayout>
+            </RelativeLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/editorial_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/middleRL"
+                android:layout_marginTop="5dp">
+
+                <EditText
+                    android:id="@+id/editorialED"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:ems="10"
+                    android:hint="@string/descrption_add_comic"
+                    android:inputType="textPersonName" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/name_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/editorial_input_layout"
+                android:layout_marginTop="5dp">
+
+                <EditText
+                    android:id="@+id/nameED"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:ems="10"
+                    android:hint="@string/name_add_comic"
+                    android:inputType="textPersonName" />
             </android.support.design.widget.TextInputLayout>
 
 
