@@ -148,10 +148,8 @@ public class AddComicFragment extends BaseFragment {
             if(serie == null) {
                 serie = Factory.createSerie(serieAC.getText().toString(), 0, 0);
             }
-            Singleton.getInstance().getDatabase().serieToDatabase(serie);
 
-
-
+           Singleton.getInstance().getDatabase().serieToDatabase(serie);
 
             Comic comicToAdd = Factory.createComic(nameED.getText().toString(),editorialED.getText().toString(),
                     "urlImagen",numeroED.getText().toString(),anyoED.getText().toString(),serie);

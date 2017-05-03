@@ -67,19 +67,19 @@ public class Database {
     /*
         Getters and Setters
      */
-    public static ArrayList<Serie> getSeries() {
+    public  ArrayList<Serie> getSeries() {
         return series;
     }
 
-    public static ArrayList<Comic> getComics() {
+    public  ArrayList<Comic> getComics() {
         return comics;
     }
 
-    public static void setComics(ArrayList<Comic> comics) {
+    public  void setComics(ArrayList<Comic> comics) {
         Database.comics = comics;
     }
 
-    public static void setSeries(ArrayList<Serie> series) {
+    public  void setSeries(ArrayList<Serie> series) {
         Database.series = series;
     }
 
@@ -87,14 +87,14 @@ public class Database {
         Logic of the database
      */
     public void serieToDatabase(Serie serie){
-        myRef.child(PrefKeys.SERIES.toString()).child(serie.getName()).setValue(serie);
+        myRef.child(PrefKeys.SERIES.toString()).setValue(serie);
     }
     public void userToDatabase(UserInfo user){
         myRef.child(PrefKeys.USERINFO.toString()).setValue(user);
     }
 
     public void comicToDatabase(Comic comic){
-        myRef.child(PrefKeys.COMICS.toString()).child(comic.getDisplayName()).setValue(comic);
+        myRef.child(PrefKeys.COMICS.toString()).setValue(comic);
     }
 
     public List<String> getAllSeriesName(){

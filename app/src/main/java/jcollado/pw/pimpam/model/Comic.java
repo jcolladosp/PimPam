@@ -15,6 +15,7 @@ public class Comic {
     private String year;
     private Serie serie;
     private String serieName;
+    private String displayName;
 
     public Comic(){
         name = "";
@@ -24,16 +25,20 @@ public class Comic {
 
     public Comic(String name, String editorial, String imageURL, String volumen, String year, Serie serie) {
         this.name = name;
+
         this.editorial = editorial;
         this.imageURL = imageURL;
         this.volumen = volumen;
         this.year = year;
         this.serie = serie;
-        if(this.serie != null)
-                this.serieName = serie.getName();
+        if(this.serie != null) {
+
+            this.serieName = serie.getName();
+            this.displayName = serieName + " " + volumen;
+        }
     }
     public String getDisplayName(){
-        return serieName + " " + volumen;
+        return displayName;
     }
 
     public String getName() {

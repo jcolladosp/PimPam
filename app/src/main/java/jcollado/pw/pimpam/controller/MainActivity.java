@@ -1,6 +1,7 @@
 package jcollado.pw.pimpam.controller;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -53,6 +54,8 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setNavigationDrawer();
+        Singleton.getInstance().getFirebaseModule().setConnectionDatabase();
+
 
 
     }
@@ -147,7 +150,12 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
 
 
 
-            @OnClick(R.id.button2) void pruebaUser(){
+            @Override
+            public void onBackPressed() {
+                Intent a = new Intent(Intent.ACTION_MAIN);
+                a.addCategory(Intent.CATEGORY_HOME);
+                a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(a);
 
             }
 

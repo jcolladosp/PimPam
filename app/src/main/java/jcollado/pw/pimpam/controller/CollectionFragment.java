@@ -15,9 +15,11 @@ import butterknife.ButterKnife;
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.model.Comic;
 import jcollado.pw.pimpam.model.Database;
+import jcollado.pw.pimpam.model.Serie;
 import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.ComicCardAdapter;
 import jcollado.pw.pimpam.utils.Functions;
+import jcollado.pw.pimpam.utils.Singleton;
 import jcollado.pw.pimpam.widgets.GridSpacingItemDecoration;
 
 import android.content.res.Resources;
@@ -147,39 +149,19 @@ public class CollectionFragment extends BaseFragment {
      */
     private void prepareComics() {
 
-        onPreStartConnection(getString(R.string.loading));
+        //onPreStartConnection(getString(R.string.loading));
+
+        ArrayList<Serie> series = Singleton.getInstance().getDatabase().getSeries();
+        //Log.i("serie",String.valueOf(series.size()));
+
+        for (Serie serie : series)
+            Log.i("serie",serie.getName());
 
 
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                clearList();
 
-                Activity activity = getActivity();
-                if(activity != null && isAdded()){
-                onPreStartConnection(getString(R.string.loading));}
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                for(DataSnapshot data : dataSnapshot.getChildren()){
-                    comicList.add(data.getValue(Comic.class));
+        comicList.add(new Comic("Stranger Things","Netflix","https://cdn.bleedingcool.net/wp-content/uploads/2016/08/stranger12x18-600x900.jpg","1","1",null));
 
-            }
-            Activity activity2 = getActivity();
-                if(activity2 != null && isAdded()){
-            stopRefreshing();}
-
-                comicList.add(new Comic("Stranger Things","Netflix","https://cdn.bleedingcool.net/wp-content/uploads/2016/08/stranger12x18-600x900.jpg","1","1",null));
-
-                adapter.notifyDataSetChanged();
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("Firebase", "Failed to read value.", error.toException());
-            }
-        });
+        adapter.notifyDataSetChanged();
 
     }
 
