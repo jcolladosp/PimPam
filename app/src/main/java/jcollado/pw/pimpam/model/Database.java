@@ -87,14 +87,14 @@ public class Database {
         Logic of the database
      */
     public void serieToDatabase(Serie serie){
-        myRef.child(PrefKeys.SERIES.toString()).setValue(serie);
+        myRef.child(PrefKeys.SERIES.toString()).child(serie.getName()).setValue(serie);
     }
     public void userToDatabase(UserInfo user){
         myRef.child(PrefKeys.USERINFO.toString()).setValue(user);
     }
 
     public void comicToDatabase(Comic comic){
-        myRef.child(PrefKeys.COMICS.toString()).setValue(comic);
+        myRef.child(PrefKeys.COMICS.toString()).child(comic.getDisplayName()).setValue(comic);
     }
 
     public List<String> getAllSeriesName(){

@@ -152,6 +152,8 @@ public class CollectionFragment extends BaseFragment {
         //onPreStartConnection(getString(R.string.loading));
 
         ArrayList<Serie> series = Singleton.getInstance().getDatabase().getSeries();
+        ArrayList<Comic> comics = Singleton.getInstance().getDatabase().getComics();
+
         //Log.i("serie",String.valueOf(series.size()));
 
         for (Serie serie : series)
