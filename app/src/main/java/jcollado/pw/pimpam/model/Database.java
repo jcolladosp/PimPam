@@ -35,6 +35,7 @@ public class Database {
     public Database() {
 
         comics = new ArrayList<>();
+        series = new ArrayList<>();
         eventListenerComics = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -42,27 +43,10 @@ public class Database {
                 // whenever data at this location is updated.
                 comics = new ArrayList<>();
 
-                for(DataSnapshot data : dataSnapshot.getChildren())
+                for(DataSnapshot data : dataSnapshot.getChildren()) {
                     comics.add(data.getValue(Comic.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.i("yuki", "Failed to read value. ",  error.toException());
-            }
-        };
-
-        series = new ArrayList<>();
-        eventListenerSeries = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                series = new ArrayList<>();
-
-                for(DataSnapshot data : dataSnapshot.getChildren())
                     series.add(data.getValue(Serie.class));
+                }
             }
 
             @Override
@@ -71,6 +55,8 @@ public class Database {
                 Log.i("yuki", "Failed to read value. ",  error.toException());
             }
         };
+
+
     }
 
     public Database(ArrayList<Serie> series, ArrayList<Comic> comics) {
@@ -108,7 +94,7 @@ public class Database {
     }
 
     public void comicToDatabase(Comic comic){
-        myRef.child(PrefKeys.COMICS.toString()).child(comic.getName()).setValue(comic);
+        myRef.child(PrefKeys.COMICS.toString()).child(comic.getDisplayName()).setValue(comic);
     }
 
     public List<String> getAllSeriesName(){
@@ -130,7 +116,6 @@ public class Database {
     public void setConnections(){
         myRef = Singleton.getInstance().getFirebaseModule().getDatabaseReference();
         myRef.addValueEventListener(eventListenerComics);
-        myRef.addValueEventListener(eventListenerSeries);
     }
 
 

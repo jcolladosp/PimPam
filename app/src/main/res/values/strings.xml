@@ -28,10 +28,11 @@
     <string name="action_delete">Eliminar</string>
     <string name="backdrop_title">MI COLECCIÓN</string>
     <string name="backdrop_subtitle">Los series de tu colección</string>
-    <string name="empty_name_comic">Por favor, introduzca un nombre.</string>
+    <string name="empty_name_comic">Por favor, introduzca una serie.</string>
     <string name="empty_editorial_comic">Por favor, introduzca una editorial.</string>
     <string name="loading">Cargando…</string>
     <string name="serie">Serie</string>
+    <string name="empty_numero_comic">Por favor, introduzca un numero de tomo.</string>
     <string name="numero">Número</string>
     <string name="anyo">Año</string>
     <string name="comic_addded_succesfull">Comic añadido correctamente</string>

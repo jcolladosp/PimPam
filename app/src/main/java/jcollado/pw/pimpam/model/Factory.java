@@ -13,7 +13,7 @@ public class Factory {
         return serie;
     }
 
-    public static Comic createComic(String name, String editorial, String imageURL, int volumen, int year, Serie serie){
+    public static Comic createComic(String name, String editorial, String imageURL, String volumen, String year, Serie serie){
         Comic comic = new Comic(name,editorial, imageURL,volumen,year,serie);
         return comic;
     }

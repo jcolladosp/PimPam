@@ -122,14 +122,19 @@ public class AddComicFragment extends BaseFragment {
 
     @OnClick(R.id.addFab) void submit() {
         hideKeyboard();
-        if (nameED.getText().toString().equals("")) {
-            nameED.setError(getString(R.string.empty_name_comic));
+        if (serieAC.getText().toString().equals("")) {
+            serieAC.setError(getString(R.string.empty_name_comic));
 
         }
-        if (editorialED.getText().toString().equals("")) {
+        else if (editorialED.getText().toString().equals("")) {
             editorialED.setError(getString(R.string.empty_editorial_comic));
 
-        } else {
+
+        }
+        else if (numeroED.getText().length() == 0) {
+            numeroED.setError(getString(R.string.empty_numero_comic));
+        }
+        else {
 
             comicIV.setDrawingCacheEnabled(true);
             comicIV.buildDrawingCache();
@@ -143,15 +148,16 @@ public class AddComicFragment extends BaseFragment {
             if(serie == null) {
                 serie = Factory.createSerie(serieAC.getText().toString(), 0, 0);
             }
+            Singleton.getInstance().getDatabase().serieToDatabase(serie);
+
+
 
 
             Comic comicToAdd = Factory.createComic(nameED.getText().toString(),editorialED.getText().toString(),
-                    imageURL,Integer.parseInt(numeroED.getText().toString()),
-                    Integer.parseInt(anyoED.getText().toString()),serie);
+                    "urlImagen",numeroED.getText().toString(),anyoED.getText().toString(),serie);
             
             serie.addComicToSerie(comicToAdd);
 
-            Singleton.getInstance().getDatabase().serieToDatabase(serie);
             Singleton.getInstance().getDatabase().comicToDatabase(comicToAdd);
 
 

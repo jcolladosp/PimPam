@@ -186,6 +186,7 @@ public class Functions {
         return false;
     }
 
+
     /**
      * Converting dp to pixel
      */

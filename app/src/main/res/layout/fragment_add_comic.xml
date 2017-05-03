@@ -76,15 +76,14 @@
                 android:id="@+id/serie_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/anyoeditorial_input_layout"
-                android:layout_alignStart="@+id/anyoeditorial_input_layout"
+
                 android:layout_marginTop="22dp">
 
                 <AutoCompleteTextView
                     android:id="@+id/serieAC"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
+                    android:inputType="textPersonName"
                     android:layout_marginLeft="30dp"
                     android:layout_marginRight="30dp"
                     android:layout_marginTop="7dp"
@@ -108,7 +107,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_marginLeft="30dp"
-                    android:layout_toLeftOf="@id/anchor"
+                    android:layout_toLeftOf="@+id/anchor"
                     android:layout_weight="1">
 
                     <EditText
@@ -136,7 +135,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
                     android:layout_marginEnd="30dp"
-                    android:layout_toRightOf="@id/anchor">
+                    android:layout_toRightOf="@+id/anchor">
 
                     <EditText
                         android:id="@+id/anyoED"
