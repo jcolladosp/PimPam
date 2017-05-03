@@ -113,6 +113,20 @@ public class Functions {
         });
         return builder;
     }
+    public static AlertDialog.Builder getModalLogOut( final Context context) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        builder.setMessage(context.getString(R.string.logout_confirm));
+        builder.setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+
+            }
+        });
+
+        return builder;
+    }
      public static String formatURLforQuery(String url){
          String returnurl = "";
          try {

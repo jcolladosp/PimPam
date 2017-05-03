@@ -1,6 +1,8 @@
 package jcollado.pw.pimpam.controller;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -90,6 +92,7 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
         SecondaryDrawerItem item2 = new SecondaryDrawerItem().withIdentifier(2).withName(getString(R.string.addComic)).withIcon(FontAwesome.Icon.faw_plus_circle);
         SecondaryDrawerItem barcode = new SecondaryDrawerItem().withIdentifier(4).withName("Barcode").withIcon(FontAwesome.Icon.faw_barcode);
         SecondaryDrawerItem ajustes = new SecondaryDrawerItem().withIdentifier(3).withName(getString(R.string.settings)).withIcon(FontAwesome.Icon.faw_cog);
+        SecondaryDrawerItem signout = new SecondaryDrawerItem().withIdentifier(3).withName(getString(R.string.logout_button)).withIcon(FontAwesome.Icon.faw_sign_out);
 
 
 
@@ -98,7 +101,7 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .withAccountHeader(headerResult)
-                .addDrawerItems(item1,item2,barcode, new DividerDrawerItem(),ajustes)
+                .addDrawerItems(item1,item2,barcode, new DividerDrawerItem(),ajustes,signout)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
@@ -109,12 +112,13 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
                             toolbar.setTitle(getString(R.string.seeCollection));
 
                             getSupportActionBar().hide();
-
+                            openFragment(fragment);
                         }
 
                         if (position == 2){
                             fragment = AddComicFragment.newInstance();
                             getSupportActionBar().hide();
+                            openFragment(fragment);
 
 
                         }
@@ -122,20 +126,28 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
                         if (position == 3) {
                             fragment = Barcode_Fragment.newInstance();
                             getSupportActionBar().hide();
+                            openFragment(fragment);
+
                         }
 
                         if (position == 5){
                             fragment = ViewComicFragment.newInstance();
                             getSupportActionBar().hide();
+                            openFragment(fragment);
+
                         }
-
-
-
-                        getSupportFragmentManager()
-                                .beginTransaction()
-                                .replace(R.id.container, fragment,"")
-                                .commit();
-                        result.closeDrawer();
+                        if (position == 6){
+                            AlertDialog.Builder logOutBuilder = Functions.getModalLogOut(MainActivity.this);
+                            logOutBuilder.setPositiveButton((getString(R.string.ok)), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                Singleton.getInstance().getFirebaseModule().getmAuth().signOut();
+                                    Intent i = new Intent(getApplicationContext(), AuthActivity.class);
+                                    startActivity(i);
+                                }
+                            });
+                            logOutBuilder.show();
+                        }
                         return true;
                     }
                 })
@@ -148,7 +160,14 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
 
             }
 
+            private void openFragment(BaseFragment fragment){
 
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, fragment,"")
+                        .commit();
+                result.closeDrawer();
+            }
 
             @Override
             public void onBackPressed() {

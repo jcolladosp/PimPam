@@ -39,6 +39,9 @@
     <string name="email_field">Email</string>
     <string name="password_field">Contraseña</string>
     <string name="login_button">Iniciar sesión</string>
+    <string name="logout_button">Cerrar sesión</string>
+    <string name="logout_confirm">¿Está seguro que quiere cerrar sesión?</string>
+
     <string name="logingoogle_button">Iniciar sesión con Google</string>
 
     <string name="signup_button">Crear una cuenta</string>
