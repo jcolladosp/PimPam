@@ -83,12 +83,11 @@ public class CollectionFragment extends BaseFragment {
         View view =     inflater.inflate(R.layout.fragment_collection, container, false);
         ButterKnife.bind(this, view);
 
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
 
-       initCollapsingToolbar(view);
+        initCollapsingToolbar(view);
+        prepareToolbar();
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        toolbar.setTitle(getString(R.string.seeCollection));
         comicList = new ArrayList<>();
         adapter = new ComicCardAdapter(getActivity(), comicList);
 
@@ -110,7 +109,21 @@ public class CollectionFragment extends BaseFragment {
         return view ;
 
     }
+    private void prepareToolbar(){
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
 
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.hamburger));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.openDrawer();
+            }
+        });
+
+        toolbar.setTitle(getString(R.string.seeCollection));
+    }
 
     /**
      * Initializing collapsing toolbar
@@ -154,16 +167,12 @@ public class CollectionFragment extends BaseFragment {
         ArrayList<Serie> series = Singleton.getInstance().getDatabase().getSeries();
         ArrayList<Comic> comics = Singleton.getInstance().getDatabase().getComics();
 
-        //Log.i("serie",String.valueOf(series.size()));
-
-        for (Serie serie : series)
-            Log.i("serie",serie.getName());
-
-
-
-        comicList.add(new Comic("Stranger Things","Netflix","https://cdn.bleedingcool.net/wp-content/uploads/2016/08/stranger12x18-600x900.jpg","1","1",null));
+        for (Comic comic : comics){
+            comicList.add(comic);
+        }
 
         adapter.notifyDataSetChanged();
+
 
     }
 

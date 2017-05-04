@@ -15,6 +15,8 @@ public class Comic {
     private String year;
     private Serie serie;
     private String serieName;
+
+
     private String displayName;
 
     public Comic(){
@@ -39,6 +41,10 @@ public class Comic {
     }
     public String getDisplayName(){
         return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public String getName() {

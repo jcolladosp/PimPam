@@ -8,6 +8,7 @@ public enum PrefKeys {
     LOGGED("logged"),
     COMICS("comics"),
     USERINFO("userInfo"),
+    IMAGES("images"),
     SERIES("series");
 
     private String value;

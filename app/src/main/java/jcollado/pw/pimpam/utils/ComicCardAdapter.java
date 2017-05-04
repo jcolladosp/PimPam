@@ -59,7 +59,7 @@ public class ComicCardAdapter extends RecyclerView.Adapter<ComicCardAdapter.MyVi
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         Comic comic = comicList.get(position);
-        holder.title.setText(comic.getName());
+        holder.title.setText(comic.getDisplayName());
         holder.count.setText(comic.getEditorial());
 
         // loading album cover using Glide library

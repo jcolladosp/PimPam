@@ -61,6 +61,8 @@ public class AddComicFragment extends BaseFragment {
 
     FirebaseStorage storage;
     String imageURL;
+    static Comic comic;
+    static Serie serie;
 
     private OnFragmentInteractionListener mListener;
     String[] languages={"Android ","java","IOS","SQL","JDBC","Web services"};
@@ -91,9 +93,6 @@ public class AddComicFragment extends BaseFragment {
         prepareSpinner();
         prepareToolbar();
 
-
-        //Singleton.getInstance().getDatabase().getSeries();
-        // for(String s :  Singleton.getDatabase().getAllSeriesName());
 
         storage = FirebaseStorage.getInstance();
         return view ;
@@ -139,30 +138,33 @@ public class AddComicFragment extends BaseFragment {
             comicIV.setDrawingCacheEnabled(true);
             comicIV.buildDrawingCache();
             Bitmap bitmap = comicIV.getDrawingCache();
-            imageURL = Singleton.getInstance().getFirebaseModule().uploadBitmap(bitmap,nameED.getText().toString(),this);
+            imageURL = Singleton.getInstance().getFirebaseModule().uploadBitmap(bitmap,java.util.UUID.randomUUID().toString(),this);
 
 
 
-            Serie serie = Singleton.getInstance().getDatabase().getSerieByName(serieAC.getText().toString());
+            serie = Singleton.getInstance().getDatabase().getSerieByName(serieAC.getText().toString());
 //            nameED.setText(Integer.toString(Singleton.getInstance().getDatabase().getSeries().get(0).getVolumenesName().size()));
             if(serie == null) {
                 serie = Factory.createSerie(serieAC.getText().toString(), 0, 0);
             }
 
-           Singleton.getInstance().getDatabase().serieToDatabase(serie);
+            comic = Factory.createComic(nameED.getText().toString(),editorialED.getText().toString(),
+                    "https://static.gamespot.com/uploads/original/1562/15626911/2991050-4996630-04-variant.jpg",numeroED.getText().toString(),anyoED.getText().toString(),serie);
 
-            Comic comicToAdd = Factory.createComic(nameED.getText().toString(),editorialED.getText().toString(),
-                    "urlImagen",numeroED.getText().toString(),anyoED.getText().toString(),serie);
-            
-            serie.addComicToSerie(comicToAdd);
-
-            Singleton.getInstance().getDatabase().comicToDatabase(comicToAdd);
 
 
 
             //Factory.createComic(nameED.getText().toString(), editorialED.getText().toString(), uri.toString(), 0, 0, /*serie*/ null);
 
         }
+    }
+    public static void uploadComic(String imageURL){
+        Singleton.getInstance().getDatabase().serieToDatabase(serie);
+        comic.setImageURL(imageURL);
+
+        serie.addComicToSerie(comic);
+
+        Singleton.getInstance().getDatabase().comicToDatabase(comic);
     }
 
     @OnClick(R.id.comicIV)
@@ -201,6 +203,14 @@ public class AddComicFragment extends BaseFragment {
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
+
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.hamburger));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.openDrawer();
+            }
+        });
 
         toolbar.setTitle(getString(R.string.addComic));
     }

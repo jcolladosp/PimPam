@@ -19,6 +19,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import jcollado.pw.pimpam.R;
+import jcollado.pw.pimpam.controller.AddComicFragment;
 
 /**
  * Created by Yuki on 14/03/2017.
@@ -60,11 +61,11 @@ public class FirebaseModule {
         return serieReference;
     }
 
-    public String uploadBitmap(Bitmap bitmap, String imagename, final BaseFragment fragment){
+    public String uploadBitmap(Bitmap bitmap, String imagename, final AddComicFragment fragment){
         fragment.onPreStartConnection(fragment.getString(R.string.loading));
 
         final String[] downloadURL = new String[1];
-        StorageReference ImagesRef = storageRef.child("images/"+imagename);
+        StorageReference ImagesRef = storageRef.child(PrefKeys.IMAGES.toString()).child(Functions.getUniqueID()).child(imagename);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
@@ -82,7 +83,7 @@ public class FirebaseModule {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                 downloadURL[0] = taskSnapshot.getDownloadUrl().toString();
                 fragment.onConnectionFinished();
-
+                fragment.uploadComic(downloadURL[0]);
                 Toast.makeText(fragment.getActivity(), fragment.getString(R.string.comic_addded_succesfull), Toast.LENGTH_SHORT).show();
 
         }
