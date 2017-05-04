@@ -16,4 +16,13 @@
             android:layout_centerVertical="true"
             android:text="Button" />
 
+    <TextView
+        android:id="@+id/codeTX"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/buttonScan"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="55dp"
+        android:text="TextView" />
+
 </RelativeLayout>

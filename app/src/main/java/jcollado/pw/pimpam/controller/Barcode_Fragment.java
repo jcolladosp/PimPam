@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -25,6 +26,9 @@ public class Barcode_Fragment extends BaseFragment {
 
     @BindView(R.id.buttonScan)
     Button buttonScan;
+    @BindView(R.id.codeTX)
+     TextView codeTX;
+    public  View view;
 
     //private ZXingScannerView scannerView;
     private OnFragmentInteractionListener mListener;
@@ -49,7 +53,7 @@ public class Barcode_Fragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_barcode, container, false);
+        view = inflater.inflate(R.layout.fragment_barcode, container, false);
         ButterKnife.bind(this, view);
         //((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
@@ -63,18 +67,9 @@ public class Barcode_Fragment extends BaseFragment {
 
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if(result != null) {
-            if(result.getContents() == null) {
-                Toast.makeText(getActivity(), "Cancelled", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(getActivity(), "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-            }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
+
+    public  void setTX(String text){
+        codeTX.setText(text);
     }
 
 
