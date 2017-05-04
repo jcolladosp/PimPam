@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -6,9 +6,7 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+
 
         <Button
             android:id="@+id/buttonScan"
@@ -17,5 +15,5 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:text="Button" />
-    </RelativeLayout>
-</FrameLayout>
+
+</RelativeLayout>
