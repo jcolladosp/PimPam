@@ -1,7 +1,6 @@
 package jcollado.pw.pimpam.utils;
 
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
@@ -9,11 +8,8 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -21,13 +17,8 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.util.ArrayList;
 
 import jcollado.pw.pimpam.R;
-import jcollado.pw.pimpam.controller.MainActivity;
-import jcollado.pw.pimpam.model.Comic;
-import jcollado.pw.pimpam.model.Database;
-import jcollado.pw.pimpam.utils.BaseFragment;
 
 /**
  * Created by Yuki on 14/03/2017.
@@ -38,12 +29,15 @@ public class FirebaseModule {
     private final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private StorageReference storageRef;
     private FirebaseAuth mAuth;
-    private DatabaseReference myRef;
+    private DatabaseReference comicReference, serieReference;
 
     public FirebaseModule(){
         storageRef = FirebaseStorage.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
-        if(mAuth.getCurrentUser() != null) myRef = database.getReference(Functions.getUniqueID());
+        if(mAuth.getCurrentUser() != null) {
+            comicReference = database.getReference(Functions.getUniqueID()+"/comics");
+            serieReference = database.getReference(Functions.getUniqueID()+"/series");
+        }
     }
 
     public FirebaseDatabase getDatabase() {
@@ -58,9 +52,12 @@ public class FirebaseModule {
         return mAuth;
     }
 
-    public DatabaseReference getDatabaseReference(){
-        return myRef;
+    public DatabaseReference getComicReference(){
+        return comicReference;
+    }
 
+    public DatabaseReference getSerieReference(){
+        return serieReference;
     }
 
     public String uploadBitmap(Bitmap bitmap, String imagename, final BaseFragment fragment){
@@ -116,7 +113,8 @@ public class FirebaseModule {
     }
 
     public void setConnectionDatabase(){
-        myRef = database.getReference(Functions.getUniqueID());
+        comicReference = database.getReference(Functions.getUniqueID()+"/comics");
+        serieReference = database.getReference(Functions.getUniqueID()+"/series");
         Singleton.getInstance().getDatabase().setConnections();
     }
 }

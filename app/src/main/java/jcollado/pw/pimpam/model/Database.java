@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jcollado.pw.pimpam.utils.Singleton;
-import jcollado.pw.pimpam.utils.PrefKeys;
 
 /**
  * Created by Yuki on 14/03/2017.
@@ -22,11 +21,9 @@ public class Database {
     private static ArrayList<Comic> comics;
     private static ArrayList<Serie> series;
 
-    private DatabaseReference myRef;
+    private DatabaseReference comicReference, serieReference;
 
-    public ValueEventListener eventListenerComics;
-
-    public ValueEventListener eventListenerSeries;
+    public ValueEventListener comicListener, serieListener;
 
     /*
         Constructors
@@ -36,7 +33,7 @@ public class Database {
 
         comics = new ArrayList<>();
         series = new ArrayList<>();
-        eventListenerComics = new ValueEventListener() {
+        comicListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
@@ -45,7 +42,6 @@ public class Database {
 
                 for(DataSnapshot data : dataSnapshot.getChildren()) {
                     comics.add(data.getValue(Comic.class));
-                    series.add(data.getValue(Serie.class));
                 }
             }
 
@@ -55,7 +51,21 @@ public class Database {
                 Log.i("yuki", "Failed to read value. ",  error.toException());
             }
         };
+        serieListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                series = new ArrayList<>();
 
+                for(DataSnapshot data : dataSnapshot.getChildren()) {
+                    series.add(data.getValue(Serie.class));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
 
     }
 
@@ -87,14 +97,16 @@ public class Database {
         Logic of the database
      */
     public void serieToDatabase(Serie serie){
-        myRef.child(PrefKeys.SERIES.toString()).child(serie.getName()).setValue(serie);
-    }
-    public void userToDatabase(UserInfo user){
-        myRef.child(PrefKeys.USERINFO.toString()).setValue(user);
+        serieReference.child(serie.getName()).setValue(serie);
     }
 
+    /*
+    public void userToDatabase(UserInfo user){
+        comicReference.child(PrefKeys.USERINFO.toString()).setValue(user);
+    }*/
+
     public void comicToDatabase(Comic comic){
-        myRef.child(PrefKeys.COMICS.toString()).child(comic.getDisplayName()).setValue(comic);
+        comicReference.child(comic.getDisplayName()).setValue(comic);
     }
 
     public List<String> getAllSeriesName(){
@@ -114,8 +126,10 @@ public class Database {
         Method for Connecting to the firebase
      */
     public void setConnections(){
-        myRef = Singleton.getInstance().getFirebaseModule().getDatabaseReference();
-        myRef.addValueEventListener(eventListenerComics);
+        comicReference = Singleton.getInstance().getFirebaseModule().getComicReference();
+        serieReference = Singleton.getInstance().getFirebaseModule().getSerieReference();
+        comicReference.addValueEventListener(comicListener);
+        serieReference.addValueEventListener(serieListener);
     }
 
 
