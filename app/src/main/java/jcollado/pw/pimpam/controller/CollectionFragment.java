@@ -251,7 +251,7 @@ public class CollectionFragment extends BaseFragment {
 
     private class LoadBackgroundTask extends AsyncTask<Void, Void, List<Comic>> {
 
-        static final int DURACION = 3 * 1000; // 3 segundos de carga
+        static final int DURACION = 3 * 1000 ; // 3 segundos de carga
 
         @Override
         protected List doInBackground(Void... params) {
