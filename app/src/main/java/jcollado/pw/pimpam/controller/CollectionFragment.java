@@ -1,20 +1,38 @@
 package jcollado.pw.pimpam.controller;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.model.Comic;
-import jcollado.pw.pimpam.model.Database;
 import jcollado.pw.pimpam.model.Serie;
 import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.ComicCardAdapter;
@@ -22,42 +40,19 @@ import jcollado.pw.pimpam.utils.Functions;
 import jcollado.pw.pimpam.utils.Singleton;
 import jcollado.pw.pimpam.widgets.GridSpacingItemDecoration;
 
-import android.content.res.Resources;
-import android.graphics.Rect;
-import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
-import android.view.View;
-import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class CollectionFragment extends BaseFragment {
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.swipeRefresh)
+    SwipeRefreshLayout refreshLayout;
 
     private CollectionFragment.OnFragmentInteractionListener mListener;
-    FirebaseDatabase database;
-    DatabaseReference myRef;
+
     private RecyclerView recyclerView;
     private ComicCardAdapter adapter;
     private List<Comic> comicList;
-
-
+    SearchView searchView = null;
+    MenuItem myActionMenuItem;
     public CollectionFragment() {
         // Required empty public constructor
     }
@@ -72,35 +67,28 @@ public class CollectionFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("comics");
+
         View view =     inflater.inflate(R.layout.fragment_collection, container, false);
         ButterKnife.bind(this, view);
 
+        setHasOptionsMenu(true);
 
         initCollapsingToolbar(view);
         prepareToolbar();
-
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        comicList = new ArrayList<>();
-        adapter = new ComicCardAdapter(getActivity(), comicList);
-
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, Functions.dpToPx(10,getActivity().getApplicationContext()), true));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
-
+        prepareRecyclerView(view);
         prepareComics();
+        listenerSwipeLayout();
 
         try {
-            Glide.with(this).load(R.drawable.cover).into((ImageView) view.findViewById(R.id.backdrop));
+            //Fondo de la CollapsingToolbar
+           // Glide.with(this).load(R.drawable.cover).into((ImageView) view.findViewById(R.id.backdrop));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -175,9 +163,34 @@ public class CollectionFragment extends BaseFragment {
 
 
     }
+    private void prepareRecyclerView(View view){
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        comicList = new ArrayList<>();
+        adapter = new ComicCardAdapter(getActivity(), comicList);
 
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, Functions.dpToPx(10,getActivity().getApplicationContext()), true));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
+    }
 
+        private void listenerSwipeLayout(){
 
+            refreshLayout.setOnRefreshListener(
+                    new SwipeRefreshLayout.OnRefreshListener() {
+                        @Override
+                        public void onRefresh() {
+                            new LoadBackgroundTask().execute();
+
+                        }
+                    }
+            );
+            refreshLayout.setColorSchemeResources(
+                    R.color.accent
+
+            );
+        }
 
 
 
@@ -207,9 +220,65 @@ public class CollectionFragment extends BaseFragment {
 
         onConnectionFinished();
     }
-    public void clearList() {
-        int size = comicList.size();
-        comicList.clear();
-        adapter.notifyItemRangeRemoved(0, size);
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+        getActivity().getMenuInflater().inflate( R.menu.collection_menu, menu);
+        super.onCreateOptionsMenu(menu,inflater);
+
+         myActionMenuItem = menu.findItem( R.id.action_search);
+        searchView = (SearchView) myActionMenuItem.getActionView();
+        searchView.setQueryHint(getString(R.string.searchToolbarHint));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Toast like print
+                Log.i("search","SearchOnQueryTextSubmit: " + query);
+                if( ! searchView.isIconified()) {
+                    searchView.setIconified(true);
+                }
+                myActionMenuItem.collapseActionView();
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String s) {
+                // UserFeedback.show( "SearchOnQueryTextChanged: " + s);
+                return false;
+            }
+        });
+    }
+
+    private class LoadBackgroundTask extends AsyncTask<Void, Void, List<Comic>> {
+
+        static final int DURACION = 3 * 1000; // 3 segundos de carga
+
+        @Override
+        protected List doInBackground(Void... params) {
+            // Simulación de la carga de items
+            try {
+                Thread.sleep(DURACION);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            // Retornar en nuevos elementos para el adaptador
+            return Singleton.getInstance().getDatabase().getComics();
+        }
+
+        @Override
+        protected void onPostExecute(List result) {
+            super.onPostExecute(result);
+
+            // Limpiar elementos antiguos
+            adapter.clear();
+
+            // Añadir elementos nuevos
+            adapter.addAll(result);
+
+            // Parar la animación del indicador
+            refreshLayout.setRefreshing(false);
+        }
+
     }
 }

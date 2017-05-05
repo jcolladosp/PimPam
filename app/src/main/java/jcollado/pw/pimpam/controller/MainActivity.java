@@ -62,15 +62,16 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
         setNavigationDrawer();
         Singleton.getInstance().getFirebaseModule().setConnectionDatabase();
 
+        BaseFragment fragment = CollectionFragment.newInstance();
+            toolbar.setTitle(getString(R.string.seeCollection));
+
+            getSupportActionBar().hide();
+            openFragment(fragment);
 
 
     }
     public static void openDrawer(){
         result.openDrawer();
-
-
-
-
     }
 
     private void setNavigationDrawer(){

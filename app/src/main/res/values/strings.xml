@@ -27,7 +27,7 @@
     <string name="action_add_favourite">Añadir a favoritos</string>
     <string name="action_delete">Eliminar</string>
     <string name="backdrop_title">MI COLECCIÓN</string>
-    <string name="backdrop_subtitle">Los series de tu colección</string>
+    <string name="backdrop_subtitle">Los comics de tu colección</string>
     <string name="empty_name_comic">Por favor, introduzca una serie.</string>
     <string name="empty_editorial_comic">Por favor, introduzca una editorial.</string>
     <string name="loading">Cargando…</string>
@@ -41,7 +41,7 @@
     <string name="login_button">Iniciar sesión</string>
     <string name="logout_button">Cerrar sesión</string>
     <string name="logout_confirm">¿Está seguro que quiere cerrar sesión?</string>
-
+    <string name="searchToolbarHint">Busca tu comic, serie o editorial.</string>
     <string name="logingoogle_button">Iniciar sesión con Google</string>
 
     <string name="signup_button">Crear una cuenta</string>

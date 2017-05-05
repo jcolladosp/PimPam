@@ -72,7 +72,21 @@ public class ComicCardAdapter extends RecyclerView.Adapter<ComicCardAdapter.MyVi
             }
         });
     }
+    /*
+        Añade una lista completa de items
+         */
+    public void addAll(List<Comic> lista){
+        comicList.addAll(lista);
+        notifyDataSetChanged();
+    }
 
+    /*
+    Permite limpiar todos los elementos del recycler
+     */
+    public void clear(){
+        comicList.clear();
+        notifyDataSetChanged();
+    }
     /**
      * Showing popup menu when tapping on 3 dots
      */
