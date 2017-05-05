@@ -47,7 +47,7 @@ import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.Functions;
 import jcollado.pw.pimpam.utils.Singleton;
 
-public class MainActivity extends BaseActivity implements ViewComicFragment.OnFragmentInteractionListener,AddComicFragment.OnFragmentInteractionListener, CollectionFragment.OnFragmentInteractionListener , Barcode_Fragment.OnFragmentInteractionListener
+public class MainActivity extends BaseActivity implements ViewComicFragment.OnFragmentInteractionListener,AddComicFragment.OnFragmentInteractionListener,  Barcode_Fragment.OnFragmentInteractionListener
         {
     public static Drawer result = null;
     Toolbar toolbar;
@@ -59,6 +59,7 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         setNavigationDrawer();
         Singleton.getInstance().getFirebaseModule().setConnectionDatabase();
 
@@ -111,7 +112,7 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
 
-                        BaseFragment fragment = ViewComicFragment.newInstance();
+                        BaseFragment fragment;
                         if (position == 1){
                             fragment = CollectionFragment.newInstance();
                             toolbar.setTitle(getString(R.string.seeCollection));
@@ -130,15 +131,16 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
 
                         if (position == 3) {
                             fragment = Barcode_Fragment.newInstance();
-                            getSupportActionBar().hide();
                             openFragment(fragment);
+                            getSupportActionBar().show();
 
                         }
 
                         if (position == 5){
-                            fragment = ViewComicFragment.newInstance();
-                            getSupportActionBar().hide();
+                            fragment = SettingsFragment.newInstance();
+
                             openFragment(fragment);
+
 
                         }
                         if (position == 6){

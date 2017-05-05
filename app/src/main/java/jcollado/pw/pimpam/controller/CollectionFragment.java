@@ -20,11 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +39,6 @@ import jcollado.pw.pimpam.widgets.GridSpacingItemDecoration;
 
 public class CollectionFragment extends BaseFragment {
     @BindView(R.id.toolbar) Toolbar toolbar;
-
-    private CollectionFragment.OnFragmentInteractionListener mListener;
 
     private RecyclerView recyclerView;
     private ComicCardAdapter adapter;
@@ -179,25 +173,15 @@ public class CollectionFragment extends BaseFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof AddComicFragment.OnFragmentInteractionListener) {
-            mListener = (CollectionFragment.OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
     private void stopRefreshing() {
 
         onConnectionFinished();
