@@ -43,8 +43,6 @@ import jcollado.pw.pimpam.widgets.GridSpacingItemDecoration;
 
 public class CollectionFragment extends BaseFragment {
     @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.swipeRefresh)
-    SwipeRefreshLayout refreshLayout;
 
     private CollectionFragment.OnFragmentInteractionListener mListener;
 
@@ -84,7 +82,7 @@ public class CollectionFragment extends BaseFragment {
         prepareToolbar();
         prepareRecyclerView(view);
         prepareComics();
-        listenerSwipeLayout();
+
 
         try {
             //Fondo de la CollapsingToolbar
@@ -175,22 +173,6 @@ public class CollectionFragment extends BaseFragment {
         recyclerView.setAdapter(adapter);
     }
 
-        private void listenerSwipeLayout(){
-
-            refreshLayout.setOnRefreshListener(
-                    new SwipeRefreshLayout.OnRefreshListener() {
-                        @Override
-                        public void onRefresh() {
-                            new LoadBackgroundTask().execute();
-
-                        }
-                    }
-            );
-            refreshLayout.setColorSchemeResources(
-                    R.color.accent
-
-            );
-        }
 
 
 
@@ -249,36 +231,5 @@ public class CollectionFragment extends BaseFragment {
         });
     }
 
-    private class LoadBackgroundTask extends AsyncTask<Void, Void, List<Comic>> {
 
-        static final int DURACION = 3 * 1000 ; // 3 segundos de carga
-
-        @Override
-        protected List doInBackground(Void... params) {
-            // Simulación de la carga de items
-            try {
-                Thread.sleep(DURACION);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            // Retornar en nuevos elementos para el adaptador
-            return Singleton.getInstance().getDatabase().getComics();
-        }
-
-        @Override
-        protected void onPostExecute(List result) {
-            super.onPostExecute(result);
-
-            // Limpiar elementos antiguos
-            adapter.clear();
-
-            // Añadir elementos nuevos
-            adapter.addAll(result);
-
-            // Parar la animación del indicador
-            refreshLayout.setRefreshing(false);
-        }
-
-    }
 }
