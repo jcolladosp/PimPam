@@ -143,72 +143,75 @@ private void authListener(){
 
     @OnClick(R.id.btn_create_account)
     void onCreateAccount() {
-        onPreStartConnection(getString(R.string.loading));
-        notGoogle = true;
-        mAuth.createUserWithEmailAndPassword(emailED.getText().toString(), passwordED.getText().toString())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
+        if(checkAllFieldsCompleted()) {
+            onPreStartConnection(getString(R.string.loading));
+            notGoogle = true;
+            mAuth.createUserWithEmailAndPassword(emailED.getText().toString(), passwordED.getText().toString())
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
 
-                        if (!task.isSuccessful()) {
+                            if (!task.isSuccessful()) {
                                 Toast.makeText(AuthActivity.this, getString(R.string.auth_failed) + ": " + task.getException().getMessage(),
-                                    Toast.LENGTH_SHORT).show();
+                                        Toast.LENGTH_SHORT).show();
 
-                        } else {
+                            } else {
 
-                            Toast.makeText(AuthActivity.this, R.string.register_succesful, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AuthActivity.this, R.string.register_succesful, Toast.LENGTH_SHORT).show();
+
+                            }
+                            stopRefreshing();
 
                         }
-                        stopRefreshing();
-
-                    }
-                });
+                    });
+        }
     }
     @OnClick(R.id.btn_login)
     void onLoginAccount() {
-        onPreStartConnection(getString(R.string.loading));
-        mAuth.signInWithEmailAndPassword(emailED.getText().toString(),  passwordED.getText().toString())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w("login", "signInWithEmail:failed", task.getException());
-                            Toast.makeText(AuthActivity.this, getString(R.string.login_failed) + ": " + task.getException().getMessage(),
-                                    Toast.LENGTH_SHORT).show();
+        if(checkAllFieldsCompleted()) {
+            onPreStartConnection(getString(R.string.loading));
+            mAuth.signInWithEmailAndPassword(emailED.getText().toString(), passwordED.getText().toString())
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (!task.isSuccessful()) {
+                                Log.w("login", "signInWithEmail:failed", task.getException());
+                                Toast.makeText(AuthActivity.this, getString(R.string.login_failed) + ": " + task.getException().getMessage(),
+                                        Toast.LENGTH_SHORT).show();
 
+                            } else {
+
+                                Toast.makeText(AuthActivity.this, R.string.login_succesful, Toast.LENGTH_SHORT).show();
+                            }
                         }
-
-                         else {
-
-                        Toast.makeText(AuthActivity.this, R.string.login_succesful, Toast.LENGTH_SHORT).show();
-                    }
-                    }
-                });
-        stopRefreshing();
+                    });
+            stopRefreshing();
+        }
 
     }
 
     @OnClick(R.id.btn_restore_password)
     void onRestorePassword(){
-        onPreStartConnection(getString(R.string.loading));
+        if(emailED.getText().length() !=0 ) {
+            onPreStartConnection(getString(R.string.loading));
 
-        mAuth.sendPasswordResetEmail(emailED.getText().toString())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            AlertDialog.Builder successRestoreAlert = Functions.getModal(getString(R.string.succesful_restored_pass),getString(R.string.ok),AuthActivity.this);
-                            successRestoreAlert.show();
+            mAuth.sendPasswordResetEmail(emailED.getText().toString())
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                AlertDialog.Builder successRestoreAlert = Functions.getModal(getString(R.string.succesful_restored_pass), getString(R.string.ok), AuthActivity.this);
+                                successRestoreAlert.show();
+
+                            } else {
+                                AlertDialog.Builder errorRestoreAlert = Functions.getModalError(AuthActivity.this);
+                                errorRestoreAlert.show();
+                            }
+                            stopRefreshing();
 
                         }
-                        else{
-                            AlertDialog.Builder errorRestoreAlert = Functions.getModalError(AuthActivity.this);
-                            errorRestoreAlert.show();
-                        }
-                        stopRefreshing();
-
-                    }
-                });
+                    });
+        }
     }
 
     @Override
@@ -274,6 +277,18 @@ private void authListener(){
         // An unresolvable error has occurred and Google APIs (including Sign-In) will not
         // be available.
         Log.d("google", "onConnectionFailed:" + connectionResult);
+    }
+
+    private boolean checkAllFieldsCompleted(){
+        if (nameED.getText().length() != 0 && passwordED.getText().length() != 0 && emailED.getText().length() != 0)
+                return true;
+        else{
+            AlertDialog.Builder allFieldsBuilder = Functions.getModal(getString(R.string.allFieldsRequired),getString(R.string.ok),this);
+            allFieldsBuilder.show();
+            return false;
+
+
+        }
     }
 
 }

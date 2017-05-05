@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fancy="http://schemas.android.com/apk/res-auto"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/auth"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context="jcollado.pw.pimpam.controller.AuthActivity">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/name_input_layout"
-        android:layout_width="match_parent"
+    <com.github.florent37.materialtextfield.MaterialTextField
+        android:id="@+id/hola"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp">
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="20dp"
+        app:mtf_cardCollapsedHeight="4dp"
+        app:mtf_hasFocus="false"
+        app:mtf_image="@drawable/ic_person"
+        app:mtf_openKeyboardOnFocus="true">
 
         <EditText
             android:id="@+id/nameED"
@@ -26,15 +35,20 @@
             android:layout_marginRight="30dp"
             android:ems="10"
             android:hint="@string/name_add_comic"
-            android:inputType="textPersonName" />
-    </android.support.design.widget.TextInputLayout>
+            android:inputType="textCapWords"
+            android:textColor="@color/primary_dark"
+            android:textColorHint="@android:color/white" />
+    </com.github.florent37.materialtextfield.MaterialTextField>
 
-    <android.support.design.widget.TextInputLayout
+    <com.github.florent37.materialtextfield.MaterialTextField
         android:id="@+id/email_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/name_input_layout"
-        android:layout_marginTop="8dp">
+        android:layout_below="@+id/hola"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="8dp"
+        app:mtf_image="@drawable/ic_mail">
 
         <EditText
             android:id="@+id/emailED"
@@ -44,17 +58,23 @@
             android:layout_alignParentTop="true"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
+            android:textColor="@color/primary_dark"
+            android:textColorHint="@android:color/white"
             android:ems="10"
             android:hint="@string/email_field"
             android:inputType="textPersonName" />
-    </android.support.design.widget.TextInputLayout>
+    </com.github.florent37.materialtextfield.MaterialTextField>
 
-    <android.support.design.widget.TextInputLayout
+    <com.github.florent37.materialtextfield.MaterialTextField
         android:id="@+id/password_input_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/email_input_layout"
-        android:layout_marginTop="8dp">
+
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="8dp"
+        app:mtf_image="@drawable/ic_lock">
 
         <EditText
             android:id="@+id/passwordED"
@@ -62,13 +82,15 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
+            android:textColor="@color/primary_dark"
+            android:textColorHint="@android:color/white"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:ems="10"
             android:hint="@string/password_field"
             android:inputType="textPassword" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.github.florent37.materialtextfield.MaterialTextField>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -85,22 +107,22 @@
             android:layout_marginRight="60dp"
             android:layout_weight="1"
             android:paddingBottom="12dp"
-            android:paddingTop="12dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
+            android:paddingTop="12dp"
 
             app:fb_defaultColor="@color/primary_dark"
             app:fb_focusColor="@color/primary"
-            fancy:fb_iconPaddingRight= "10dp"
-            fancy:fb_fontIconSize="15sp"
             fancy:fb_borderColor="#FFFFFF"
-
-            fancy:fb_borderWidth="1dp"
+            fancy:fb_borderWidth="0dp"
             fancy:fb_fontIconResource="@string/icon_login"
+
+            fancy:fb_fontIconSize="15sp"
+            fancy:fb_iconPaddingRight="10dp"
             fancy:fb_iconPosition="left"
             fancy:fb_radius="30dp"
             fancy:fb_text="@string/login_button"
-            fancy:fb_textColor="#FFFFFF" >
+            fancy:fb_textColor="#FFFFFF">
 
         </mehdi.sakout.fancybuttons.FancyButton>
 
@@ -122,7 +144,7 @@
             app:fb_text="@string/logingoogle_button"
             fancy:fb_borderColor="#FFFFFF"
 
-            fancy:fb_borderWidth="1dp"
+            fancy:fb_borderWidth="0dp"
             fancy:fb_fontIconResource="@string/icon_google"
             fancy:fb_fontIconSize="15sp"
             fancy:fb_iconPaddingRight="10dp"
@@ -145,7 +167,7 @@
             app:fb_defaultColor="@color/primary_dark"
             app:fb_focusColor="@color/primary"
             fancy:fb_borderColor="#FFFFFF"
-            fancy:fb_borderWidth="1dp"
+            fancy:fb_borderWidth="0dp"
             fancy:fb_fontIconResource="@string/icon_signup"
             fancy:fb_fontIconSize="15sp"
             fancy:fb_iconPaddingRight="10dp"
@@ -168,7 +190,7 @@
             app:fb_defaultColor="@color/accent"
             app:fb_focusColor="@color/accent"
             fancy:fb_borderColor="#FFFFFF"
-            fancy:fb_borderWidth="1dp"
+            fancy:fb_borderWidth="0dp"
             fancy:fb_radius="30dp"
             fancy:fb_text="@string/restore_password"
             fancy:fb_textColor="#FFFFFF">

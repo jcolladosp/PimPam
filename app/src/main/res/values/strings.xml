@@ -22,7 +22,7 @@
     <string name="warning_modal_title">Cambiar imagen</string>
     <string name="name_add_comic">Nombre</string>
     <string name="descrption_add_comic">Editorial</string>
-
+    <string name="allFieldsRequired">Es necesario rellenar todos los campos.</string>
     <string name="action_settings">Settings</string>
     <string name="action_add_favourite">Añadir a favoritos</string>
     <string name="action_delete">Eliminar</string>
