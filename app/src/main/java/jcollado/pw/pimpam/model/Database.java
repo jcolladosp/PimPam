@@ -10,6 +10,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+
+import jcollado.pw.pimpam.controller.CollectionFragment;
 import jcollado.pw.pimpam.utils.Singleton;
 
 /**
@@ -24,13 +26,15 @@ public class Database {
     private DatabaseReference comicReference, serieReference;
 
     public ValueEventListener comicListener, serieListener;
+    private CollectionFragment fragment;
+    private boolean firstLoad;
 
     /*
         Constructors
      */
 
     public Database() {
-
+        firstLoad = true;
         comics = new ArrayList<>();
         series = new ArrayList<>();
         comicListener = new ValueEventListener() {
@@ -39,9 +43,15 @@ public class Database {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 comics = new ArrayList<>();
-
+                if(fragment != null){
+                    fragment.mostrarCargando();
+                }
                 for(DataSnapshot data : dataSnapshot.getChildren()) {
                     comics.add(data.getValue(Comic.class));
+                }
+                if(fragment != null) {
+                    fragment.prepareComics();
+                    fragment.onConnectionFinished();
                 }
             }
 
@@ -132,8 +142,15 @@ public class Database {
         serieReference.addValueEventListener(serieListener);
     }
 
+    public void setFragment(CollectionFragment fragment){
+        this.fragment = fragment;
+    }
 
+    public boolean isFirstLoad() {
+        return firstLoad;
+    }
 
-
-
+    public void setFirstLoad(boolean firstLoad) {
+        this.firstLoad = firstLoad;
+    }
 }

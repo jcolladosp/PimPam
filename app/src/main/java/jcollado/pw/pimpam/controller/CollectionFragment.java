@@ -69,9 +69,12 @@ public class CollectionFragment extends BaseFragment {
 
         View view =     inflater.inflate(R.layout.fragment_collection, container, false);
         ButterKnife.bind(this, view);
-
+        Singleton.getInstance().getDatabase().setFragment(this);
         setHasOptionsMenu(true);
-
+        if(Singleton.getInstance().getDatabase().isFirstLoad()) {
+            mostrarCargando();
+            Singleton.getInstance().getDatabase().setFirstLoad(false);
+        }
         initCollapsingToolbar(view);
         prepareToolbar();
         prepareRecyclerView(view);
@@ -140,7 +143,7 @@ public class CollectionFragment extends BaseFragment {
     /**
      * Adding few comics for testing
      */
-    private void prepareComics() {
+    public void prepareComics() {
 
         //onPreStartConnection(getString(R.string.loading));
 
@@ -182,9 +185,12 @@ public class CollectionFragment extends BaseFragment {
     }
 
 
-    private void stopRefreshing() {
+    public void stopRefreshing() {
 
         onConnectionFinished();
+    }
+    public void mostrarCargando(){
+        onPreStartConnection(getString(R.string.loading));
     }
 
 

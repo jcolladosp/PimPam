@@ -51,6 +51,8 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
         {
     public static Drawer result = null;
     Toolbar toolbar;
+    private CollectionFragment collectionFragment;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,17 +65,18 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
         setNavigationDrawer();
         Singleton.getInstance().getFirebaseModule().setConnectionDatabase();
 
-        BaseFragment fragment = CollectionFragment.newInstance();
+        collectionFragment = CollectionFragment.newInstance();
+        Singleton.getInstance().getDatabase().setFragment(collectionFragment);
             toolbar.setTitle(getString(R.string.seeCollection));
-
             getSupportActionBar().hide();
-            openFragment(fragment);
+            openFragment(collectionFragment);
 
 
     }
     public static void openDrawer(){
         result.openDrawer();
     }
+
 
     private void setNavigationDrawer(){
 
@@ -114,11 +117,10 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
 
                         BaseFragment fragment;
                         if (position == 1){
-                            fragment = CollectionFragment.newInstance();
                             toolbar.setTitle(getString(R.string.seeCollection));
 
                             getSupportActionBar().hide();
-                            openFragment(fragment);
+                            openFragment(collectionFragment);
                         }
 
                         if (position == 2){
@@ -199,6 +201,10 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
                 } else {
                     super.onActivityResult(requestCode, resultCode, data);
                 }
+            }
+
+            public void mostrarCargando(){
+                onPreStartConnection(getString(R.string.loading));
             }
 
 
