@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -50,6 +51,8 @@ public class AddComicFragment extends BaseFragment {
     @BindView(R.id.numeroED)
     EditText numeroED;
 
+    @BindView(R.id.favouriteButton)
+    FloatingActionButton favouriteButton;
 
     @BindView(R.id.comicIV)
     SquareImageView comicIV;
@@ -116,7 +119,10 @@ public class AddComicFragment extends BaseFragment {
         }
     }
 
-
+    @OnClick(R.id.favouriteButton) void change ()
+    {
+        favouriteButton.setImageResource(R.drawable.ic_shopping_cart_white);
+    }
 
     @OnClick(R.id.addFab) void submit() {
         hideKeyboard();

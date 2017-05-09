@@ -15,7 +15,7 @@ public class Comic {
     private String year;
     private Serie serie;
     private String serieName;
-
+    private boolean favourite;
 
     private String displayName;
 
@@ -25,7 +25,7 @@ public class Comic {
         imageURL = "";
     }
 
-    public Comic(String name, String editorial, String imageURL, String volumen, String year, Serie serie) {
+    public Comic(String name, String editorial, String imageURL, String volumen, String year, Serie serie, boolean favourite) {
         this.name = name;
 
         this.editorial = editorial;
@@ -38,6 +38,7 @@ public class Comic {
             this.serieName = serie.getName();
             this.displayName = serieName + " " + volumen;
         }
+        this.favourite =  favourite;
     }
     public String getDisplayName(){
         return displayName;
@@ -106,4 +107,10 @@ public class Comic {
     public void setVolumen(String volumen) {
         this.volumen = volumen;
     }
+
+    public boolean getFavourite() {return favourite;}
+
+    public void setFavourite() {this.favourite = favourite ;}
 }
+
+

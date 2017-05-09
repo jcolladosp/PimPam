@@ -11,5 +11,6 @@ public class FactoryComic {
         return comic;
     }
 
+
 }
 

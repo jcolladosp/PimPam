@@ -8,6 +8,17 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/favouriteButton"
+        style="@style/FabStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|left"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        app:layout_anchor="@+id/app_bar_layout"
+        app:layout_anchorGravity="bottom|left" />
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
