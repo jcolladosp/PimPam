@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -121,8 +122,12 @@ public class AddComicFragment extends BaseFragment {
 
     @OnClick(R.id.favouriteButton) void change ()
     {
-        favouriteButton.setImageResource(R.drawable.star);
+
         fav = !fav;//FontAwesome.Icon.faw_star.ordinal()
+        if (fav)
+        {
+            favouriteButton.setImageResource(R.drawable.star_full);
+        } else {favouriteButton.setImageResource(R.drawable.star);}
     }
 
     @OnClick(R.id.addFab) void submit() {

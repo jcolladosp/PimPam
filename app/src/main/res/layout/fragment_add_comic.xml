@@ -10,6 +10,7 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/favouriteButton"
+        android:src="@drawable/star"
         style="@style/FabStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
