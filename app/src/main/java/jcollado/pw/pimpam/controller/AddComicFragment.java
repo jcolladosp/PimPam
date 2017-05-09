@@ -20,14 +20,13 @@ import android.widget.TextView;
 
 import com.google.firebase.storage.FirebaseStorage;
 
-import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.model.Comic;
-import jcollado.pw.pimpam.model.Factory;
+import jcollado.pw.pimpam.model.FactoryComic;
+import jcollado.pw.pimpam.model.FactorySerie;
 import jcollado.pw.pimpam.model.Serie;
 import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.Functions;
@@ -145,16 +144,16 @@ public class AddComicFragment extends BaseFragment {
             serie = Singleton.getInstance().getDatabase().getSerieByName(serieAC.getText().toString());
 //            nameED.setText(Integer.toString(Singleton.getInstance().getDatabase().getSeries().get(0).getVolumenesName().size()));
             if(serie == null) {
-                serie = Factory.createSerie(serieAC.getText().toString(), 0, 0);
+                serie = FactorySerie.createSerie(serieAC.getText().toString(), 0, 0);
             }
 
-            comic = Factory.createComic(nameED.getText().toString(),editorialED.getText().toString(),
+            comic = FactoryComic.createComic(nameED.getText().toString(),editorialED.getText().toString(),
                     "https://static.gamespot.com/uploads/original/1562/15626911/2991050-4996630-04-variant.jpg",numeroED.getText().toString(),anyoED.getText().toString(),serie);
 
 
 
 
-            //Factory.createComic(nameED.getText().toString(), editorialED.getText().toString(), uri.toString(), 0, 0, /*serie*/ null);
+            //FactorySerie.createComic(nameED.getText().toString(), editorialED.getText().toString(), uri.toString(), 0, 0, /*serie*/ null);
 
         }
     }
