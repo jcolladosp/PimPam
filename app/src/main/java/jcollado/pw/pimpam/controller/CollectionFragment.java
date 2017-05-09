@@ -45,6 +45,7 @@ public class CollectionFragment extends BaseFragment {
     private List<Comic> comicList;
     SearchView searchView = null;
     MenuItem myActionMenuItem;
+    public boolean isAtached = false;
     public CollectionFragment() {
         // Required empty public constructor
     }
@@ -175,12 +176,14 @@ public class CollectionFragment extends BaseFragment {
 
     @Override
     public void onAttach(Context context) {
+        isAtached = true;
         super.onAttach(context);
 
     }
 
     @Override
     public void onDetach() {
+        isAtached = false;
         super.onDetach();
     }
 

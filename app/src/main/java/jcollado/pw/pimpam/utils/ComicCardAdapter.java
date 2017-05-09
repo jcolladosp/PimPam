@@ -7,6 +7,7 @@ package jcollado.pw.pimpam.utils;
 import android.content.Context;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -29,7 +30,7 @@ public class ComicCardAdapter extends RecyclerView.Adapter<ComicCardAdapter.MyVi
     private Context mContext;
     private List<Comic> comicList;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener {
         public TextView title, count;
         public ImageView thumbnail, overflow;
 
@@ -39,6 +40,12 @@ public class ComicCardAdapter extends RecyclerView.Adapter<ComicCardAdapter.MyVi
             count = (TextView) view.findViewById(R.id.count);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
             overflow = (ImageView) view.findViewById(R.id.overflow);
+        }
+
+        @Override
+        //onClick method when click a card
+        public void onClick(View view) {
+            Log.i("onClick", "onClick " + comicList.get(getAdapterPosition()).getDisplayName() );
         }
     }
 

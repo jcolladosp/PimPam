@@ -43,13 +43,13 @@ public class Database {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 comics = new ArrayList<>();
-                if(fragment != null){
+                if(fragment != null && fragment.isAtached){
                     fragment.mostrarCargando();
                 }
                 for(DataSnapshot data : dataSnapshot.getChildren()) {
                     comics.add(data.getValue(Comic.class));
                 }
-                if(fragment != null) {
+                if(fragment != null && fragment.isAtached) {
                     fragment.prepareComics();
                     fragment.onConnectionFinished();
                 }

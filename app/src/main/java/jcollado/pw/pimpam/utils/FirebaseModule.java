@@ -8,6 +8,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FileDownloadTask;
@@ -36,8 +37,7 @@ public class FirebaseModule {
         storageRef = FirebaseStorage.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         if(mAuth.getCurrentUser() != null) {
-            comicReference = database.getReference(Functions.getUniqueID()+"/comics");
-            serieReference = database.getReference(Functions.getUniqueID()+"/series");
+            setReferences();
         }
     }
 
@@ -52,10 +52,15 @@ public class FirebaseModule {
     public FirebaseAuth getmAuth() {
         return mAuth;
     }
+    public FirebaseUser getCurrentUser(){
+        return mAuth.getCurrentUser();
+    }
 
     public DatabaseReference getComicReference(){
         return comicReference;
     }
+
+
 
     public DatabaseReference getSerieReference(){
         return serieReference;
@@ -65,7 +70,7 @@ public class FirebaseModule {
         fragment.onPreStartConnection(fragment.getString(R.string.loading));
 
         final String[] downloadURL = new String[1];
-        StorageReference ImagesRef = storageRef.child(PrefKeys.IMAGES.toString()).child(Functions.getUniqueID()).child(imagename);
+        StorageReference ImagesRef = storageRef.child(PrefKeys.IMAGES.toString()).child(UserInfo.getUniqueID()).child(imagename);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
@@ -114,8 +119,11 @@ public class FirebaseModule {
     }
 
     public void setConnectionDatabase(){
-        comicReference = database.getReference(Functions.getUniqueID()+"/comics");
-        serieReference = database.getReference(Functions.getUniqueID()+"/series");
+        setReferences();
         Singleton.getInstance().getDatabase().setConnections();
+    }
+    private void setReferences(){
+        comicReference = database.getReference(UserInfo.getUniqueID()+"/" + PrefKeys.COMICS.toString());
+        serieReference = database.getReference(UserInfo.getUniqueID()+"/" + PrefKeys.SERIES.toString());
     }
 }

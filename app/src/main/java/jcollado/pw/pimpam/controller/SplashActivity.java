@@ -8,12 +8,14 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import jcollado.pw.pimpam.R;
+import jcollado.pw.pimpam.utils.BaseActivity;
 import jcollado.pw.pimpam.utils.Functions;
+import jcollado.pw.pimpam.utils.UserInfo;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         startSplash();
@@ -22,7 +24,7 @@ public class SplashActivity extends AppCompatActivity {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                if(!Functions.isLogged(SplashActivity.this)) {
+                if(!UserInfo.isLogged()) {
                     Intent i = new Intent(getApplicationContext(), AuthActivity.class);
                     startActivity(i);
                 }

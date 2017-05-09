@@ -164,41 +164,7 @@ public class Functions {
     }
 
 
-    public static String getUniqueID() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            return user.getUid();
-        }
-        return null;
-    }
-    public static String getUserName() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            return user.getDisplayName();
-        }
-        return null;
-    }
-    public static Uri getProfilePictureURL() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            return user.getPhotoUrl();
-        }
-        return null;
-    }
-    public static String getUserEmail() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            return user.getEmail();
-        }
-        return null;
-    }
-    public static boolean isLogged(Context context) {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            return true;
-        }
-        return false;
-    }
+
 
 
     /**

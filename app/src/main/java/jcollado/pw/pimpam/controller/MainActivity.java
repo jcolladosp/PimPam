@@ -17,12 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserInfo;
-import com.google.firebase.auth.UserProfileChangeRequest;
+
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
@@ -36,16 +31,13 @@ import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
-import com.mikepenz.materialdrawer.util.DrawerImageLoader;
-import com.mikepenz.materialdrawer.util.DrawerUIUtils;
 
-import butterknife.OnClick;
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.utils.BaseActivity;
 import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.Functions;
 import jcollado.pw.pimpam.utils.Singleton;
+import jcollado.pw.pimpam.utils.UserInfo;
 
 public class MainActivity extends BaseActivity implements ViewComicFragment.OnFragmentInteractionListener,AddComicFragment.OnFragmentInteractionListener,  Barcode_Fragment.OnFragmentInteractionListener
         {
@@ -81,19 +73,14 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
     private void setNavigationDrawer(){
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        String displayName = Singleton.getInstance().getFirebaseModule().getmAuth().getCurrentUser().getDisplayName();
-        String userEmail = Singleton.getInstance().getFirebaseModule().getmAuth().getCurrentUser().getEmail();
-        Uri icon = Singleton.getInstance().getFirebaseModule().getmAuth().getCurrentUser().getPhotoUrl();
-
-
-        // Create the AccountHeader
+       // Create the AccountHeader
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.header)
                 .withSelectionListEnabledForSingleProfile(false)
                 .withOnlyMainProfileImageVisible(true)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(displayName).withEmail(userEmail).withIcon(icon)
+                        new ProfileDrawerItem().withName(UserInfo.getDisplayName()).withEmail(UserInfo.getUserEmail()).withIcon(UserInfo.getProfilePictureURL())
                 )
 
                 .build();
