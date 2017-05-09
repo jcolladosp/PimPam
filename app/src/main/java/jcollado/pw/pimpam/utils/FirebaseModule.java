@@ -52,6 +52,7 @@ public class FirebaseModule {
     public FirebaseAuth getmAuth() {
         return mAuth;
     }
+
     public FirebaseUser getCurrentUser(){
         return mAuth.getCurrentUser();
     }
@@ -123,7 +124,7 @@ public class FirebaseModule {
         Singleton.getInstance().getDatabase().setConnections();
     }
     private void setReferences(){
-        comicReference = database.getReference(UserInfo.getUniqueID()+"/" + PrefKeys.COMICS.toString());
-        serieReference = database.getReference(UserInfo.getUniqueID()+"/" + PrefKeys.SERIES.toString());
+        comicReference = database.getReference(mAuth.getCurrentUser().getUid()+"/" + PrefKeys.COMICS.toString());
+        serieReference = database.getReference(mAuth.getCurrentUser().getUid()+"/" + PrefKeys.SERIES.toString());
     }
 }
