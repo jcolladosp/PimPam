@@ -9,17 +9,26 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jcollado.pw.pimpam.R;
+import jcollado.pw.pimpam.model.Comic;
 import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.Functions;
 import jcollado.pw.pimpam.widgets.SquareImageView;
@@ -39,6 +48,10 @@ public class ViewComicFragment extends BaseFragment {
     TextView editorialED;
     @BindView(R.id.numeroED)
     EditText numeroED;
+    @BindView(R.id.serieAC)
+    AutoCompleteTextView serieAC;
+
+
 
 
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -46,7 +59,7 @@ public class ViewComicFragment extends BaseFragment {
     SquareImageView comicIV;
 
     private OnFragmentInteractionListener mListener;
-
+    private static Comic comic;
     public ViewComicFragment() {
         // Required empty public constructor
     }
@@ -68,13 +81,17 @@ public class ViewComicFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_viewcomic, container, false);
         ButterKnife.bind(this, view);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(true);
-        toolbar.setTitle("Hola");
+        prepareToolbar();
+        setHasOptionsMenu(true);
 
+        toolbar.setTitle(comic.getDisplayName());
 
-
+        nameED.setText(comic.getName());
+        anyoED.setText(comic.getYear());
+        editorialED.setText(comic.getEditorial());
+        numeroED.setText(comic.getVolumen());
+        serieAC.setText(comic.getSerieName());
+        Glide.with(getContext()).load(comic.getImageURL()).placeholder(R.drawable.placeholder).into(comicIV);
         return view;
     }
 
@@ -138,9 +155,53 @@ public class ViewComicFragment extends BaseFragment {
             builder.show();
 
     }
+    public void setComic(Comic comic){
+        this.comic = comic;
 
+    }
     @OnClick(R.id.doneFab)
     public void onDone(){
         MainActivity.openDrawer();
+    }
+
+    private void prepareToolbar(){
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
+
+       // toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.hamburger));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, CollectionFragment.newInstance(),"")
+                        .commit();
+            }
+        });
+
+       // toolbar.setTitle(getString(R.string.addComic));
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+        getActivity().getMenuInflater().inflate( R.menu.viewcomic_menu, menu);
+        super.onCreateOptionsMenu(menu,inflater);
+
+
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_edit:
+                //lblMensaje.setText("Opcion 1 pulsada!");
+                return true;
+            case R.id.action_delete:
+                //lblMensaje.setText("Opcion 2 pulsada!");;
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

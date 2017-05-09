@@ -22,6 +22,8 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import jcollado.pw.pimpam.R;
+import jcollado.pw.pimpam.controller.MainActivity;
+import jcollado.pw.pimpam.controller.ViewComicFragment;
 import jcollado.pw.pimpam.model.Comic;
 
 
@@ -49,7 +51,7 @@ public class ComicCardAdapter extends RecyclerView.Adapter<ComicCardAdapter.MyVi
         @Override
         //onClick method when click a card
         public void onClick(View view) {
-            Log.i("onClick", "onClick " + comicList.get(getAdapterPosition()).getDisplayName() );
+            openViewComicFragment(comicList.get(getAdapterPosition()));
         }
     }
 
@@ -69,7 +71,7 @@ public class ComicCardAdapter extends RecyclerView.Adapter<ComicCardAdapter.MyVi
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        Comic comic = comicList.get(position);
+        final Comic comic = comicList.get(position);
         holder.title.setText(comic.getDisplayName());
         holder.count.setText(comic.getEditorial());
 
@@ -85,11 +87,21 @@ public class ComicCardAdapter extends RecyclerView.Adapter<ComicCardAdapter.MyVi
         holder.thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i("onClick", "onClick " + comicList.get(position).getDisplayName() );
+               openViewComicFragment(comicList.get(position));
 
             }
         });
     }
+    private void openViewComicFragment(Comic comic){
+        ViewComicFragment fragment = ViewComicFragment.newInstance();
+        fragment.setComic(comic);
+        MainActivity myActivity = (MainActivity) mContext;
+         myActivity.getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, fragment,"")
+                .commit();
+    }
+
     /*
         Añade una lista completa de items
          */

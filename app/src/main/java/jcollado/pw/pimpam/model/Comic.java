@@ -110,7 +110,7 @@ public class Comic {
 
     public boolean getFavourite() {return favourite;}
 
-    public void setFavourite() {this.favourite = favourite ;}
+    public void setFavourite(boolean fav) {favourite = fav ;}
 }
 
 
