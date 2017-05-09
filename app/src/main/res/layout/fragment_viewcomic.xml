@@ -67,32 +67,135 @@
                 app:cardElevation="@dimen/spacing_medium"
                 app:cardUseCompatPadding="true">
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true">
 
-                    <TextView
-                        android:id="@+id/title"
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/serie_input_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/spacing_large"
-                        android:layout_marginRight="@dimen/spacing_large"
-                        android:layout_marginTop="@dimen/spacing_large"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
 
-                    <TextView
-                        android:id="@+id/description"
+                        android:layout_marginTop="15dp">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/serieAC"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="30dp"
+
+                            android:layout_marginRight="30dp"
+                            android:ems="10"
+                            android:hint="@string/serie"
+                            android:inputType="textCapWords" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/middleRL"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_below="@+id/serie_input_layout"
+                        android:layout_marginTop="5dp"
+                        android:weightSum="2">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/numero_input_layout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginLeft="30dp"
+                            android:layout_toLeftOf="@+id/anchor"
+                            android:layout_weight="1">
+
+                            <EditText
+                                android:id="@+id/numeroED"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_alignEnd="@+id/name_input_layout"
+                                android:layout_alignStart="@+id/name_input_layout"
+                                android:layout_marginRight="5dp"
+                                android:ems="10"
+                                android:hint="@string/numero"
+                                android:inputType="number" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <View
+                            android:id="@+id/anchor"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_centerInParent="true" />
+
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/anyo_input_layout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginEnd="30dp"
+                            android:layout_toRightOf="@+id/anchor">
+
+                            <EditText
+                                android:id="@+id/anyoED"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignEnd="@+id/name_input_layout"
+                                android:layout_alignStart="@+id/name_input_layout"
+                                android:layout_marginLeft="5dp"
+                                android:ems="10"
+                                android:hint="@string/anyo"
+                                android:inputType="number" />
+                        </android.support.design.widget.TextInputLayout>
+                    </RelativeLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/editorial_input_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/spacing_large"
-                        android:text="@string/lorem_ipsum"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                        android:layout_below="@+id/middleRL"
+                        android:layout_marginTop="5dp">
 
-                </LinearLayout>
+                        <EditText
+                            android:id="@+id/editorialED"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginLeft="30dp"
+                            android:layout_marginRight="30dp"
+                            android:ems="10"
+                            android:hint="@string/descrption_add_comic"
+                            android:inputType="textCapWords"
+                            />
+                    </android.support.design.widget.TextInputLayout>
 
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/name_input_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/editorial_input_layout"
+                        android:layout_marginBottom="30dp"
+                        android:layout_marginTop="5dp">
+
+                        <EditText
+                            android:id="@+id/nameED"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginLeft="30dp"
+                            android:layout_marginRight="30dp"
+                            android:ems="10"
+                            android:hint="@string/name_add_comic"
+                            android:inputType="textCapWords" />
+                    </android.support.design.widget.TextInputLayout>
+
+
+                </RelativeLayout>
             </android.support.v7.widget.CardView>
-
         </FrameLayout>
 
     </android.support.v4.widget.NestedScrollView>

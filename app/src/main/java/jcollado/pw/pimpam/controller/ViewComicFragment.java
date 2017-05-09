@@ -13,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,6 +30,16 @@ public class ViewComicFragment extends BaseFragment {
     private static final int GALLERY_PICK = 1;
     private static final int CAMERA_PICK = 2;
     private boolean imageChanged = false;
+
+    @BindView(R.id.nameED)
+    EditText nameED;
+    @BindView(R.id.anyoED)
+    EditText anyoED;
+    @BindView(R.id.editorialED)
+    TextView editorialED;
+    @BindView(R.id.numeroED)
+    EditText numeroED;
+
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.comicIV)

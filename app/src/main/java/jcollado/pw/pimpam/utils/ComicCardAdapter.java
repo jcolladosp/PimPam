@@ -40,6 +40,10 @@ public class ComicCardAdapter extends RecyclerView.Adapter<ComicCardAdapter.MyVi
             count = (TextView) view.findViewById(R.id.count);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
             overflow = (ImageView) view.findViewById(R.id.overflow);
+
+            view.setOnClickListener(this);
+
+
         }
 
         @Override
@@ -64,7 +68,7 @@ public class ComicCardAdapter extends RecyclerView.Adapter<ComicCardAdapter.MyVi
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
         Comic comic = comicList.get(position);
         holder.title.setText(comic.getDisplayName());
         holder.count.setText(comic.getEditorial());
@@ -76,6 +80,13 @@ public class ComicCardAdapter extends RecyclerView.Adapter<ComicCardAdapter.MyVi
             @Override
             public void onClick(View view) {
                 showPopupMenu(holder.overflow);
+            }
+        });
+        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("onClick", "onClick " + comicList.get(position).getDisplayName() );
+
             }
         });
     }

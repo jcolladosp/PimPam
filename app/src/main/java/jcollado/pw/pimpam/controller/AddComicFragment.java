@@ -46,7 +46,7 @@ public class AddComicFragment extends BaseFragment {
     @BindView(R.id.anyoED)
     EditText anyoED;
     @BindView(R.id.editorialED)
-    TextView editorialED;
+    EditText editorialED;
     @BindView(R.id.numeroED)
     EditText numeroED;
 
