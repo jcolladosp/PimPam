@@ -193,10 +193,7 @@ public class ViewComicFragment extends BaseFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_edit:
-                //lblMensaje.setText("Opcion 1 pulsada!");
-                return true;
-            case R.id.action_delete:
+               case R.id.action_delete:
                 //lblMensaje.setText("Opcion 2 pulsada!");;
                 return true;
 

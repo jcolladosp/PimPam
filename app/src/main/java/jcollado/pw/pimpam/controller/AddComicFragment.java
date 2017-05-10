@@ -52,9 +52,6 @@ public class AddComicFragment extends BaseFragment {
     @BindView(R.id.numeroED)
     EditText numeroED;
 
-    @BindView(R.id.favouriteButton)
-    FloatingActionButton favouriteButton;
-
     @BindView(R.id.comicIV)
     SquareImageView comicIV;
     @BindView(R.id.toolbar2)
@@ -120,15 +117,7 @@ public class AddComicFragment extends BaseFragment {
         }
     }
 
-    @OnClick(R.id.favouriteButton) void change ()
-    {
 
-        fav = !fav;//FontAwesome.Icon.faw_star.ordinal()
-        if (fav)
-        {
-            favouriteButton.setImageResource(R.drawable.star_full);
-        } else {favouriteButton.setImageResource(R.drawable.star);}
-    }
 
     @OnClick(R.id.addFab) void submit() {
         hideKeyboard();

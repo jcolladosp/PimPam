@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.varunest.sparkbutton.SparkButton;
+import com.varunest.sparkbutton.SparkEventListener;
 
 import java.util.List;
 
@@ -34,14 +36,16 @@ public class ComicCardAdapter extends RecyclerView.Adapter<ComicCardAdapter.MyVi
 
     public class MyViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener {
         public TextView title, count;
-        public ImageView thumbnail, overflow;
+        public ImageView thumbnail;
+        public SparkButton favButton;
 
         public MyViewHolder(View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.title);
             count = (TextView) view.findViewById(R.id.count);
             thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
-            overflow = (ImageView) view.findViewById(R.id.overflow);
+            favButton = (SparkButton) view.findViewById(R.id.star_button1);
+
 
             view.setOnClickListener(this);
 
@@ -78,12 +82,30 @@ public class ComicCardAdapter extends RecyclerView.Adapter<ComicCardAdapter.MyVi
         // loading album cover using Glide library
         Glide.with(mContext).load(comic.getImageURL()).placeholder(R.drawable.placeholder).into(holder.thumbnail);
 
-        holder.overflow.setOnClickListener(new View.OnClickListener() {
+        holder.favButton.setChecked(comic.getFavourite());
+
+
+        holder.favButton.setEventListener(new SparkEventListener(){
             @Override
-            public void onClick(View view) {
-                showPopupMenu(holder.overflow);
+            public void onEvent(ImageView button, boolean buttonState) {
+                if (buttonState) {
+                        comic.setFavourite(true);
+                    } else {
+                        comic.setFavourite(false);
+                }
+            }
+
+            @Override
+            public void onEventAnimationEnd(ImageView button, boolean buttonState) {
+
+            }
+
+            @Override
+            public void onEventAnimationStart(ImageView button, boolean buttonState) {
+
             }
         });
+
         holder.thumbnail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,40 +139,7 @@ public class ComicCardAdapter extends RecyclerView.Adapter<ComicCardAdapter.MyVi
         comicList.clear();
         notifyDataSetChanged();
     }
-    /**
-     * Showing popup menu when tapping on 3 dots
-     */
-    private void showPopupMenu(View view) {
-        // inflate menu
-        PopupMenu popup = new PopupMenu(mContext, view);
-        MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.card_menu, popup.getMenu());
-        popup.setOnMenuItemClickListener(new MyMenuItemClickListener());
-        popup.show();
-    }
 
-    /**
-     * Click listener for popup menu items
-     */
-    class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
-
-        public MyMenuItemClickListener() {
-        }
-
-        @Override
-        public boolean onMenuItemClick(MenuItem menuItem) {
-            switch (menuItem.getItemId()) {
-                case R.id.action_add_favourite:
-                    Toast.makeText(mContext, "Add to favourite", Toast.LENGTH_SHORT).show();
-                    return true;
-                case R.id.action_play_next:
-                    Toast.makeText(mContext, "Play next", Toast.LENGTH_SHORT).show();
-                    return true;
-                default:
-            }
-            return false;
-        }
-    }
 
     @Override
     public int getItemCount() {
