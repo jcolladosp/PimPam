@@ -60,4 +60,6 @@ public abstract class BaseFragment extends Fragment {
     public void onConnectionFinished() {
         progressBar.hide();
     }
+
+    public void comicUploaded(){}
 }

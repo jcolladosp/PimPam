@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.firebase.storage.FirebaseStorage;
 
@@ -156,14 +157,26 @@ public class AddComicFragment extends BaseFragment {
 
         }
     }
-    public static void uploadComic(String imageURL){
+    public void uploadComic(String imageURL){
         Database.getInstance().serieToDatabase(serie);
         comic.setImageURL(imageURL);
 
         serie.addComicToSerie(comic);
 
-        Database.getInstance().comicToDatabase(comic);
+        Database.getInstance().comicToDatabase(comic,this);
+
+
     }
+    @Override
+    public void comicUploaded(){
+        onConnectionFinished();
+        new Toast(getContext()).makeText(getContext(),getString(R.string.comic_addded_succesfull), Toast.LENGTH_SHORT).show();
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, CollectionFragment.newInstance(),"")
+                .commit();
+    }
+
 
     @OnClick(R.id.comicIV)
     public void changeImage() {

@@ -126,9 +126,6 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
                             case 5:
                                 //logout code
 
-<<<<<<< Updated upstream
-                        }
-                        if (position == 6){
                             AlertDialog.Builder logOutBuilder = Functions.getModalLogOut(MainActivity.this);
                             logOutBuilder.setPositiveButton((getString(R.string.ok)), new DialogInterface.OnClickListener() {
                                 @Override
@@ -139,19 +136,10 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
                                 }
                             });
                             logOutBuilder.show();
-=======
-                                AlertDialog.Builder logOutBuilder = Functions.getModalLogOut(MainActivity.this);
-                                logOutBuilder.setPositiveButton((getString(R.string.ok)), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Singleton.getInstance().getFirebaseModule().getmAuth().signOut();
-                                        Intent i = new Intent(getApplicationContext(), AuthActivity.class);
-                                        startActivity(i);
-                                    }
-                                });
-                                logOutBuilder.show();
+
+
                                 break;
->>>>>>> Stashed changes
+
                         }
                         return true;
                     }

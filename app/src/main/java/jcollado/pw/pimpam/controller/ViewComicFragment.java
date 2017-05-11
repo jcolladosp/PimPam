@@ -10,9 +10,7 @@ import android.provider.MediaStore;
 import android.app.AlertDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.varunest.sparkbutton.SparkButton;
@@ -34,9 +33,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.model.Comic;
+import jcollado.pw.pimpam.model.Database;
+import jcollado.pw.pimpam.model.FactoryComic;
+import jcollado.pw.pimpam.model.Serie;
 import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.Functions;
-import jcollado.pw.pimpam.utils.Singleton;
 import jcollado.pw.pimpam.widgets.SquareImageView;
 
 
@@ -53,10 +54,6 @@ public class ViewComicFragment extends BaseFragment {
     EditText anyoED;
     @BindView(R.id.editorialED)
     TextView editorialED;
-    @BindView(R.id.numeroED)
-    EditText numeroED;
-    @BindView(R.id.serieAC)
-    AutoCompleteTextView serieAC;
     @BindView(R.id.editFab)
     FloatingActionButton editFab;
     @BindView(R.id.showLayout)
@@ -81,6 +78,8 @@ public class ViewComicFragment extends BaseFragment {
 
     private OnFragmentInteractionListener mListener;
     private static Comic comic;
+    static Serie serie;
+
     public ViewComicFragment() {
         // Required empty public constructor
     }
@@ -155,7 +154,7 @@ public class ViewComicFragment extends BaseFragment {
 
     @OnClick(R.id.comicIV)
     public void changeImage() {
-
+            /*
             AlertDialog.Builder builder = Functions.getModal(R.string.warning_modal_title,R.string.news_image_message, getActivity());
             builder.setPositiveButton(R.string.news_image_camera, new DialogInterface.OnClickListener() {
                   @Override
@@ -172,7 +171,7 @@ public class ViewComicFragment extends BaseFragment {
                 }
             });
             builder.show();
-
+        */
     }
     public void setComic(Comic comic){
         this.comic = comic;
@@ -188,7 +187,12 @@ public class ViewComicFragment extends BaseFragment {
             editingComic = false;
             actionDelete.setVisible(false);
             editFab.setImageResource(R.drawable.ic_edit);
-            //save comic
+            comic.setYear(anyoED.getText().toString());
+            comic.setName(nameED.getText().toString());
+            comic.setEditorial(editorialED.getText().toString());
+
+
+            Database.getInstance().comicToDatabase(comic,this);
 
             showMode();
 
@@ -206,8 +210,7 @@ public class ViewComicFragment extends BaseFragment {
         nameED.setText(comic.getName());
         anyoED.setText(comic.getYear());
         editorialED.setText(comic.getEditorial());
-        numeroED.setText(comic.getVolumen());
-        serieAC.setText(comic.getSerieName());
+
 
     }
     private void showMode(){
@@ -228,6 +231,13 @@ public class ViewComicFragment extends BaseFragment {
         }
 
     }
+    @Override
+    public void comicUploaded(){
+        onConnectionFinished();
+        new Toast(getContext()).makeText(getContext(),getString(R.string.comicUpdated), Toast.LENGTH_SHORT).show();
+       showMode();
+    }
+
 
     private void prepareToolbar(){
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -260,17 +270,28 @@ public class ViewComicFragment extends BaseFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
                case R.id.action_delete:
-                   Singleton.getInstance().getDatabase().deleteComicFromDatabase(comic);
-                   getActivity().getSupportFragmentManager()
-                           .beginTransaction()
-                           .replace(R.id.container, CollectionFragment.newInstance(),"")
-                           .commit();
+
+                   mostrarCargando();
+                   Database.getInstance().deleteComicFromDatabase(comic,this);
                    return true;
 
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+    public void mostrarCargando(){
+        onPreStartConnection(getString(R.string.loading));
+    }
+
+    public void comicDeleted(){
+        onConnectionFinished();
+        new Toast(getContext()).makeText(getContext(),getString(R.string.comicDeleted), Toast.LENGTH_SHORT).show();
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, CollectionFragment.newInstance(),"")
+                .commit();
+    }
+
     private void listenerFavButton(){
         starButton.setEventListener(new SparkEventListener(){
             @Override

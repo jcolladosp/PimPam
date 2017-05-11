@@ -95,9 +95,7 @@ public class FirebaseModule {
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                 downloadURL[0] = taskSnapshot.getDownloadUrl().toString();
-                fragment.onConnectionFinished();
                 fragment.uploadComic(downloadURL[0]);
-                Toast.makeText(fragment.getActivity(), fragment.getString(R.string.comic_addded_succesfull), Toast.LENGTH_SHORT).show();
 
         }
         });

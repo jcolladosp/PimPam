@@ -11,7 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.controller.CollectionFragment;
+import jcollado.pw.pimpam.controller.ViewComicFragment;
+import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.FirebaseModule;
 
 /**
@@ -51,6 +54,8 @@ public class Database {
                 for(DataSnapshot data : dataSnapshot.getChildren()) {
                     comics.add(data.getValue(Comic.class));
                 }
+                fragment.prepareComics();
+
                 if(fragment != null && fragment.isAtached) {
                     fragment.prepareComics();
                     fragment.onConnectionFinished();
@@ -120,11 +125,32 @@ public class Database {
         comicReference.child(PrefKeys.USERINFO.toString()).setValue(user);
     }*/
 
-    public void comicToDatabase(Comic comic){
-        comicReference.child(comic.getDisplayName()).setValue(comic);
+    public void comicToDatabase(Comic comic, final BaseFragment fragment){
+        comicReference.child(comic.getDisplayName()).setValue(comic,new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError error, DatabaseReference ref) {
+                if (error != null) {
+                    Log.i("eror","Data could not be deleted. " + error.getMessage());
+                } else {
+                    fragment.comicUploaded();
+                }
+
+            }
+        });
     }
-    public void deleteComicFromDatabase(Comic comic){
-        comicReference.child(comic.getDisplayName()).removeValue();
+    public void deleteComicFromDatabase(Comic comic, final ViewComicFragment view){
+        view.mostrarCargando();
+        comicReference.child(comic.getDisplayName()).removeValue(new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError error, DatabaseReference ref) {
+                if (error != null) {
+                    Log.i("eror","Data could not be deleted. " + error.getMessage());
+                } else {
+                    view.comicDeleted();
+                }
+
+            }
+        });
     }
 
     public List<String> getAllSeriesName(){
