@@ -123,6 +123,9 @@ public class Database {
     public void comicToDatabase(Comic comic){
         comicReference.child(comic.getDisplayName()).setValue(comic);
     }
+    public void deleteComicFromDatabase(Comic comic){
+        comicReference.child(comic.getDisplayName()).removeValue();
+    }
 
     public List<String> getAllSeriesName(){
         ArrayList<String> names = new ArrayList<>();

@@ -94,36 +94,39 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-
                         BaseFragment fragment;
-                        if (position == 1){
-                            toolbar.setTitle(getString(R.string.seeCollection));
 
-                            getSupportActionBar().hide();
-                            openFragment(collectionFragment);
-                        }
+                        switch (position) {
+                            case 1:
+                                toolbar.setTitle(getString(R.string.seeCollection));
 
-                        if (position == 2){
-                            fragment = AddComicFragment.newInstance();
-                            getSupportActionBar().hide();
-                            openFragment(fragment);
+                                getSupportActionBar().hide();
+                                openFragment(collectionFragment);
+                                break;
 
-
-                        }
-
-                        if (position == 3) {
-                            fragment = Barcode_Fragment.newInstance();
-                            openFragment(fragment);
-                            getSupportActionBar().show();
-
-                        }
-
-                        if (position == 5){
-                            fragment = SettingsFragment.newInstance();
-
-                            openFragment(fragment);
+                            case 2:
+                                fragment = AddComicFragment.newInstance();
+                                getSupportActionBar().hide();
+                                openFragment(fragment);
+                                break;
 
 
+
+                            case 3:
+                                fragment = Barcode_Fragment.newInstance();
+                                openFragment(fragment);
+                                getSupportActionBar().show();
+                                break;
+
+
+                            case 4:
+                                fragment = SettingsFragment.newInstance();
+                                openFragment(fragment);
+
+                            case 5:
+                                //logout code
+
+<<<<<<< Updated upstream
                         }
                         if (position == 6){
                             AlertDialog.Builder logOutBuilder = Functions.getModalLogOut(MainActivity.this);
@@ -136,6 +139,19 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
                                 }
                             });
                             logOutBuilder.show();
+=======
+                                AlertDialog.Builder logOutBuilder = Functions.getModalLogOut(MainActivity.this);
+                                logOutBuilder.setPositiveButton((getString(R.string.ok)), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Singleton.getInstance().getFirebaseModule().getmAuth().signOut();
+                                        Intent i = new Intent(getApplicationContext(), AuthActivity.class);
+                                        startActivity(i);
+                                    }
+                                });
+                                logOutBuilder.show();
+                                break;
+>>>>>>> Stashed changes
                         }
                         return true;
                     }

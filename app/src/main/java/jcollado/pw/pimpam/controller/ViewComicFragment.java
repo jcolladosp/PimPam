@@ -21,10 +21,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.varunest.sparkbutton.SparkButton;
+import com.varunest.sparkbutton.SparkEventListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,6 +36,7 @@ import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.model.Comic;
 import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.Functions;
+import jcollado.pw.pimpam.utils.Singleton;
 import jcollado.pw.pimpam.widgets.SquareImageView;
 
 
@@ -67,6 +71,8 @@ public class ViewComicFragment extends BaseFragment {
     TextView tvYear;
     @BindView(R.id.tvName)
     TextView tvName;
+    @BindView(R.id.star_button1)
+    SparkButton starButton;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.comicIV)
@@ -98,9 +104,12 @@ public class ViewComicFragment extends BaseFragment {
         ButterKnife.bind(this, view);
         prepareToolbar();
         setHasOptionsMenu(true);
+        listenerFavButton();
+        showMode();
 
         toolbar.setTitle(comic.getDisplayName());
         Glide.with(getContext()).load(comic.getImageURL()).placeholder(R.drawable.placeholder).into(comicIV);
+
 
         return view;
     }
@@ -172,12 +181,16 @@ public class ViewComicFragment extends BaseFragment {
     @OnClick(R.id.editFab)
     public void onDone(){
         if(!editingComic) {
+            editingComic = true;
             editMode();
         }
         else{
             editingComic = false;
             actionDelete.setVisible(false);
             editFab.setImageResource(R.drawable.ic_edit);
+            //save comic
+
+            showMode();
 
         }
     }
@@ -198,10 +211,21 @@ public class ViewComicFragment extends BaseFragment {
 
     }
     private void showMode(){
+        editLayout.setVisibility(View.GONE);
+        showLayout.setVisibility(View.VISIBLE);
         toolbar.setTitle(comic.getDisplayName());
         tvEditorial.setText(comic.getEditorial());
         tvYear.setText(comic.getYear());
         tvName.setText(comic.getName());
+
+        if(comic.getFavourite()){
+            starButton.setChecked(true);
+            tvFab.setText(getString(R.string.comicInFav));
+        }
+        else{
+            starButton.setChecked(false);
+            tvFab.setText(getString(R.string.comicNotInFav));
+        }
 
     }
 
@@ -236,11 +260,40 @@ public class ViewComicFragment extends BaseFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
                case R.id.action_delete:
-                //lblMensaje.setText("Opcion 2 pulsada!");;
-                return true;
+                   Singleton.getInstance().getDatabase().deleteComicFromDatabase(comic);
+                   getActivity().getSupportFragmentManager()
+                           .beginTransaction()
+                           .replace(R.id.container, CollectionFragment.newInstance(),"")
+                           .commit();
+                   return true;
 
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+    private void listenerFavButton(){
+        starButton.setEventListener(new SparkEventListener(){
+            @Override
+            public void onEvent(ImageView button, boolean buttonState) {
+                if (buttonState) {
+                    comic.setFavourite(true);
+                    tvFab.setText(getString(R.string.comicInFav));
+                } else {
+                    comic.setFavourite(false);
+                    tvFab.setText(getString(R.string.comicNotInFav));
+                }
+            }
+
+            @Override
+            public void onEventAnimationEnd(ImageView button, boolean buttonState) {
+
+            }
+
+            @Override
+            public void onEventAnimationStart(ImageView button, boolean buttonState) {
+
+            }
+        });
+
     }
 }
