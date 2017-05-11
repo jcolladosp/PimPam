@@ -1,7 +1,5 @@
 package jcollado.pw.pimpam.model;
 
-import jcollado.pw.pimpam.utils.Singleton;
-
 /**
  * Created by Yuki on 21/03/2017.
  */

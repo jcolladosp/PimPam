@@ -4,12 +4,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -26,12 +24,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.model.Comic;
+import jcollado.pw.pimpam.model.Database;
 import jcollado.pw.pimpam.model.FactoryComic;
 import jcollado.pw.pimpam.model.FactorySerie;
 import jcollado.pw.pimpam.model.Serie;
 import jcollado.pw.pimpam.utils.BaseFragment;
+import jcollado.pw.pimpam.utils.FirebaseModule;
 import jcollado.pw.pimpam.utils.Functions;
-import jcollado.pw.pimpam.utils.Singleton;
 import jcollado.pw.pimpam.widgets.SquareImageView;
 
 
@@ -137,11 +136,11 @@ public class AddComicFragment extends BaseFragment {
             comicIV.setDrawingCacheEnabled(true);
             comicIV.buildDrawingCache();
             Bitmap bitmap = comicIV.getDrawingCache();
-            imageURL = Singleton.getInstance().getFirebaseModule().uploadBitmap(bitmap,java.util.UUID.randomUUID().toString(),this);
+            imageURL = FirebaseModule.getInstance().uploadBitmap(bitmap,java.util.UUID.randomUUID().toString(),this);
 
 
 
-            serie = Singleton.getInstance().getDatabase().getSerieByName(serieAC.getText().toString());
+            serie = Database.getInstance().getSerieByName(serieAC.getText().toString());
 //            nameED.setText(Integer.toString(Singleton.getInstance().getDatabase().getSeries().get(0).getVolumenesName().size()));
             if(serie == null) {
                 serie = FactorySerie.createSerie(serieAC.getText().toString(), 0, 0);
@@ -158,12 +157,12 @@ public class AddComicFragment extends BaseFragment {
         }
     }
     public static void uploadComic(String imageURL){
-        Singleton.getInstance().getDatabase().serieToDatabase(serie);
+        Database.getInstance().serieToDatabase(serie);
         comic.setImageURL(imageURL);
 
         serie.addComicToSerie(comic);
 
-        Singleton.getInstance().getDatabase().comicToDatabase(comic);
+        Database.getInstance().comicToDatabase(comic);
     }
 
     @OnClick(R.id.comicIV)

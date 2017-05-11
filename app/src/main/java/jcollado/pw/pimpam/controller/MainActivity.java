@@ -1,19 +1,12 @@
 package jcollado.pw.pimpam.controller;
 
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,7 +14,6 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
-import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -33,10 +25,11 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import jcollado.pw.pimpam.R;
+import jcollado.pw.pimpam.model.Database;
 import jcollado.pw.pimpam.utils.BaseActivity;
 import jcollado.pw.pimpam.utils.BaseFragment;
+import jcollado.pw.pimpam.utils.FirebaseModule;
 import jcollado.pw.pimpam.utils.Functions;
-import jcollado.pw.pimpam.utils.Singleton;
 import jcollado.pw.pimpam.utils.UserInfo;
 
 public class MainActivity extends BaseActivity implements ViewComicFragment.OnFragmentInteractionListener,AddComicFragment.OnFragmentInteractionListener,  Barcode_Fragment.OnFragmentInteractionListener
@@ -55,10 +48,10 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
         setSupportActionBar(toolbar);
 
         setNavigationDrawer();
-        Singleton.getInstance().getFirebaseModule().setConnectionDatabase();
+        FirebaseModule.getInstance().setConnectionDatabase();
 
         collectionFragment = CollectionFragment.newInstance();
-        Singleton.getInstance().getDatabase().setFragment(collectionFragment);
+        Database.getInstance().setFragment(collectionFragment);
             toolbar.setTitle(getString(R.string.seeCollection));
             getSupportActionBar().hide();
             openFragment(collectionFragment);
@@ -137,7 +130,7 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
                             logOutBuilder.setPositiveButton((getString(R.string.ok)), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                Singleton.getInstance().getFirebaseModule().getmAuth().signOut();
+                                FirebaseModule.getInstance().getmAuth().signOut();
                                     Intent i = new Intent(getApplicationContext(), AuthActivity.class);
                                     startActivity(i);
                                 }

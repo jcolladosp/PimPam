@@ -1,12 +1,9 @@
 package jcollado.pw.pimpam.controller;
 
 import android.content.Context;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -29,11 +26,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.model.Comic;
+import jcollado.pw.pimpam.model.Database;
 import jcollado.pw.pimpam.model.Serie;
 import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.ComicCardAdapter;
 import jcollado.pw.pimpam.utils.Functions;
-import jcollado.pw.pimpam.utils.Singleton;
 import jcollado.pw.pimpam.widgets.GridSpacingItemDecoration;
 
 
@@ -70,11 +67,11 @@ public class CollectionFragment extends BaseFragment {
 
         View view =     inflater.inflate(R.layout.fragment_collection, container, false);
         ButterKnife.bind(this, view);
-        Singleton.getInstance().getDatabase().setFragment(this);
+        Database.getInstance().setFragment(this);
         setHasOptionsMenu(true);
-        if(Singleton.getInstance().getDatabase().isFirstLoad()) {
+        if(Database.getInstance().isFirstLoad()) {
             mostrarCargando();
-            Singleton.getInstance().getDatabase().setFirstLoad(false);
+            Database.getInstance().setFirstLoad(false);
         }
         initCollapsingToolbar(view);
         prepareToolbar();
@@ -148,8 +145,8 @@ public class CollectionFragment extends BaseFragment {
 
         //onPreStartConnection(getString(R.string.loading));
 
-        ArrayList<Serie> series = Singleton.getInstance().getDatabase().getSeries();
-        ArrayList<Comic> comics = Singleton.getInstance().getDatabase().getComics();
+        ArrayList<Serie> series = Database.getInstance().getSeries();
+        ArrayList<Comic> comics = Database.getInstance().getComics();
 
         for (Comic comic : comics){
             comicList.add(comic);

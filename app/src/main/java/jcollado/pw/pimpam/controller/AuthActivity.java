@@ -2,7 +2,6 @@ package jcollado.pw.pimpam.controller;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
@@ -30,8 +29,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.utils.BaseActivity;
+import jcollado.pw.pimpam.utils.FirebaseModule;
 import jcollado.pw.pimpam.utils.Functions;
-import jcollado.pw.pimpam.utils.Singleton;
 import mehdi.sakout.fancybuttons.FancyButton;
 
 public class AuthActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener {
@@ -56,7 +55,7 @@ public class AuthActivity extends BaseActivity implements GoogleApiClient.OnConn
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
         ButterKnife.bind(this);
-        mAuth = Singleton.getInstance().getFirebaseModule().getmAuth();
+        mAuth = FirebaseModule.getInstance().getmAuth();
 
         authListener();
         configGoogle();
@@ -97,7 +96,7 @@ private void authListener(){
             user = firebaseAuth.getCurrentUser();
             if (user != null) {
                 // User is signed in
-                Singleton.getInstance().getFirebaseModule().setConnectionDatabase();
+                FirebaseModule.getInstance().setConnectionDatabase();
                 if(notGoogle){
                     addUserInfo(user);
 

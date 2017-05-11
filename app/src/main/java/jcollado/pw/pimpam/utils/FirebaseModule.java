@@ -21,6 +21,7 @@ import java.io.File;
 
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.controller.AddComicFragment;
+import jcollado.pw.pimpam.model.Database;
 
 /**
  * Created by Yuki on 14/03/2017.
@@ -28,17 +29,23 @@ import jcollado.pw.pimpam.controller.AddComicFragment;
 
 public class FirebaseModule {
 
+    private static final FirebaseModule ourInstance = new FirebaseModule();
+
     private final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private StorageReference storageRef;
     private FirebaseAuth mAuth;
     private DatabaseReference comicReference, serieReference;
 
-    public FirebaseModule(){
+    private FirebaseModule(){
         storageRef = FirebaseStorage.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         if(mAuth.getCurrentUser() != null) {
             setReferences();
         }
+    }
+
+    public static FirebaseModule getInstance(){
+        return ourInstance;
     }
 
     public FirebaseDatabase getDatabase() {
@@ -121,7 +128,7 @@ public class FirebaseModule {
 
     public void setConnectionDatabase(){
         setReferences();
-        Singleton.getInstance().getDatabase().setConnections();
+        Database.getInstance().setConnections();
     }
     private void setReferences(){
         comicReference = database.getReference(mAuth.getCurrentUser().getUid()+"/" + PrefKeys.COMICS.toString());

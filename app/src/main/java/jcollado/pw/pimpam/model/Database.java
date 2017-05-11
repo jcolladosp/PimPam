@@ -12,7 +12,7 @@ import java.util.List;
 
 
 import jcollado.pw.pimpam.controller.CollectionFragment;
-import jcollado.pw.pimpam.utils.Singleton;
+import jcollado.pw.pimpam.utils.FirebaseModule;
 
 /**
  * Created by Yuki on 14/03/2017.
@@ -20,8 +20,10 @@ import jcollado.pw.pimpam.utils.Singleton;
 
 public class Database {
 
-    private static ArrayList<Comic> comics;
-    private static ArrayList<Serie> series;
+    private static final Database ourInstance = new Database();
+
+    private ArrayList<Comic> comics;
+    private ArrayList<Serie> series;
 
     private DatabaseReference comicReference, serieReference;
 
@@ -33,7 +35,7 @@ public class Database {
         Constructors
      */
 
-    public Database() {
+    private Database() {
         firstLoad = true;
         comics = new ArrayList<>();
         series = new ArrayList<>();
@@ -79,9 +81,12 @@ public class Database {
 
     }
 
-    public Database(ArrayList<Serie> series, ArrayList<Comic> comics) {
-        this.series = series;
-        this.comics = comics;
+    /*
+        Static getter
+     */
+
+    public static Database getInstance(){
+        return ourInstance;
     }
 
     /*
@@ -96,11 +101,11 @@ public class Database {
     }
 
     public  void setComics(ArrayList<Comic> comics) {
-        Database.comics = comics;
+        this.comics = comics;
     }
 
     public  void setSeries(ArrayList<Serie> series) {
-        Database.series = series;
+        this.series = series;
     }
 
     /*
@@ -136,8 +141,8 @@ public class Database {
         Method for Connecting to the firebase
      */
     public void setConnections(){
-        comicReference = Singleton.getInstance().getFirebaseModule().getComicReference();
-        serieReference = Singleton.getInstance().getFirebaseModule().getSerieReference();
+        comicReference = FirebaseModule.getInstance().getComicReference();
+        serieReference = FirebaseModule.getInstance().getSerieReference();
         comicReference.addValueEventListener(comicListener);
         serieReference.addValueEventListener(serieListener);
     }
