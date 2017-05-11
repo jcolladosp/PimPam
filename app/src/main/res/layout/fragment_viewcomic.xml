@@ -4,6 +4,7 @@
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
@@ -68,10 +69,12 @@
                 app:cardUseCompatPadding="true">
 
                 <RelativeLayout
+                    android:id="@+id/editLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:focusable="true"
-                    android:focusableInTouchMode="true">
+                    android:focusableInTouchMode="true"
+                    android:visibility="invisible">
 
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/serie_input_layout"
@@ -168,8 +171,7 @@
                             android:layout_marginRight="30dp"
                             android:ems="10"
                             android:hint="@string/descrption_add_comic"
-                            android:inputType="textCapWords"
-                            />
+                            android:inputType="textCapWords" />
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
@@ -195,13 +197,104 @@
 
 
                 </RelativeLayout>
-            </android.support.v7.widget.CardView>
+
+                <RelativeLayout
+                    android:id="@+id/showLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true">
+
+                    <TextView
+                        android:id="@+id/tvYear"
+                        style="@style/TextBlackTextView"
+                        android:layout_height="48dp"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="15dp"
+                        android:drawableLeft="@drawable/ic_year"
+                        android:drawablePadding="32dp"
+                        android:drawableStart="@drawable/ic_year"
+                        android:gravity="center_vertical"
+                        android:text="1980" />
+
+                    <TextView
+                        android:id="@+id/tvEditorial"
+                        style="@style/TextBlackTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_below="@+id/tvYear"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="3dp"
+                        android:drawableLeft="@drawable/ic_editorial"
+                        android:drawablePadding="32dp"
+                        android:drawableStart="@drawable/ic_editorial"
+                        android:gravity="center_vertical"
+                        android:text="Marvel" />
+
+                    <TextView
+                        android:id="@+id/tvName"
+                        style="@style/TextBlackTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_below="@+id/tvEditorial"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="3dp"
+                        android:drawableLeft="@drawable/ic_speechbubble"
+                        android:drawablePadding="32dp"
+                        android:drawableStart="@drawable/ic_speechbubble"
+                        android:gravity="center_vertical"
+                        android:text="Batman contra su tia" />
+
+                    <TextView
+                        android:id="@+id/tvFav"
+                        style="@style/TextBlackTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_below="@+id/tvName"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginTop="3dp"
+                        android:drawableLeft="@drawable/ic_white"
+                        android:drawablePadding="32dp"
+                        android:drawableStart="@drawable/ic_white"
+                        android:gravity="center_vertical"
+                        android:text="@string/comicNotInFav" />
+
+                    <com.varunest.sparkbutton.SparkButton
+
+                        android:id="@+id/star_button1"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignStart="@+id/tvName"
+                        android:layout_below="@+id/tvName"
+                        android:layout_centerHorizontal="false"
+                        android:layout_centerInParent="false"
+                        android:layout_centerVertical="false"
+                        android:layout_gravity="end"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginRight="0dp"
+                        android:layout_marginStart="-8dp"
+                        android:layout_marginTop="5dp"
+                        android:scaleType="centerCrop"
+                        app:sparkbutton_activeImage="@drawable/ic_star_on"
+                        app:sparkbutton_animationSpeed=".85"
+                        app:sparkbutton_iconSize="20dp"
+                        app:sparkbutton_inActiveImage="@drawable/ic_star_off" />
+                </RelativeLayout>
+
+
+
+
+        </android.support.v7.widget.CardView>
         </FrameLayout>
 
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/doneFab"
+        android:id="@+id/editFab"
         style="@style/FabStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

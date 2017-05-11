@@ -41,7 +41,6 @@ public class AddComicFragment extends BaseFragment {
     private static final int CAMERA_PICK = 2;
     private boolean imageChanged = false;
     private Bitmap imageBitmap;
-    public boolean fav = false;
 
     @BindView(R.id.nameED)
     EditText nameED;
@@ -149,7 +148,7 @@ public class AddComicFragment extends BaseFragment {
             }
 
             comic = FactoryComic.createComic(nameED.getText().toString(),editorialED.getText().toString(),
-                    "https://static.gamespot.com/uploads/original/1562/15626911/2991050-4996630-04-variant.jpg",numeroED.getText().toString(),anyoED.getText().toString(),serie,fav);
+                    "",numeroED.getText().toString(),anyoED.getText().toString(),serie,false);
 
 
 

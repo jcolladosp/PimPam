@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.app.AlertDialog;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -39,6 +41,7 @@ public class ViewComicFragment extends BaseFragment {
     private static final int GALLERY_PICK = 1;
     private static final int CAMERA_PICK = 2;
     private boolean imageChanged = false;
+    private     MenuItem actionDelete;
 
     @BindView(R.id.nameED)
     EditText nameED;
@@ -50,13 +53,25 @@ public class ViewComicFragment extends BaseFragment {
     EditText numeroED;
     @BindView(R.id.serieAC)
     AutoCompleteTextView serieAC;
-
-
-
+    @BindView(R.id.editFab)
+    FloatingActionButton editFab;
+    @BindView(R.id.showLayout)
+    RelativeLayout showLayout;
+    @BindView(R.id.editLayout)
+    RelativeLayout editLayout;
+    @BindView(R.id.tvEditorial)
+    TextView tvEditorial;
+    @BindView(R.id.tvFav)
+    TextView tvFab;
+    @BindView(R.id.tvYear)
+    TextView tvYear;
+    @BindView(R.id.tvName)
+    TextView tvName;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.comicIV)
     SquareImageView comicIV;
+    private boolean editingComic = false;
 
     private OnFragmentInteractionListener mListener;
     private static Comic comic;
@@ -85,13 +100,8 @@ public class ViewComicFragment extends BaseFragment {
         setHasOptionsMenu(true);
 
         toolbar.setTitle(comic.getDisplayName());
-
-        nameED.setText(comic.getName());
-        anyoED.setText(comic.getYear());
-        editorialED.setText(comic.getEditorial());
-        numeroED.setText(comic.getVolumen());
-        serieAC.setText(comic.getSerieName());
         Glide.with(getContext()).load(comic.getImageURL()).placeholder(R.drawable.placeholder).into(comicIV);
+
         return view;
     }
 
@@ -159,9 +169,40 @@ public class ViewComicFragment extends BaseFragment {
         this.comic = comic;
 
     }
-    @OnClick(R.id.doneFab)
+    @OnClick(R.id.editFab)
     public void onDone(){
-        MainActivity.openDrawer();
+        if(!editingComic) {
+            editMode();
+        }
+        else{
+            editingComic = false;
+            actionDelete.setVisible(false);
+            editFab.setImageResource(R.drawable.ic_edit);
+
+        }
+    }
+    private void editMode(){
+        editingComic = true;
+        actionDelete.setVisible(true);
+        editFab.setImageResource(R.drawable.ic_done);
+        editLayout.setVisibility(View.VISIBLE);
+        showLayout.setVisibility(View.GONE);
+
+        toolbar.setTitle("Editando "+comic.getDisplayName());
+
+        nameED.setText(comic.getName());
+        anyoED.setText(comic.getYear());
+        editorialED.setText(comic.getEditorial());
+        numeroED.setText(comic.getVolumen());
+        serieAC.setText(comic.getSerieName());
+
+    }
+    private void showMode(){
+        toolbar.setTitle(comic.getDisplayName());
+        tvEditorial.setText(comic.getEditorial());
+        tvYear.setText(comic.getYear());
+        tvName.setText(comic.getName());
+
     }
 
     private void prepareToolbar(){
@@ -187,7 +228,8 @@ public class ViewComicFragment extends BaseFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         getActivity().getMenuInflater().inflate( R.menu.viewcomic_menu, menu);
         super.onCreateOptionsMenu(menu,inflater);
-
+        actionDelete = menu.findItem(R.id.action_delete);
+        actionDelete.setVisible(false);
 
     }
     @Override

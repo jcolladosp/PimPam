@@ -43,6 +43,8 @@
     <string name="logout_confirm">¿Está seguro que quiere cerrar sesión?</string>
     <string name="searchToolbarHint">Busca tu comic, serie o editorial.</string>
     <string name="logingoogle_button">Iniciar sesión con Google</string>
+    <string name="comicInFav">Está en tu lista de favoritos</string>
+    <string name="comicNotInFav">No está en tu lista de favoritos</string>
 
     <string name="signup_button">Crear una cuenta</string>
     <string name="auth_failed">Error en el registro.</string>
