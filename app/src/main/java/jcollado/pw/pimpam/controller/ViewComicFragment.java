@@ -75,6 +75,7 @@ public class ViewComicFragment extends BaseFragment {
     @BindView(R.id.comicIV)
     SquareImageView comicIV;
     private boolean editingComic = false;
+    private boolean isFavChange = false;
 
     private OnFragmentInteractionListener mListener;
     private static Comic comic;
@@ -181,6 +182,7 @@ public class ViewComicFragment extends BaseFragment {
     public void onDone(){
         if(!editingComic) {
             editingComic = true;
+            //ditMode(comic.getFavourite());
             editMode();
         }
         else{
@@ -191,7 +193,6 @@ public class ViewComicFragment extends BaseFragment {
             comic.setName(nameED.getText().toString());
             comic.setEditorial(editorialED.getText().toString());
 
-
             Database.getInstance().comicToDatabase(comic,this);
 
             showMode();
@@ -200,6 +201,7 @@ public class ViewComicFragment extends BaseFragment {
     }
     private void editMode(){
         editingComic = true;
+        //isFavChange = fav;
         actionDelete.setVisible(true);
         editFab.setImageResource(R.drawable.ic_done);
         editLayout.setVisibility(View.VISIBLE);
@@ -220,10 +222,11 @@ public class ViewComicFragment extends BaseFragment {
         tvEditorial.setText(comic.getEditorial());
         tvYear.setText(comic.getYear());
         tvName.setText(comic.getName());
-
+        isFavChange = comic.getFavourite();
         if(comic.getFavourite()){
             starButton.setChecked(true);
             tvFab.setText(getString(R.string.comicInFav));
+
         }
         else{
             starButton.setChecked(false);
@@ -292,16 +295,22 @@ public class ViewComicFragment extends BaseFragment {
                 .commit();
     }
 
+
+
     private void listenerFavButton(){
+        final BaseFragment aux = this;
         starButton.setEventListener(new SparkEventListener(){
             @Override
             public void onEvent(ImageView button, boolean buttonState) {
+
                 if (buttonState) {
                     comic.setFavourite(true);
                     tvFab.setText(getString(R.string.comicInFav));
+                    Database.getInstance().comicToDatabase(comic,aux);
                 } else {
                     comic.setFavourite(false);
                     tvFab.setText(getString(R.string.comicNotInFav));
+                    Database.getInstance().comicToDatabase(comic,aux);
                 }
             }
 
