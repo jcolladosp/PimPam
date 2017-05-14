@@ -5,17 +5,12 @@ package jcollado.pw.pimpam.utils;
  */
 
 import android.content.Context;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.varunest.sparkbutton.SparkButton;
@@ -29,52 +24,31 @@ import jcollado.pw.pimpam.controller.ViewComicFragment;
 import jcollado.pw.pimpam.model.Comic;
 
 
-public class ComicCardAdapter extends RecyclerView.Adapter<ComicCardAdapter.MyViewHolder> {
+public class ComicCardAdapter extends RecyclerView.Adapter<ComicCardAdapter.CardHolder> {
 
     private Context mContext;
     private List<Comic> comicList;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener {
-        public TextView title, count;
-        public ImageView thumbnail;
-        public SparkButton favButton;
-
-        public MyViewHolder(View view) {
-            super(view);
-            title = (TextView) view.findViewById(R.id.title);
-            count = (TextView) view.findViewById(R.id.count);
-            thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
-            favButton = (SparkButton) view.findViewById(R.id.star_button1);
-
-
-            view.setOnClickListener(this);
-
-
-        }
-
-        @Override
-        //onClick method when click a card
-        public void onClick(View view) {
-            openViewComicFragment(comicList.get(getAdapterPosition()));
-        }
-    }
-
-
-    public ComicCardAdapter(Context mContext, List<Comic> albumList) {
+    public ComicCardAdapter(Context mContext, List<Comic> comicList) {
         this.mContext = mContext;
-        this.comicList = albumList;
+        this.comicList = comicList;
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CardHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.comic_card, parent, false);
 
-        return new MyViewHolder(itemView);
+        return new CardHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, final int position) {
+    public int getItemCount() {
+        return comicList.size();
+    }
+
+    @Override
+    public void onBindViewHolder(final CardHolder holder, final int position) {
         final Comic comic = comicList.get(position);
         holder.title.setText(comic.getDisplayName());
         holder.count.setText(comic.getEditorial());
@@ -141,8 +115,31 @@ public class ComicCardAdapter extends RecyclerView.Adapter<ComicCardAdapter.MyVi
     }
 
 
-    @Override
-    public int getItemCount() {
-        return comicList.size();
+
+
+    public class CardHolder extends RecyclerView.ViewHolder  implements View.OnClickListener {
+        public TextView title, count;
+        public ImageView thumbnail;
+        public SparkButton favButton;
+
+        public CardHolder(View view) {
+            super(view);
+            title = (TextView) view.findViewById(R.id.title);
+            count = (TextView) view.findViewById(R.id.count);
+            thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
+            favButton = (SparkButton) view.findViewById(R.id.star_button1);
+
+
+            view.setOnClickListener(this);
+
+
+        }
+
+        @Override
+        //onClick method when click a card
+        public void onClick(View view) {
+            openViewComicFragment(comicList.get(getAdapterPosition()));
+        }
     }
+
 }
