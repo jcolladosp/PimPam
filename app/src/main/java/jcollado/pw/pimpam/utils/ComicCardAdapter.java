@@ -64,6 +64,8 @@ public class ComicCardAdapter extends RecyclerView.Adapter<ComicCardAdapter.Card
             public void onEvent(ImageView button, boolean buttonState) {
                 if (buttonState) {
                         comic.setFavourite(true);
+
+
                     } else {
                         comic.setFavourite(false);
                 }
@@ -100,7 +102,7 @@ public class ComicCardAdapter extends RecyclerView.Adapter<ComicCardAdapter.Card
 
     /*
         Añade una lista completa de items
-         */
+      */
     public void addAll(List<Comic> lista){
         comicList.addAll(lista);
         notifyDataSetChanged();

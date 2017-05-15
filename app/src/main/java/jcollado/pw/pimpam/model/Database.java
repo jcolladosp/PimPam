@@ -101,6 +101,12 @@ public class Database {
         return series;
     }
 
+    public  ArrayList<String> getSeriesNameArray() {
+        ArrayList<String> seriesNames = new ArrayList<>();
+        for(Serie serie : series) seriesNames.add(serie.getName());
+        return seriesNames;
+    }
+
     public  ArrayList<Comic> getComics() {
         return comics;
     }

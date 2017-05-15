@@ -199,7 +199,7 @@ public class AddComicFragment extends BaseFragment {
     }
     private void prepareSpinner(){
 
-        ArrayAdapter adapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,languages);
+        ArrayAdapter adapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,Database.getInstance().getSeriesNameArray());
 
         serieAC.setAdapter(adapter);
         serieAC.setThreshold(1);
