@@ -11,8 +11,8 @@ import java.util.ArrayList;
 public class Serie {
 
     private String name;
-    private int startYear;
-    private int endYear;
+    private String year;
+    private String editorial;
 
     private ArrayList<String> volumenesName;
 
@@ -24,18 +24,18 @@ public class Serie {
         name = new String();
     }
 
-    public Serie(String name, int startYear, int endYear) {
+    public Serie(String name, String year, String editorial) {
         this.name = name;
-        this.startYear = startYear;
-        this.endYear = endYear;
+        this.year = year;
+        this.editorial = editorial;
         volumenes = new ArrayList<>();
         volumenesName = new ArrayList<>();
     }
 
     public Serie(String name, int startYear, int endYear, ArrayList<String> volumenesName, ArrayList<Comic> volumenes) {
         this.name = name;
-        this.startYear = startYear;
-        this.endYear = endYear;
+        this.year = year;
+        this.editorial = editorial;
         this.volumenesName = volumenesName;
         this.volumenes = volumenes;
     }
@@ -48,20 +48,20 @@ public class Serie {
         this.name = name;
     }
 
-    public int getStartYear() {
-        return startYear;
+    public String getYear() {
+        return year;
     }
 
-    public void setStartYear(int startYear) {
-        this.startYear = startYear;
+    public void setYear(String year) {
+        this.year = year;
     }
 
-    public int getEndYear() {
-        return endYear;
+    public String getEditorial() {
+        return editorial;
     }
 
-    public void setEndYear(int endYear) {
-        this.endYear = endYear;
+    public void setEditorial(String editorial) {
+        this.editorial = editorial;
     }
 
     @Exclude

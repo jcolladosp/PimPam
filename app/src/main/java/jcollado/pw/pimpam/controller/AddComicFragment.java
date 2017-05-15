@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -93,7 +94,6 @@ public class AddComicFragment extends BaseFragment {
         prepareSpinner();
         prepareToolbar();
 
-
         storage = FirebaseStorage.getInstance();
         return view ;
 
@@ -117,7 +117,16 @@ public class AddComicFragment extends BaseFragment {
         }
     }
 
-
+    private void onItemSerieACTVListener(){
+        serieAC.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick (AdapterView<?> parent, View view, int position, long id) {
+                Serie serie = (Database.getInstance().getSerieByName(serieAC.getText().toString()));
+               anyoED.setText(serie.getYear());
+                editorialED.setText(serie.getEditorial());
+            }
+        });
+    }
 
     @OnClick(R.id.addFab) void submit() {
         hideKeyboard();
@@ -145,7 +154,7 @@ public class AddComicFragment extends BaseFragment {
             serie = Database.getInstance().getSerieByName(serieAC.getText().toString());
 //            nameED.setText(Integer.toString(Singleton.getInstance().getDatabase().getSeries().get(0).getVolumenesName().size()));
             if(serie == null) {
-                serie = FactorySerie.createSerie(serieAC.getText().toString(), 0, 0);
+                serie = FactorySerie.createSerie(serieAC.getText().toString(),anyoED.getText().toString() , editorialED.getText().toString());
             }
 
             comic = FactoryComic.createComic(nameED.getText().toString(),editorialED.getText().toString(),
@@ -203,6 +212,8 @@ public class AddComicFragment extends BaseFragment {
 
         serieAC.setAdapter(adapter);
         serieAC.setThreshold(1);
+        onItemSerieACTVListener();
+
     }
     private void prepareToolbar(){
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
