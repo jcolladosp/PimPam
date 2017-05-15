@@ -37,6 +37,8 @@ import jcollado.pw.pimpam.widgets.GridSpacingItemDecoration;
 
 
 public class CollectionFragment extends BaseFragment {
+    public static final int PLACE_IN_DRAWER = 1;
+
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.addComic)
     FloatingActionButton addComic;
@@ -148,7 +150,7 @@ public class CollectionFragment extends BaseFragment {
      */
     public void prepareComics() {
 
-        //onPreStartConnection(getString(R.string.loading));
+        adapter.clear();
 
         ArrayList<Serie> series = Database.getInstance().getSeries();
         ArrayList<Comic> comics = Database.getInstance().getComics();
@@ -231,12 +233,17 @@ public class CollectionFragment extends BaseFragment {
     @OnClick(R.id.addComic)
     public void addComic(){
 
-        AddComicFragment nextFrag= new AddComicFragment();
-        this.getFragmentManager().beginTransaction()
-                .replace(R.id.main_content, nextFrag,null)
-                .addToBackStack(null)
-                .commit();
+        AddComicFragment addFrag= new AddComicFragment();
+      openFragment(addFrag,addFrag.PLACE_IN_DRAWER);
 
+    }
+    private void openFragment(BaseFragment fragment,int drawerSelection){
+
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, fragment,"")
+                .commit();
+        MainActivity.result.setSelection(drawerSelection);
     }
 
 }

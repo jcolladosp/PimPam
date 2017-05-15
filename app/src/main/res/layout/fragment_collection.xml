@@ -98,9 +98,9 @@
         android:layout_gravity="left|center_vertical"
         android:layout_margin="16dp"
         android:clickable="true"
-        app:backgroundTint="@color/material_drawer_primary_dark"
+        app:backgroundTint="@color/accent"
         app:fabSize="normal"
         app:layout_anchor="@id/relativeLayout"
         app:layout_anchorGravity="bottom|right"
-        app:srcCompat="@android:drawable/ic_menu_add" />
+        app:srcCompat="@drawable/ic_add" />
 </android.support.design.widget.CoordinatorLayout>

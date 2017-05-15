@@ -37,6 +37,7 @@ import jcollado.pw.pimpam.widgets.SquareImageView;
 
 public class AddComicFragment extends BaseFragment {
 
+    public static final int PLACE_IN_DRAWER = 2;
     private static final int GALLERY_PICK = 1;
     private static final int CAMERA_PICK = 2;
     private boolean imageChanged = false;
@@ -150,11 +151,6 @@ public class AddComicFragment extends BaseFragment {
             comic = FactoryComic.createComic(nameED.getText().toString(),editorialED.getText().toString(),
                     "",numeroED.getText().toString(),anyoED.getText().toString(),serie,false);
 
-
-
-
-            //FactorySerie.createComic(nameED.getText().toString(), editorialED.getText().toString(), uri.toString(), 0, 0, /*serie*/ null);
-
         }
     }
     public void uploadComic(String imageURL){
@@ -171,10 +167,8 @@ public class AddComicFragment extends BaseFragment {
     public void comicUploaded(){
         onConnectionFinished();
         new Toast(getContext()).makeText(getContext(),getString(R.string.comic_addded_succesfull), Toast.LENGTH_SHORT).show();
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.container, CollectionFragment.newInstance(),"")
-                .commit();
+        CollectionFragment collection = CollectionFragment.newInstance();
+         openFragment(collection,collection.PLACE_IN_DRAWER);
     }
 
 
@@ -246,5 +240,12 @@ public class AddComicFragment extends BaseFragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+    private void openFragment(BaseFragment fragment,int drawerSelection){
 
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, fragment,"")
+                .commit();
+        MainActivity.result.setSelection(drawerSelection);
+    }
 }
