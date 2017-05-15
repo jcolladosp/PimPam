@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -24,6 +25,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.model.Comic;
 import jcollado.pw.pimpam.model.Database;
@@ -36,6 +38,8 @@ import jcollado.pw.pimpam.widgets.GridSpacingItemDecoration;
 
 public class CollectionFragment extends BaseFragment {
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.addComic)
+    FloatingActionButton addComic;
 
     private RecyclerView recyclerView;
     private ComicCardAdapter adapter;
@@ -43,6 +47,7 @@ public class CollectionFragment extends BaseFragment {
     SearchView searchView = null;
     MenuItem myActionMenuItem;
     public boolean isAtached = false;
+    AddComicFragment addComicFragment = new AddComicFragment() ;
     public CollectionFragment() {
         // Required empty public constructor
     }
@@ -219,7 +224,19 @@ public class CollectionFragment extends BaseFragment {
                 return false;
             }
         });
+
     }
 
+
+    @OnClick(R.id.addComic)
+    public void addComic(){
+
+        AddComicFragment nextFrag= new AddComicFragment();
+        this.getFragmentManager().beginTransaction()
+                .replace(R.id.main_content, nextFrag,null)
+                .addToBackStack(null)
+                .commit();
+
+    }
 
 }
