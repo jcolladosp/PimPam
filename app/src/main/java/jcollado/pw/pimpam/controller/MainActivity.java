@@ -32,7 +32,7 @@ import jcollado.pw.pimpam.utils.FirebaseModule;
 import jcollado.pw.pimpam.utils.Functions;
 import jcollado.pw.pimpam.utils.UserInfo;
 
-public class MainActivity extends BaseActivity implements ViewComicFragment.OnFragmentInteractionListener,AddComicFragment.OnFragmentInteractionListener,  Barcode_Fragment.OnFragmentInteractionListener
+public class MainActivity extends BaseActivity implements ViewComicFragment.OnFragmentInteractionListener,AddComicFragment.OnFragmentInteractionListener,  Barcode_Fragment.OnFragmentInteractionListener, SearchFragment.OnFragmentInteractionListener
         {
     public static Drawer result = null;
     Toolbar toolbar;
@@ -82,7 +82,7 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
         //SecondaryDrawerItem barcode = new SecondaryDrawerItem().withIdentifier(4).withName("Barcode").withIcon(FontAwesome.Icon.faw_barcode);
         SecondaryDrawerItem ajustes = new SecondaryDrawerItem().withIdentifier(3).withName(getString(R.string.settings)).withIcon(FontAwesome.Icon.faw_cog);
         SecondaryDrawerItem signout = new SecondaryDrawerItem().withIdentifier(3).withName(getString(R.string.logout_button)).withIcon(FontAwesome.Icon.faw_sign_out);
-
+        SecondaryDrawerItem search = new SecondaryDrawerItem().withIdentifier(5).withName("Search a comic").withIcon(FontAwesome.Icon.faw_search);
 
 
         //create the drawer and remember the `Drawer` result object
@@ -90,7 +90,7 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
                 .withActivity(this)
                 .withToolbar(toolbar)
                 .withAccountHeader(headerResult)
-                .addDrawerItems(item1,item2, new DividerDrawerItem(),ajustes,signout)
+                .addDrawerItems(item1,item2,search, new DividerDrawerItem(),ajustes,signout)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
@@ -112,7 +112,7 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
 
 
 
-                            case 3:
+                            case 6:
                                 fragment = Barcode_Fragment.newInstance();
                                 openFragment(fragment);
                                 getSupportActionBar().show();
@@ -137,7 +137,9 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
                             });
                             logOutBuilder.show();
 
-
+                            case 3:
+                                fragment = SearchFragment.newInstance();
+                                openFragment(fragment);
                                 break;
 
                         }
