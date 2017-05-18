@@ -213,7 +213,22 @@ public class CollectionFragment extends BaseFragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // Toast like print
-                Log.i("search","SearchOnQueryTextSubmit: " + query);
+                ArrayList<Comic> comicsFiltered = new ArrayList<>();
+                for(Comic comic : comicList){
+                    String displayName = comic.getDisplayName().toLowerCase();
+                    String editorial = comic.getEditorial().toLowerCase();
+                    String serie = comic.getSerieName().toLowerCase();
+                    String query1 = query.toLowerCase();
+                    if(displayName.contains(query1) || serie.contains(query1) || editorial.contains(query1)){
+                        comicsFiltered.add(comic);
+                    }
+                    }
+
+                adapter = new ComicCardAdapter(getActivity(), comicsFiltered);
+                recyclerView.setAdapter(adapter);
+
+
+
                 if( ! searchView.isIconified()) {
                     searchView.setIconified(true);
                 }
