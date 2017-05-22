@@ -81,7 +81,7 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
         SecondaryDrawerItem item2 = new SecondaryDrawerItem().withIdentifier(2).withName(getString(R.string.addComic)).withIcon(FontAwesome.Icon.faw_plus_circle);
         //SecondaryDrawerItem barcode = new SecondaryDrawerItem().withIdentifier(4).withName("Barcode").withIcon(FontAwesome.Icon.faw_barcode);
         SecondaryDrawerItem ajustes = new SecondaryDrawerItem().withIdentifier(3).withName(getString(R.string.settings)).withIcon(FontAwesome.Icon.faw_cog);
-        SecondaryDrawerItem signout = new SecondaryDrawerItem().withIdentifier(3).withName(getString(R.string.logout_button)).withIcon(FontAwesome.Icon.faw_sign_out);
+        SecondaryDrawerItem signout = new SecondaryDrawerItem().withIdentifier(4).withName(getString(R.string.logout_button)).withIcon(FontAwesome.Icon.faw_sign_out);
 
 
 
@@ -110,34 +110,24 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
                                 openFragment(fragment);
                                 break;
 
-
-
-                            case 3:
-                                fragment = Barcode_Fragment.newInstance();
-                                openFragment(fragment);
-                                getSupportActionBar().show();
-                                break;
-
-
                             case 4:
                                 fragment = SettingsFragment.newInstance();
                                 openFragment(fragment);
+                                break;
+
 
                             case 5:
                                 //logout code
-
-                            AlertDialog.Builder logOutBuilder = Functions.getModalLogOut(MainActivity.this);
-                            logOutBuilder.setPositiveButton((getString(R.string.ok)), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                FirebaseModule.getInstance().getmAuth().signOut();
-                                    Intent i = new Intent(getApplicationContext(), AuthActivity.class);
-                                    startActivity(i);
-                                }
-                            });
-                            logOutBuilder.show();
-
-
+                                AlertDialog.Builder logOutBuilder = Functions.getModalLogOut(MainActivity.this);
+                                logOutBuilder.setPositiveButton((getString(R.string.ok)), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                    FirebaseModule.getInstance().getmAuth().signOut();
+                                        Intent i = new Intent(getApplicationContext(), AuthActivity.class);
+                                        startActivity(i);
+                                    }
+                                });
+                                logOutBuilder.show();
                                 break;
 
                         }
@@ -170,6 +160,8 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
                 startActivity(a);
 
             }
+
+            /*
             @Override
             public void onActivityResult(int requestCode, int resultCode, Intent data) {
                 IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
@@ -186,6 +178,7 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
                     super.onActivityResult(requestCode, resultCode, data);
                 }
             }
+            */
 
             public void mostrarCargando(){
                 onPreStartConnection(getString(R.string.loading));
