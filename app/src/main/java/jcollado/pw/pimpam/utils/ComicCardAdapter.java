@@ -22,16 +22,19 @@ import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.controller.MainActivity;
 import jcollado.pw.pimpam.controller.ViewComicFragment;
 import jcollado.pw.pimpam.model.Comic;
+import jcollado.pw.pimpam.model.Database;
 
 
 public class ComicCardAdapter extends RecyclerView.Adapter<ComicCardAdapter.CardHolder> {
 
     private Context mContext;
     private List<Comic> comicList;
+    private Database database;
 
-    public ComicCardAdapter(Context mContext, List<Comic> comicList) {
+    public ComicCardAdapter(Context mContext, List<Comic> comicList, Database database) {
         this.mContext = mContext;
         this.comicList = comicList;
+        this.database = database;
     }
 
     @Override
@@ -64,10 +67,13 @@ public class ComicCardAdapter extends RecyclerView.Adapter<ComicCardAdapter.Card
             public void onEvent(ImageView button, boolean buttonState) {
                 if (buttonState) {
                         comic.setFavourite(true);
+                         Database.getInstance().comicToDatabase(comic,null);
 
 
-                    } else {
+                } else {
                         comic.setFavourite(false);
+                      Database.getInstance().comicToDatabase(comic,null);
+
                 }
             }
 
@@ -104,6 +110,7 @@ public class ComicCardAdapter extends RecyclerView.Adapter<ComicCardAdapter.Card
         Añade una lista completa de items
       */
     public void addAll(List<Comic> lista){
+        clear();
         comicList.addAll(lista);
         notifyDataSetChanged();
     }

@@ -138,6 +138,7 @@ public class Database {
                 if (error != null) {
                     Log.i("eror","Data could not be deleted. " + error.getMessage());
                 } else {
+                    if(fragment != null)
                     fragment.comicUploaded();
                 }
 

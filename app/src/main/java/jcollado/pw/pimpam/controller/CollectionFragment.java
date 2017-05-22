@@ -152,7 +152,6 @@ public class CollectionFragment extends BaseFragment {
 
         adapter.clear();
 
-        ArrayList<Serie> series = Database.getInstance().getSeries();
         ArrayList<Comic> comics = Database.getInstance().getComics();
 
         for (Comic comic : comics){
@@ -166,7 +165,7 @@ public class CollectionFragment extends BaseFragment {
     private void prepareRecyclerView(View view){
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         comicList = new ArrayList<>();
-        adapter = new ComicCardAdapter(getActivity(), comicList);
+        adapter = new ComicCardAdapter(getActivity(), comicList,Database.getInstance());
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getActivity(), 2);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -223,11 +222,7 @@ public class CollectionFragment extends BaseFragment {
                         comicsFiltered.add(comic);
                     }
                     }
-
-                adapter = new ComicCardAdapter(getActivity(), comicsFiltered);
-                recyclerView.setAdapter(adapter);
-
-
+                adapter.addAll(comicsFiltered);
 
                 if( ! searchView.isIconified()) {
                     searchView.setIconified(true);

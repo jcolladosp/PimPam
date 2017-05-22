@@ -298,7 +298,7 @@ public class ViewComicFragment extends BaseFragment {
 
 
     private void listenerFavButton(){
-        final BaseFragment aux = this;
+        final BaseFragment fragment = this;
         starButton.setEventListener(new SparkEventListener(){
             @Override
             public void onEvent(ImageView button, boolean buttonState) {
@@ -306,11 +306,11 @@ public class ViewComicFragment extends BaseFragment {
                 if (buttonState) {
                     comic.setFavourite(true);
                     tvFab.setText(getString(R.string.comicInFav));
-                    Database.getInstance().comicToDatabase(comic,aux);
+                    Database.getInstance().comicToDatabase(comic,fragment);
                 } else {
                     comic.setFavourite(false);
                     tvFab.setText(getString(R.string.comicNotInFav));
-                    Database.getInstance().comicToDatabase(comic,aux);
+                    Database.getInstance().comicToDatabase(comic,fragment);
                 }
             }
 
