@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 import java.util.ArrayList;
@@ -40,8 +41,11 @@ public class CollectionFragment extends BaseFragment {
     public static final int PLACE_IN_DRAWER = 1;
 
     @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.addComic)
-    FloatingActionButton addComic;
+    @BindView(R.id.addComic)    FloatingActionButton addComic;
+    @BindView(R.id.noComicsTX)
+    TextView noComicsTX;
+    @BindView(R.id.noResultsTX)
+    TextView noResultsTX;
 
     private RecyclerView recyclerView;
     private ComicCardAdapter adapter;
@@ -149,15 +153,20 @@ public class CollectionFragment extends BaseFragment {
      * Adding few comics for testing
      */
     public void prepareComics() {
-
+        noResultsTX.setVisibility(View.GONE);
         adapter.clear();
 
         ArrayList<Comic> comics = Database.getInstance().getComics();
-
-        for (Comic comic : comics){
-            comicList.add(comic);
+        if (comics.size() == 0 ) {
+            noComicsTX.setVisibility(View.VISIBLE);
         }
+        else {
+            for (Comic comic : comics) {
+                comicList.add(comic);
+            }
+            noComicsTX.setVisibility(View.GONE);
 
+        }
         adapter.notifyDataSetChanged();
 
 
@@ -222,20 +231,25 @@ public class CollectionFragment extends BaseFragment {
                         comicsFiltered.add(comic);
                     }
                     }
+
+                    if(comicsFiltered.size() == 0 && noComicsTX.getVisibility() != View.VISIBLE){
+
+                        noResultsTX.setVisibility(View.VISIBLE);
+                    }
                 adapter.addAll(comicsFiltered);
 
-                if( ! searchView.isIconified()) {
-                    searchView.setIconified(true);
-                }
-                myActionMenuItem.collapseActionView();
                 return false;
             }
             @Override
             public boolean onQueryTextChange(String s) {
-                // UserFeedback.show( "SearchOnQueryTextChanged: " + s);
+                if(s.equals("")){
+                    prepareComics();
+
+                }
                 return false;
             }
         });
+
 
     }
 
