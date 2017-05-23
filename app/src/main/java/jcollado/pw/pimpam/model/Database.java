@@ -10,8 +10,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.controller.CollectionFragment;
 import jcollado.pw.pimpam.controller.ViewComicFragment;
 import jcollado.pw.pimpam.utils.BaseFragment;

@@ -1,5 +1,6 @@
 package jcollado.pw.pimpam.controller;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -20,6 +21,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.storage.FirebaseStorage;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -188,8 +195,8 @@ public class AddComicFragment extends BaseFragment {
         builder.setPositiveButton(R.string.news_image_camera, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, CAMERA_PICK);
+               openCamera();
+
             }
         });
         builder.setNeutralButton(R.string.news_image_gallery, new DialogInterface.OnClickListener() {
@@ -259,4 +266,24 @@ public class AddComicFragment extends BaseFragment {
                 .commit();
         MainActivity.result.setSelection(drawerSelection);
     }
+
+    private void openCamera(){
+        Dexter.withActivity(getActivity())
+                .withPermission(Manifest.permission.CAMERA)
+                .withListener(new PermissionListener() {
+                    @Override public void onPermissionGranted(PermissionGrantedResponse response) {
+                        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(cameraIntent, CAMERA_PICK);
+
+                    }
+                    @Override public void onPermissionDenied(PermissionDeniedResponse response) {
+                        Functions.getModal("Necesitamos tu permiso para abrir la camara","Vale",getContext()).show();
+                    }
+                    @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {/* ... */}
+                }).check();
+    }
+
+
 }
+
+
