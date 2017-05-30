@@ -76,45 +76,46 @@ public class AuthActivity extends BaseActivity implements GoogleApiClient.OnConn
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
-private void configGoogle(){
-    // Configure Google Sign In
-    GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build();
 
-    mGoogleApiClient = new GoogleApiClient.Builder(this)
-            .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-            .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-            .build();
-}
+    private void configGoogle(){
+        // Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
 
-private void authListener(){
-    mAuthListener = new FirebaseAuth.AuthStateListener() {
-        @Override
-        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-            user = firebaseAuth.getCurrentUser();
-            if (user != null) {
-                // User is signed in
-                FirebaseModule.getInstance().setConnectionDatabase();
-                if(notGoogle){
-                    addUserInfo(user);
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+    }
 
+    private void authListener(){
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    FirebaseModule.getInstance().setConnectionDatabase();
+                    if(notGoogle){
+                        addUserInfo(user);
+
+                    }
+                    else{
+                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(i);
+                    }
+
+
+                } else {
+                    // User is signed out
+                    // Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
-                else{
-                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(i);
-                }
-
-
-            } else {
-                // User is signed out
-                // Log.d(TAG, "onAuthStateChanged:signed_out");
+                // ...
             }
-            // ...
-        }
-    };
-}
+        };
+    }
     private void addUserInfo( FirebaseUser user ){
         Uri picUri = Uri.parse("https://s-media-cache-ak0.pinimg.com/originals/d3/cf/69/d3cf690f988f41fd1894526e78c1e1f8.png");
         String name = nameED.getText().toString();
@@ -138,7 +139,6 @@ private void authListener(){
 
 
     }
-
 
     @OnClick(R.id.btn_create_account)
     void onCreateAccount() {
@@ -165,6 +165,7 @@ private void authListener(){
                     });
         }
     }
+
     @OnClick(R.id.btn_login)
     void onLoginAccount() {
         if(checkAllFieldsCompleted()) {
@@ -186,7 +187,6 @@ private void authListener(){
                     });
             stopRefreshing();
         }
-
     }
 
     @OnClick(R.id.btn_restore_password)

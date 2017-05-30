@@ -137,29 +137,13 @@ public class AddComicFragment extends BaseFragment {
 
     @OnClick(R.id.addFab) void submit() {
         hideKeyboard();
-        if (serieAC.getText().toString().equals("")) {
-            serieAC.setError(getString(R.string.empty_name_comic));
-
-        }
-        else if (editorialED.getText().toString().equals("")) {
-            editorialED.setError(getString(R.string.empty_editorial_comic));
-
-
-        }
-        else if (numeroED.getText().length() == 0) {
-            numeroED.setError(getString(R.string.empty_numero_comic));
-        }
-        else {
-
+        if(isFieldsCompleted()){
             comicIV.setDrawingCacheEnabled(true);
             comicIV.buildDrawingCache();
             Bitmap bitmap = comicIV.getDrawingCache();
             imageURL = FirebaseModule.getInstance().uploadBitmap(bitmap,java.util.UUID.randomUUID().toString(),this);
 
-
-
             serie = Database.getInstance().getSerieByName(serieAC.getText().toString());
-//            nameED.setText(Integer.toString(Singleton.getInstance().getDatabase().getSeries().get(0).getVolumenesName().size()));
             if(serie == null) {
                 serie = FactorySerie.createSerie(serieAC.getText().toString(),anyoED.getText().toString() , editorialED.getText().toString());
             }
@@ -169,6 +153,24 @@ public class AddComicFragment extends BaseFragment {
 
         }
     }
+
+    private boolean isFieldsCompleted(){
+        boolean completed = true;
+        if (serieAC.getText().toString().equals("")) {
+            serieAC.setError(getString(R.string.empty_name_comic));
+            completed = false;
+        }
+        if (editorialED.getText().toString().equals("")) {
+            editorialED.setError(getString(R.string.empty_editorial_comic));
+            completed = false;
+        }
+        if (numeroED.getText().length() == 0) {
+            numeroED.setError(getString(R.string.empty_numero_comic));
+            completed = false;
+        }
+        return completed;
+    }
+
     public void uploadComic(String imageURL){
         Database.getInstance().serieToDatabase(serie);
         comic.setImageURL(imageURL);
