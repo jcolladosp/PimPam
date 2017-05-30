@@ -267,7 +267,7 @@ public class CollectionFragment extends BaseFragment {
                 .beginTransaction()
                 .replace(R.id.container, fragment,"")
                 .commit();
-        MainActivity.result.setSelection(drawerSelection);
+        MainActivity.getResult().setSelection(drawerSelection);
     }
 
 }

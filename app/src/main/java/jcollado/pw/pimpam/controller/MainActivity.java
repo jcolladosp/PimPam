@@ -34,7 +34,7 @@ import jcollado.pw.pimpam.utils.UserInfo;
 
 public class MainActivity extends BaseActivity implements ViewComicFragment.OnFragmentInteractionListener,AddComicFragment.OnFragmentInteractionListener,  Barcode_Fragment.OnFragmentInteractionListener
         {
-    public static Drawer result = null;
+    private static Drawer result = null;
     Toolbar toolbar;
     private CollectionFragment collectionFragment;
 
@@ -184,5 +184,7 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
                 onPreStartConnection(getString(R.string.loading));
             }
 
-
+            public static Drawer getResult(){
+                return result;
+            }
         }

@@ -266,7 +266,7 @@ public class AddComicFragment extends BaseFragment {
                 .beginTransaction()
                 .replace(R.id.container, fragment,"")
                 .commit();
-        MainActivity.result.setSelection(drawerSelection);
+        MainActivity.getResult().setSelection(drawerSelection);
     }
 
     private void openCamera(){
