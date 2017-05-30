@@ -87,4 +87,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void onConnectionFinished() {
         progressBar.hide();
     }
+
+    public void onImageUploaded(String filename){}
+
 }

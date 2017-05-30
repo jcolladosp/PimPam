@@ -91,7 +91,7 @@ public class AuthActivity extends BaseActivity implements GoogleApiClient.OnConn
             user = firebaseAuth.getCurrentUser();
             if (user != null) {
                 // User is signed in
-                FirebaseModule.getInstance().setConnectionDatabase();
+
                 Intent i;
                 if(notGoogle){
                    i = new Intent(getApplicationContext(), AccountDetailsActivity.class);
@@ -99,6 +99,7 @@ public class AuthActivity extends BaseActivity implements GoogleApiClient.OnConn
                 }
                 else{
                     i = new Intent(getApplicationContext(), MainActivity.class);
+                    FirebaseModule.getInstance().setConnectionDatabase();
 
                 }
                 startActivity(i);

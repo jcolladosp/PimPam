@@ -38,7 +38,7 @@
     <string name="logout_button">Log Out</string>
     <string name="logout_confirm">Are you sure you want to log out?</string>
     <string name="searchToolbarHint">Search for a comic, series or editorial.</string>
-    <string name="logingoogle_button">Log in with Google</string>
+    <string name="logingoogle_button">Continue with Google</string>
     <string name="comicInFav">It is on your favorites list.</string>
     <string name="comicNotInFav">It is not in your favorites list</string>
     <string name="comicDeleted">Comic removed correctly</string>

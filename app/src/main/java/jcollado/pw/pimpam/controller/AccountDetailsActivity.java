@@ -34,30 +34,54 @@ public class AccountDetailsActivity extends BaseActivity {
     CircleImageView profile_image;
     public boolean imageChanged = false;
     private Bitmap imageBitmap;
-
+    String spiderman = "https://animotionlatinoamerica.files.wordpress.com/2016/05/decoration-stickers-spiderman.jpg";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_details);
         ButterKnife.bind(this);
-        Glide.with(this).load("http://i.annihil.us/u/prod/marvel/i/mg/2/00/53710b14a320b.png")
-                .placeholder(R.drawable.placeholder).into(profile_image);
+        Glide.with(this).load(spiderman).placeholder(R.drawable.placeholder).dontAnimate().into(profile_image);
 
 
     }
     @OnClick(R.id.btn_continuar)
         void onContinuar(){
-        addUserInfo(FirebaseModule.getInstance().getmAuth().getCurrentUser());
+        onPreStartConnection(getString(R.string.loading));
+        if(imageChanged){
+            profile_image.setDrawingCacheEnabled(true);
+            profile_image.buildDrawingCache();
+            Bitmap bitmap = profile_image.getDrawingCache();
+           String imageURL = FirebaseModule.getInstance().uploadBitmap(bitmap,java.util.UUID.randomUUID().toString(),null,this);
+
+        }
+        else{
+            addUserInfo(FirebaseModule.getInstance().getmAuth().getCurrentUser(),null);
+            onConnectionFinished();
+        }
+
+
     }
     @OnClick(R.id.profile_image)
     void onProfileImage(){
         Functions.changeImage(this,getApplicationContext());
 
     }
+    @Override
+    public void onImageUploaded(String filename){
+        addUserInfo(FirebaseModule.getInstance().getmAuth().getCurrentUser(),filename);
+        onConnectionFinished();
+    }
 
-    private void addUserInfo( FirebaseUser user ){
-        Uri picUri = Uri.parse("https://s-media-cache-ak0.pinimg.com/originals/d3/cf/69/d3cf690f988f41fd1894526e78c1e1f8.png");
+
+    private void addUserInfo( FirebaseUser user, String filename ){
+       Uri picUri;
+        if(filename!=null){
+            picUri = Uri.parse(filename);
+        }
+        else {
+            picUri = Uri.parse(spiderman);
+        }
         String name = nameED.getText().toString();
 
 
@@ -73,6 +97,8 @@ public class AccountDetailsActivity extends BaseActivity {
                         if (task.isSuccessful()) {
                             Intent i = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(i);
+                            FirebaseModule.getInstance().setConnectionDatabase();
+
                         }
                     }
                 });

@@ -74,8 +74,8 @@ public class FirebaseModule {
         return serieReference;
     }
 
-    public String uploadBitmap(Bitmap bitmap, String imagename, final AddComicFragment fragment){
-        fragment.onPreStartConnection(fragment.getString(R.string.loading));
+    public String uploadBitmap(Bitmap bitmap, String imagename, final BaseFragment fragment, final BaseActivity activity){
+        if(fragment!=null) fragment.onPreStartConnection(fragment.getString(R.string.loading));
 
         final String[] downloadURL = new String[1];
         StorageReference ImagesRef = storageRef.child(PrefKeys.IMAGES.toString()).child(UserInfo.getUniqueID()).child(imagename);
@@ -95,34 +95,14 @@ public class FirebaseModule {
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
                 downloadURL[0] = taskSnapshot.getDownloadUrl().toString();
-                fragment.uploadComic(downloadURL[0]);
-
+                if(fragment!=null){  fragment.onImageUploaded(downloadURL[0]);}
+                if (activity!=null){ activity.onImageUploaded(downloadURL[0]);}
         }
         });
         return downloadURL[0];
     }
 
-    public void downloadFile(String name){
-        try {
-            File localFile = File.createTempFile("images", "jpg");
-            storageRef.getFile(localFile)
-                    .addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                            // Successfully downloaded data to local file
-                            // ...
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    // Handle failed download
-                    // ...
-                }
-            });
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
+
 
     public void setConnectionDatabase(){
         setReferences();

@@ -38,7 +38,7 @@
     <string name="logout_button">Tancar sesió</string>
     <string name="logout_confirm">¿Estás segur que vols tancar sesió?</string>
     <string name="searchToolbarHint">Busca el teu còmic, serie o editorial.</string>
-    <string name="logingoogle_button">Iniciar sesió amb Google</string>
+    <string name="logingoogle_button">Continuar amb Google</string>
     <string name="comicInFav">Está en la teua llista de preferits</string>
     <string name="comicNotInFav">No está en la teua llista de preferits</string>
     <string name="comicDeleted">Còmic eliminat correctament</string>

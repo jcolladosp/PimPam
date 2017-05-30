@@ -141,7 +141,7 @@ public class AddComicFragment extends BaseFragment {
             comicIV.setDrawingCacheEnabled(true);
             comicIV.buildDrawingCache();
             Bitmap bitmap = comicIV.getDrawingCache();
-            imageURL = FirebaseModule.getInstance().uploadBitmap(bitmap,java.util.UUID.randomUUID().toString(),this);
+            imageURL = FirebaseModule.getInstance().uploadBitmap(bitmap,java.util.UUID.randomUUID().toString(),this,null);
 
             serie = Database.getInstance().getSerieByName(serieAC.getText().toString());
             if(serie == null) {
@@ -171,16 +171,14 @@ public class AddComicFragment extends BaseFragment {
         return completed;
     }
 
-    public void uploadComic(String imageURL){
+    @Override
+    public void onImageUploaded(String imageURL){
         Database.getInstance().serieToDatabase(serie);
         comic.setImageURL(imageURL);
-
         serie.addComicToSerie(comic);
-
         Database.getInstance().comicToDatabase(comic,this);
-
-
     }
+
     @Override
     public void comicUploaded(){
         onConnectionFinished();
@@ -192,23 +190,8 @@ public class AddComicFragment extends BaseFragment {
 
     @OnClick(R.id.comicIV)
     public void changeImage() {
+        Functions.changeImage(getActivity(),getContext());
 
-        AlertDialog.Builder builder = Functions.getModal(R.string.warning_modal_title,R.string.news_image_message, getActivity());
-        builder.setPositiveButton(R.string.news_image_camera, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-               openCamera();
-
-            }
-        });
-        builder.setNeutralButton(R.string.news_image_gallery, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(pickPhoto, GALLERY_PICK);
-            }
-        });
-        builder.show();
 
     }
     private void stopRefreshing() {
@@ -269,21 +252,6 @@ public class AddComicFragment extends BaseFragment {
         MainActivity.getResult().setSelection(drawerSelection);
     }
 
-    private void openCamera(){
-        Dexter.withActivity(getActivity())
-                .withPermission(Manifest.permission.CAMERA)
-                .withListener(new PermissionListener() {
-                    @Override public void onPermissionGranted(PermissionGrantedResponse response) {
-                        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(cameraIntent, CAMERA_PICK);
-
-                    }
-                    @Override public void onPermissionDenied(PermissionDeniedResponse response) {
-                        Functions.getModal("Necesitamos tu permiso para abrir la camara","Vale",getContext()).show();
-                    }
-                    @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {/* ... */}
-                }).check();
-    }
 
 
 }

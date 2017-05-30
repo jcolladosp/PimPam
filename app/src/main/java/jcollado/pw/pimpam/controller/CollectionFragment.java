@@ -153,18 +153,21 @@ public class CollectionFragment extends BaseFragment {
      * Adding few comics for testing
      */
     public void prepareComics() {
+        recyclerView.setVisibility(View.VISIBLE);
         noResultsTX.setVisibility(View.GONE);
         adapter.clear();
 
         ArrayList<Comic> comics = Database.getInstance().getComics();
         if (comics.size() == 0 ) {
             noComicsTX.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.INVISIBLE);
         }
         else {
             for (Comic comic : comics) {
                 comicList.add(comic);
             }
             noComicsTX.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
 
         }
         adapter.notifyDataSetChanged();
@@ -235,7 +238,9 @@ public class CollectionFragment extends BaseFragment {
                     if(comicsFiltered.size() == 0 && noComicsTX.getVisibility() != View.VISIBLE){
 
                         noResultsTX.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.INVISIBLE);
                     }
+                recyclerView.setVisibility(View.VISIBLE);
                 adapter.addAll(comicsFiltered);
 
                 return false;

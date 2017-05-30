@@ -62,4 +62,6 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public void comicUploaded(){}
+    public void onImageUploaded(String filename){}
+
 }
