@@ -76,14 +76,15 @@ public class AuthActivity extends BaseActivity implements GoogleApiClient.OnConn
         }
     }
 
-    private void configGoogle(){
+    private void configGoogle() {
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
+    }
 
-private void authListener(){
+    private void authListener(){
     mAuthListener = new FirebaseAuth.AuthStateListener() {
         @Override
         public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -106,7 +107,6 @@ private void authListener(){
                 // User is signed out
                 // Log.d(TAG, "onAuthStateChanged:signed_out");
             }
-            // ...
         }
     };
 }

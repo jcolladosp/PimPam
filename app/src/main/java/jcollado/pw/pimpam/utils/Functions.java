@@ -1,5 +1,7 @@
 package jcollado.pw.pimpam.utils;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,12 +12,19 @@ import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.TypedValue;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
@@ -33,6 +42,8 @@ import jcollado.pw.pimpam.R;
 
 
 public class Functions {
+    private static final int GALLERY_PICK = 1;
+    private static final int CAMERA_PICK = 2;
 
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -127,15 +138,7 @@ public class Functions {
 
         return builder;
     }
-     public static String formatURLforQuery(String url){
-         String returnurl = "";
-         try {
-             returnurl =  URLEncoder.encode(url, "UTF-8");
-         } catch (UnsupportedEncodingException e) {
-             e.printStackTrace();
-         }
-         return returnurl;
-     }
+
 
     public static AlertDialog.Builder checkConnectionAndAlert(Context context){
          AlertDialog.Builder builder = null;
@@ -148,16 +151,6 @@ public class Functions {
 
 
 
-    public static int getImageFromString(String string, Context context) {
-        return context.getResources().getIdentifier("drawable/" + string.toLowerCase(), null, context.getPackageName());
-    }
-
-    public static String transformImageBase64(Bitmap bitmap) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
-        byte[] b = baos.toByteArray();
-        return Base64.encodeToString(b, Base64.DEFAULT);
-    }
 
     public static SharedPreferences getPrefs(Context context) {
         return context.getSharedPreferences(PrefKeys.NAME.toString(), Context.MODE_PRIVATE);
@@ -186,15 +179,6 @@ public class Functions {
 
         return emailIntent;
     }
-    public static Intent openWeb(String url){
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse(url));
-        return i;
-    }
-    public static String getPhoneIMEI(Context context){
-        TelephonyManager mngr = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        return mngr.getDeviceId();
-    }
 
     public static String getDateFormated(){
         Date date = Calendar.getInstance().getTime();
@@ -206,6 +190,42 @@ public class Functions {
 
         String today = formatDate.format(date) + " " + formatHour.format(date);
         return today;
+    }
+
+    public static void openCamera(final Activity activity, final Context context){
+        Dexter.withActivity(activity)
+                .withPermission(Manifest.permission.CAMERA)
+                .withListener(new PermissionListener() {
+                    @Override public void onPermissionGranted(PermissionGrantedResponse response) {
+                        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        activity.startActivityForResult(cameraIntent, CAMERA_PICK);
+
+                    }
+                    @Override public void onPermissionDenied(PermissionDeniedResponse response) {
+                        getModal("Necesitamos tu permiso para abrir la camara","Vale",context).show();
+                    }
+                    @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {/* ... */}
+                }).check();
+    }
+    public static void changeImage(final Activity activity, final Context context) {
+
+        AlertDialog.Builder builder = Functions.getModal(R.string.warning_modal_title,R.string.news_image_message, activity);
+        builder.setPositiveButton(R.string.news_image_camera, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                openCamera(activity,context);
+
+            }
+        });
+        builder.setNeutralButton(R.string.news_image_gallery, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                activity.startActivityForResult(pickPhoto, GALLERY_PICK);
+            }
+        });
+        builder.show();
+
     }
 
 }
