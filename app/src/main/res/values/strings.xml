@@ -35,6 +35,7 @@
     <string name="email_field">Email</string>
     <string name="password_field">Contraseña</string>
     <string name="login_button">Iniciar sesión</string>
+    <string name="continuar_button">Continuar</string>
     <string name="logout_button">Cerrar sesión</string>
     <string name="logout_confirm">¿Está seguro que quiere cerrar sesión?</string>
     <string name="searchToolbarHint">Busca tu cómic, serie o editorial.</string>

@@ -40,8 +40,7 @@ public class AuthActivity extends BaseActivity implements GoogleApiClient.OnConn
     EditText emailED;
     @BindView(R.id.passwordED)
     EditText passwordED;
-    @BindView(R.id.nameED)
-    EditText nameED;
+
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseUser user;
@@ -84,61 +83,35 @@ public class AuthActivity extends BaseActivity implements GoogleApiClient.OnConn
                 .requestEmail()
                 .build();
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-    }
+private void authListener(){
+    mAuthListener = new FirebaseAuth.AuthStateListener() {
+        @Override
+        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+            user = firebaseAuth.getCurrentUser();
+            if (user != null) {
+                // User is signed in
+                FirebaseModule.getInstance().setConnectionDatabase();
+                Intent i;
+                if(notGoogle){
+                   i = new Intent(getApplicationContext(), AccountDetailsActivity.class);
 
-    private void authListener(){
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    FirebaseModule.getInstance().setConnectionDatabase();
-                    if(notGoogle){
-                        addUserInfo(user);
-
-                    }
-                    else{
-                        Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(i);
-                    }
-
-
-                } else {
-                    // User is signed out
-                    // Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
-                // ...
+                else{
+                    i = new Intent(getApplicationContext(), MainActivity.class);
+
+                }
+                startActivity(i);
+
+            } else {
+                // User is signed out
+                // Log.d(TAG, "onAuthStateChanged:signed_out");
             }
-        };
-    }
-    private void addUserInfo( FirebaseUser user ){
-        Uri picUri = Uri.parse("https://s-media-cache-ak0.pinimg.com/originals/d3/cf/69/d3cf690f988f41fd1894526e78c1e1f8.png");
-        String name = nameED.getText().toString();
+            // ...
+        }
+    };
+}
 
 
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName(name)
-                .setPhotoUri(picUri)
-                .build();
-
-        user.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(i);
-                        }
-                    }
-                });
-
-
-    }
 
     @OnClick(R.id.btn_create_account)
     void onCreateAccount() {
@@ -279,7 +252,7 @@ public class AuthActivity extends BaseActivity implements GoogleApiClient.OnConn
     }
 
     private boolean checkAllFieldsCompleted(){
-        if (nameED.getText().length() != 0 && passwordED.getText().length() != 0 && emailED.getText().length() != 0)
+        if ( passwordED.getText().length() != 0 && emailED.getText().length() != 0)
                 return true;
         else{
             AlertDialog.Builder allFieldsBuilder = Functions.getModal(getString(R.string.allFieldsRequired),getString(R.string.ok),this);

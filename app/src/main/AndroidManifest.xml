@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="jcollado.pw.pimpam">
+
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
@@ -10,12 +11,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".controller.MainActivity"
+        <activity
+            android:name=".controller.MainActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait">
-
-        </activity>
-        <activity android:name=".controller.SplashActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".controller.SplashActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -24,10 +25,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".controller.AuthActivity"
+        <activity
+            android:name=".controller.AuthActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
-            ></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".controller.AccountDetailsActivity"></activity>
     </application>
 
 </manifest>

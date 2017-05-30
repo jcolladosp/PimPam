@@ -30,6 +30,8 @@ dependencies {
     }
 
 
+
+
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.jakewharton:butterknife:8.5.1'
     compile 'com.mikepenz:fontawesome-typeface:4.7.0.0@aar'
@@ -49,12 +51,13 @@ dependencies {
     compile 'com.journeyapps:zxing-android-embedded:3.5.0'
     compile 'com.google.firebase:firebase-messaging:10.2.4'
     compile 'com.karumi:dexter:4.1.0'
-
     compile 'com.github.varunest:sparkbutton:1.0.5'
-
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.1'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 }
+
 
 
 apply plugin: 'com.google.gms.google-services'

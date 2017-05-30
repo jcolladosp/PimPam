@@ -161,25 +161,6 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
 
             }
 
-            /*
-            @Override
-            public void onActivityResult(int requestCode, int resultCode, Intent data) {
-                IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-                if(result != null) {
-                    if(result.getContents() == null) {
-                        Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
-                    } else {
-                        TextView tv = (TextView) findViewById(R.id.codeTX);
-                        tv.setText(result.getContents());
-
-                        Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                    }
-                } else {
-                    super.onActivityResult(requestCode, resultCode, data);
-                }
-            }
-            */
-
             public void mostrarCargando(){
                 onPreStartConnection(getString(R.string.loading));
             }
