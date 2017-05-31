@@ -181,7 +181,7 @@ public class AddComicFragment extends BaseFragment {
         onConnectionFinished();
         new Toast(getContext()).makeText(getContext(),getString(R.string.comic_addded_succesfull), Toast.LENGTH_SHORT).show();
         CollectionFragment collection = CollectionFragment.newInstance();
-         openFragment(collection,collection.PLACE_IN_DRAWER);
+         openFragment(collection,collection.PLACE_IN_DRAWER,"collection");
     }
 
 
@@ -223,15 +223,6 @@ public class AddComicFragment extends BaseFragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-    private void openFragment(BaseFragment fragment,int drawerSelection){
-
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.container, fragment,"")
-                .commit();
-        MainActivity.getResult().setSelection(drawerSelection);
-    }
-
 
 
 }

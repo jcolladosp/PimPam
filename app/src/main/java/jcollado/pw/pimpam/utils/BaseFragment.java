@@ -12,6 +12,8 @@ import android.view.inputmethod.InputMethodManager;
 
 
 import butterknife.ButterKnife;
+import jcollado.pw.pimpam.R;
+import jcollado.pw.pimpam.controller.MainActivity;
 
 public abstract class BaseFragment extends Fragment {
 
@@ -63,5 +65,15 @@ public abstract class BaseFragment extends Fragment {
 
     public void comicUploaded(){}
     public void onImageUploaded(String filename){}
+
+    public void openFragment(BaseFragment fragment,int drawerSelection,String tag){
+
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .addToBackStack(tag)
+                .replace(R.id.container, fragment,"")
+                .commit();
+        MainActivity.getResult().setSelection(drawerSelection);
+    }
 
 }

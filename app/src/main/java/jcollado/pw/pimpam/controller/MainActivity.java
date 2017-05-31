@@ -3,6 +3,7 @@ package jcollado.pw.pimpam.controller;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import com.mikepenz.materialdrawer.Drawer;
 
@@ -37,7 +38,7 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
         Database.getInstance().setFragment(collectionFragment);
         toolbar.setTitle(getString(R.string.seeCollection));
         getSupportActionBar().hide();
-        openFragment(collectionFragment);
+        openFragment(collectionFragment,"");
 
 
     }
@@ -57,10 +58,11 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
     public void onFragmentInteraction(Uri uri) {
     }
 
-    public void openFragment(BaseFragment fragment) {
+    public void openFragment(BaseFragment fragment,String tag) {
 
         getSupportFragmentManager()
                 .beginTransaction()
+                .addToBackStack(tag)
                 .replace(R.id.container, fragment, "")
                 .commit();
         if (navigationDrawer != null) {
@@ -73,7 +75,11 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
     public void onBackPressed() {
 
         if (navigationDrawer.getCurrentSelectedPosition() != 1) {
-            openDrawer();
+            FragmentManager fm = getSupportFragmentManager();
+            fm.popBackStack ("add", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            fm.popBackStack ("settings", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+            //openDrawer();
         } else {
             Intent a = new Intent(Intent.ACTION_MAIN);
             a.addCategory(Intent.CATEGORY_HOME);

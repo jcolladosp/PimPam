@@ -263,16 +263,9 @@ public class CollectionFragment extends BaseFragment {
     public void addComic(){
 
         AddComicFragment addFrag= new AddComicFragment();
-      openFragment(addFrag,addFrag.PLACE_IN_DRAWER);
+        openFragment(addFrag,addFrag.PLACE_IN_DRAWER,"add");
 
     }
-    private void openFragment(BaseFragment fragment,int drawerSelection){
 
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.container, fragment,"")
-                .commit();
-        MainActivity.getResult().setSelection(drawerSelection);
-    }
 
 }

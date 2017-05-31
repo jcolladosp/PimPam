@@ -74,18 +74,18 @@ public class NavigationDrawer {
                                 toolbar.setTitle(activity.getString(R.string.seeCollection));
 
                                 activity.getSupportActionBar().hide();
-                                activity.openFragment(fragment);
+                                activity.openFragment(fragment,"");
                                 break;
 
                             case 2:
                                 fragment = AddComicFragment.newInstance();
                                 activity.getSupportActionBar().hide();
-                                activity.openFragment(fragment);
+                                activity.openFragment(fragment,"add");
                                 break;
 
                             case 4:
                                 fragment = SettingsFragment.newInstance();
-                                activity.openFragment(fragment);
+                                activity.openFragment(fragment,"settings");
                                 break;
 
 
