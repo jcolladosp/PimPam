@@ -39,6 +39,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import jcollado.pw.pimpam.R;
+import jcollado.pw.pimpam.controller.AddComicFragment;
 
 
 public class Functions {
@@ -80,16 +81,7 @@ public class Functions {
     public static AlertDialog.Builder getModalError(Context context) {
         return Functions.getModal(R.string.error_general, context);
     }
-    public static boolean validateDate(String fecha) {
-        try {
-            SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-            formatoFecha.setLenient(false);
-            formatoFecha.parse(fecha);
-        } catch (ParseException e) {
-            return false;
-        }
-        return true;
-    }
+
 
     public static boolean validatePasswordSize(String password) {
         return password.length() >= 6;
@@ -151,15 +143,6 @@ public class Functions {
 
 
 
-
-    public static SharedPreferences getPrefs(Context context) {
-        return context.getSharedPreferences(PrefKeys.NAME.toString(), Context.MODE_PRIVATE);
-    }
-
-
-
-
-
     /**
      * Converting dp to pixel
      */
@@ -180,25 +163,17 @@ public class Functions {
         return emailIntent;
     }
 
-    public static String getDateFormated(){
-        Date date = Calendar.getInstance().getTime();
-        Calendar now = Calendar.getInstance();
 
-        // Display a date in day, month, year format
-        DateFormat formatDate = new SimpleDateFormat("yyyy/MM/dd");
-        DateFormat formatHour = new SimpleDateFormat("HH:mm:ss");
-
-        String today = formatDate.format(date) + " " + formatHour.format(date);
-        return today;
-    }
-
-    public static void openCamera(final Activity activity, final Context context){
+    public static void openCamera(final Activity activity, final Context context, final BaseFragment fragment){
         Dexter.withActivity(activity)
                 .withPermission(Manifest.permission.CAMERA)
                 .withListener(new PermissionListener() {
                     @Override public void onPermissionGranted(PermissionGrantedResponse response) {
                         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        activity.startActivityForResult(cameraIntent, CAMERA_PICK);
+                        if(fragment!=null) fragment.startActivityForResult(cameraIntent, CAMERA_PICK);
+                        else{
+                            activity.startActivityForResult(cameraIntent, CAMERA_PICK);
+                        }
 
                     }
                     @Override public void onPermissionDenied(PermissionDeniedResponse response) {
@@ -207,13 +182,13 @@ public class Functions {
                     @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {/* ... */}
                 }).check();
     }
-    public static void changeImage(final Activity activity, final Context context) {
+    public static void changeImage(final Activity activity, final Context context, final AddComicFragment fragment) {
 
         AlertDialog.Builder builder = Functions.getModal(R.string.warning_modal_title,R.string.news_image_message, activity);
         builder.setPositiveButton(R.string.news_image_camera, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                openCamera(activity,context);
+                openCamera(activity,context,fragment);
 
             }
         });
@@ -221,7 +196,11 @@ public class Functions {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                activity.startActivityForResult(pickPhoto, GALLERY_PICK);
+                if(fragment!=null) fragment.startActivityForResult(pickPhoto, GALLERY_PICK);
+                else{
+                    activity.startActivityForResult(pickPhoto, GALLERY_PICK);
+                }
+
             }
         });
         builder.show();

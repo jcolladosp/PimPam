@@ -1,7 +1,9 @@
 package jcollado.pw.pimpam.controller;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -48,6 +50,7 @@ public class AddComicFragment extends BaseFragment {
     public static final int PLACE_IN_DRAWER = 2;
     private static final int GALLERY_PICK = 1;
     private static final int CAMERA_PICK = 2;
+    private static  AddComicFragment fragment;
     private boolean imageChanged = false;
     private Bitmap imageBitmap;
 
@@ -81,7 +84,7 @@ public class AddComicFragment extends BaseFragment {
 
 
     public static AddComicFragment newInstance() {
-        AddComicFragment fragment = new AddComicFragment();
+        fragment = new AddComicFragment();
 
         return fragment;
     }
@@ -117,7 +120,7 @@ public class AddComicFragment extends BaseFragment {
                 Bundle extras = data.getExtras();
                 imageBitmap = (Bitmap) extras.get("data");
                 comicIV.setImageBitmap(imageBitmap);
-            } else {
+            }  if (requestCode == GALLERY_PICK) {
                 comicIV.setImageURI(data.getData());
 
             }
@@ -147,10 +150,7 @@ public class AddComicFragment extends BaseFragment {
             if(serie == null) {
                 serie = FactorySerie.createSerie(serieAC.getText().toString(),anyoED.getText().toString() , editorialED.getText().toString());
             }
-
-            comic = FactoryComic.createComic(nameED.getText().toString(),editorialED.getText().toString(),
-                    "",numeroED.getText().toString(),anyoED.getText().toString(),serie,false);
-
+            comic = FactoryComic.createComic(nameED.getText().toString(),editorialED.getText().toString(),"",numeroED.getText().toString(),anyoED.getText().toString(),serie,false);
         }
     }
 
@@ -190,14 +190,10 @@ public class AddComicFragment extends BaseFragment {
 
     @OnClick(R.id.comicIV)
     public void changeImage() {
-        Functions.changeImage(getActivity(),getContext());
-
+        Functions.changeImage(getActivity(),getContext(),fragment);
 
     }
-    private void stopRefreshing() {
 
-        onConnectionFinished();
-    }
     private void prepareSpinner(){
 
         ArrayAdapter adapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,Database.getInstance().getSeriesNameArray());
@@ -251,6 +247,7 @@ public class AddComicFragment extends BaseFragment {
                 .commit();
         MainActivity.getResult().setSelection(drawerSelection);
     }
+
 
 
 }

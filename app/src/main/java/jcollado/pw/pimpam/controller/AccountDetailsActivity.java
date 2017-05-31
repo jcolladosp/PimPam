@@ -64,7 +64,7 @@ public class AccountDetailsActivity extends BaseActivity {
     }
     @OnClick(R.id.profile_image)
     void onProfileImage(){
-        Functions.changeImage(this,getApplicationContext());
+        Functions.changeImage(this,getApplicationContext(),null);
 
     }
     @Override
