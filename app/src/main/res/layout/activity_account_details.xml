@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/auth"
+    android:background="@android:color/white"
     android:focusable="true"
     android:focusableInTouchMode="true"
     tools:context="jcollado.pw.pimpam.controller.AuthActivity">
@@ -16,10 +16,10 @@
         android:layout_height="200dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
-        app:civ_border_color="@android:color/white"
+        app:civ_border_color="@color/primary_dark"
         app:civ_border_width="2dp" />
 
-    <com.github.florent37.materialtextfield.MaterialTextField
+    <android.support.design.widget.TextInputLayout
         android:id="@+id/nameLayput"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
@@ -30,10 +30,7 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginTop="30dp"
-        app:mtf_cardCollapsedHeight="4dp"
-        app:mtf_hasFocus="false"
-        app:mtf_image="@drawable/ic_person"
-        app:mtf_openKeyboardOnFocus="true">
+       >
 
         <EditText
             android:id="@+id/nameED"
@@ -41,14 +38,12 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:ems="10"
             android:hint="@string/name_add_comic"
-            android:inputType="textCapWords"
-            android:textColor="@color/primary_dark"
-            android:textColorHint="@android:color/white" />
-    </com.github.florent37.materialtextfield.MaterialTextField>
+            android:inputType="textCapWords" />
+    </android.support.design.widget.TextInputLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
