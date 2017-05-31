@@ -3,6 +3,7 @@ package jcollado.pw.pimpam.controller;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 
 import com.mikepenz.materialdrawer.Drawer;
@@ -17,7 +18,6 @@ import jcollado.pw.pimpam.utils.NavigationDrawer;
 public class MainActivity extends BaseActivity implements ViewComicFragment.OnFragmentInteractionListener,AddComicFragment.OnFragmentInteractionListener{
 
     Toolbar toolbar;
-    private CollectionFragment collectionFragment;
     private static Drawer navigationDrawer;
 
     @Override
@@ -31,7 +31,7 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
         setNavigationDrawer();
         FirebaseModule.getInstance().setConnectionDatabase();
 
-        collectionFragment = CollectionFragment.newInstance();
+        CollectionFragment collectionFragment = CollectionFragment.newInstance();
         Database.getInstance().setFragment(collectionFragment);
             toolbar.setTitle(getString(R.string.seeCollection));
             getSupportActionBar().hide();
@@ -68,10 +68,15 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
 
             @Override
             public void onBackPressed() {
-                Intent a = new Intent(Intent.ACTION_MAIN);
-                a.addCategory(Intent.CATEGORY_HOME);
-                a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(a);
+
+                if (navigationDrawer.getCurrentSelectedPosition() != 1) {
+                    openDrawer();
+                }
+                else {
+                    Intent a = new Intent(Intent.ACTION_MAIN);
+                    a.addCategory(Intent.CATEGORY_HOME);
+                    a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(a);                }
 
             }
 
