@@ -51,8 +51,8 @@
     <string name="login_failed">Log in error</string>
     <string name="restore_password">I have forgotten my password</string>
     <string name="succesful_restored_pass">We have send an message to your email for recovering your password.</string>
-    <string name="no_comics">You have no comics yet, add them 😉</string>
-    <string name="no_results">We have not found any comic 😢</string>
+    <string name="no_comics">You have no comics yet, add them</string>
+    <string name="no_results">We have not found any comic</string>
 
 
     <string name="icon_signup">&#xf234;</string>

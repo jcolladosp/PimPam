@@ -73,15 +73,6 @@ public class SettingsFragment  extends BaseFragment {
     }
 
 
-    public static class Settings2Fragment extends PreferenceFragment {
-        public Settings2Fragment() {}
-
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.settings_prefs);
-        }
-    }
 
 
 }

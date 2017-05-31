@@ -10,10 +10,6 @@
         android:orientation="vertical">
         <include layout="@layout/toolbar" />
 
-        <fragment android:name="jcollado.pw.pimpam.controller.SettingsFragment$Settings2Fragment"
-            android:id="@+id/settings_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
     </LinearLayout>
 
 

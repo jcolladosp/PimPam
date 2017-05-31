@@ -253,7 +253,6 @@ public class AddComicFragment extends BaseFragment {
     }
 
 
-
 }
 
 
