@@ -51,7 +51,6 @@ public class AddComicFragment extends BaseFragment {
     private static final int GALLERY_PICK = 1;
     private static final int CAMERA_PICK = 2;
     private static  AddComicFragment fragment;
-    private boolean imageChanged = false;
     private Bitmap imageBitmap;
 
     @BindView(R.id.nameED)
@@ -75,8 +74,7 @@ public class AddComicFragment extends BaseFragment {
     static Comic comic;
     static Serie serie;
 
-    private OnFragmentInteractionListener mListener;
-    String[] languages={"Android ","java","IOS","SQL","JDBC","Web services"};
+
 
     public AddComicFragment() {
         // Required empty public constructor
@@ -115,7 +113,6 @@ public class AddComicFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (data != null) {
-            imageChanged = true;
             if (requestCode == CAMERA_PICK) {
                 Bundle extras = data.getExtras();
                 imageBitmap = (Bitmap) extras.get("data");
@@ -219,22 +216,9 @@ public class AddComicFragment extends BaseFragment {
         toolbar.setTitle(getString(R.string.addComic));
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
+
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);

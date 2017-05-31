@@ -37,6 +37,7 @@ import jcollado.pw.pimpam.model.Database;
 import jcollado.pw.pimpam.model.FactoryComic;
 import jcollado.pw.pimpam.model.Serie;
 import jcollado.pw.pimpam.utils.BaseFragment;
+import jcollado.pw.pimpam.utils.FirebaseModule;
 import jcollado.pw.pimpam.utils.Functions;
 import jcollado.pw.pimpam.widgets.SquareImageView;
 
@@ -79,7 +80,7 @@ public class ViewComicFragment extends BaseFragment {
 
     private OnFragmentInteractionListener mListener;
     private static Comic comic;
-    static Serie serie;
+    private static ViewComicFragment fragment;
 
     public ViewComicFragment() {
         // Required empty public constructor
@@ -87,7 +88,7 @@ public class ViewComicFragment extends BaseFragment {
 
 
     public static ViewComicFragment newInstance() {
-        ViewComicFragment fragment = new ViewComicFragment();
+        fragment = new ViewComicFragment();
         return fragment;
     }
 
@@ -155,24 +156,10 @@ public class ViewComicFragment extends BaseFragment {
 
     @OnClick(R.id.comicIV)
     public void changeImage() {
-            /*
-            AlertDialog.Builder builder = Functions.getModal(R.string.warning_modal_title,R.string.news_image_message, getActivity());
-            builder.setPositiveButton(R.string.news_image_camera, new DialogInterface.OnClickListener() {
-                  @Override
-                public void onClick(DialogInterface dialog, int which) {
-                   Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                   startActivityForResult(cameraIntent, CAMERA_PICK);
-                }
-            });
-            builder.setNeutralButton(R.string.news_image_gallery, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(pickPhoto, GALLERY_PICK);
-                }
-            });
-            builder.show();
-        */
+           if(editingComic){
+               Functions.changeImage(getActivity(),getContext(),fragment);
+
+           }
     }
     public void setComic(Comic comic){
         this.comic = comic;
@@ -189,19 +176,44 @@ public class ViewComicFragment extends BaseFragment {
             editingComic = false;
             actionDelete.setVisible(false);
             editFab.setImageResource(R.drawable.ic_edit);
-            comic.setYear(anyoED.getText().toString());
-            comic.setName(nameED.getText().toString());
-            comic.setEditorial(editorialED.getText().toString());
+            if(imageChanged){
+                comicIV.setDrawingCacheEnabled(true);
+                comicIV.buildDrawingCache();
+                Bitmap bitmap = comicIV.getDrawingCache();
+                String imageURL = FirebaseModule.getInstance().uploadBitmap(bitmap,java.util.UUID.randomUUID().toString(),this,null);
 
-            Database.getInstance().comicToDatabase(comic,this);
+            }
+            else{
+                uploadComicToDatabase(null);
+
+            }
+
 
             showMode();
 
         }
     }
+
+    @Override
+    public void onImageUploaded(String imageURL){
+        uploadComicToDatabase(imageURL);
+
+    }
+
+    private void uploadComicToDatabase(String imageurl){
+        comic.setYear(anyoED.getText().toString());
+        comic.setName(nameED.getText().toString());
+        comic.setEditorial(editorialED.getText().toString());
+        if(imageurl != null){
+            comic.setImageURL(imageurl);
+        }
+
+
+        Database.getInstance().comicToDatabase(comic,this);
+    }
+
     private void editMode(){
         editingComic = true;
-        //isFavChange = fav;
         actionDelete.setVisible(true);
         editFab.setImageResource(R.drawable.ic_done);
         editLayout.setVisibility(View.VISIBLE);
@@ -247,7 +259,6 @@ public class ViewComicFragment extends BaseFragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
 
-       // toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.hamburger));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -258,7 +269,6 @@ public class ViewComicFragment extends BaseFragment {
             }
         });
 
-       // toolbar.setTitle(getString(R.string.addComic));
     }
 
     @Override

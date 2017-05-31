@@ -97,6 +97,7 @@ public class FirebaseModule {
                 downloadURL[0] = taskSnapshot.getDownloadUrl().toString();
                 if(fragment!=null){  fragment.onImageUploaded(downloadURL[0]);}
                 if (activity!=null){ activity.onImageUploaded(downloadURL[0]);}
+
         }
         });
         return downloadURL[0];

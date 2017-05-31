@@ -182,7 +182,7 @@ public class Functions {
                     @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {/* ... */}
                 }).check();
     }
-    public static void changeImage(final Activity activity, final Context context, final AddComicFragment fragment) {
+    public static void changeImage(final Activity activity, final Context context,  final BaseFragment fragment) {
 
         AlertDialog.Builder builder = Functions.getModal(R.string.warning_modal_title,R.string.news_image_message, activity);
         builder.setPositiveButton(R.string.news_image_camera, new DialogInterface.OnClickListener() {
