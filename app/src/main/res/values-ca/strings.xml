@@ -64,6 +64,9 @@
     <string name="english">Anglés</string>
     <string name="valencia">Valencià</string>
     <string name="deleteAllComics">Elimina tots els comics</string>
+    <string name="atention">Atenciò!</string>
+    <string name="confirmdelete">Estàs segur que vols eliminar tots els comics?</string>
+    <string name="comicsDeletedOk">Comics eleminats correctament</string>
 
 
 </resources>

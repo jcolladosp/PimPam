@@ -1,6 +1,8 @@
 package jcollado.pw.pimpam.controller;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -109,7 +111,23 @@ public class SettingsFragment  extends BaseFragment {
 
     @OnClick(R.id.eraseComicsBT)
     void onEraseComics(){
-        Database.getInstance().deleteAllData();
+        AlertDialog.Builder builder = Functions.getModal(R.string.atention,R.string.confirmdelete, getActivity());
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Database.getInstance().deleteAllData();
+                Functions.getModal(R.string.comicsDeletedOk,getContext()).show();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+
+            }
+        });
+
+    builder.show();
     }
 
 
