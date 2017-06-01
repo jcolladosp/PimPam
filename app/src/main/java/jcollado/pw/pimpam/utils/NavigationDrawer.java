@@ -32,13 +32,12 @@ public class NavigationDrawer {
 
     private static NavigationDrawer drawerBuilerClass;
     private static Drawer drawerBuilder;
-    private static CollectionFragment collection;
 
 
-    private NavigationDrawer(final MainActivity activity, final Toolbar toolbar) {
+    private NavigationDrawer(final MainActivity activity) {
 
 
-        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+//        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         // Create the AccountHeader
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(activity)
@@ -60,7 +59,7 @@ public class NavigationDrawer {
         //create the drawer and remember the `Drawer` result object
         drawerBuilder = new DrawerBuilder()
                 .withActivity(activity)
-                .withToolbar(toolbar)
+
                 .withAccountHeader(headerResult)
                 .addDrawerItems(item1,item2, new DividerDrawerItem(),ajustes,signout)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -71,15 +70,12 @@ public class NavigationDrawer {
                         switch (position) {
                             case 1:
                                 fragment = CollectionFragment.newInstance();
-                                toolbar.setTitle(activity.getString(R.string.seeCollection));
 
-                                activity.getSupportActionBar().hide();
                                 activity.openFragment(fragment,"");
                                 break;
 
                             case 2:
                                 fragment = AddComicFragment.newInstance();
-                                activity.getSupportActionBar().hide();
                                 activity.openFragment(fragment,"add");
                                 break;
 
@@ -110,9 +106,9 @@ public class NavigationDrawer {
 
     }
 
-    public static NavigationDrawer getInstance(final MainActivity activity, final Toolbar toolbar) {
+    public static NavigationDrawer getInstance(final MainActivity activity) {
 
-            drawerBuilerClass = new NavigationDrawer(activity,toolbar);
+            drawerBuilerClass = new NavigationDrawer(activity);
 
         return drawerBuilerClass;
     }

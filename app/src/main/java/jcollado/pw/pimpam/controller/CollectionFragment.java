@@ -90,12 +90,10 @@ public class CollectionFragment extends BaseFragment {
         prepareComics();
 
 
-        try {
+
             //Fondo de la CollapsingToolbar
            // Glide.with(this).load(R.drawable.cover).into((ImageView) view.findViewById(R.id.backdrop));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
 
 
         return view ;

@@ -1,16 +1,127 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="jcollado.pw.pimpam.controller.SettingsFragment">
+    android:background="@android:color/white"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context="jcollado.pw.pimpam.controller.AuthActivity">
+    <include layout="@layout/toolbar"
+        android:id="@+id/include" />
+
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/profile_edit"
+        android:layout_width="176dp"
+        android:layout_height="176dp"
+        android:layout_below="@+id/include"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        app:civ_border_color="@color/primary_dark"
+        app:civ_border_width="2dp" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/nameLayput"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/profile_edit"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="20dp">
+
+        <EditText
+            android:id="@+id/nameED"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:ems="10"
+            android:hint="@string/name_add_comic"
+            android:inputType="textCapWords" />
+    </android.support.design.widget.TextInputLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/nameLayput"
+        android:layout_marginLeft="9dp"
+        android:layout_marginRight="9dp"
+        android:layout_marginTop="20dp"
         android:orientation="vertical">
-        <include layout="@layout/toolbar" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/language"
+            android:textSize="16sp" />
+
+        <RadioGroup
+            android:id="@+id/language"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/radio_spanish"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:checked="false"
+                android:text="@string/spanish" />
+
+            <RadioButton
+                android:id="@+id/radio_english"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/english" />
+
+            <RadioButton
+                android:id="@+id/radio_valencia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/valencia" />
+        </RadioGroup>
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/btn_continuar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
+            android:layout_marginTop="25dp"
+            android:layout_weight="1"
+            android:paddingBottom="12dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+
+            android:paddingTop="12dp"
+            android:visibility="gone"
+            app:fb_defaultColor="@color/primary_dark"
+            app:fb_focusColor="@color/primary"
+
+            fancy:fb_borderColor="#FFFFFF"
+            fancy:fb_borderWidth="0dp"
+            fancy:fb_fontIconSize="15sp"
+            fancy:fb_iconPaddingRight="10dp"
+            fancy:fb_iconPosition="left"
+            fancy:fb_radius="30dp"
+            fancy:fb_text="@string/continuar_button"
+            fancy:fb_textColor="#FFFFFF">
+
+        </mehdi.sakout.fancybuttons.FancyButton>
 
     </LinearLayout>
 
-
-</FrameLayout>
+</RelativeLayout>

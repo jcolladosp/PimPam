@@ -41,6 +41,7 @@ public class AccountDetailsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_details);
         ButterKnife.bind(this);
+
         Glide.with(this).load(spiderman).placeholder(R.drawable.placeholder).dontAnimate().into(profile_image);
 
 

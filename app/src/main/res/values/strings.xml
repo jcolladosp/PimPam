@@ -56,9 +56,14 @@
     <string name="no_results">No hemos encontrado ningún cómic</string>
 
 
+
     <string name="icon_signup">&#xf234;</string>
     <string name="icon_login">&#xf007;</string>
     <string name="icon_google">&#xf1a0;</string>
+    <string name="language">Idioma</string>
+    <string name="spanish">Español</string>
+    <string name="english">Inglés</string>
+    <string name="valencia">Valenciano</string>
 
 
 </resources>

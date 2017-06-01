@@ -58,6 +58,11 @@
     <string name="icon_signup">&#xf234;</string>
     <string name="icon_login">&#xf007;</string>
     <string name="icon_google">&#xf1a0;</string>
+    <string name="continuar_button">Continue</string>
+    <string name="language">Language</string>
+    <string name="spanish">Spanish</string>
+    <string name="english">English</string>
+    <string name="valencia">Valencian</string>
 
 
 </resources>

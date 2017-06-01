@@ -18,8 +18,7 @@ import jcollado.pw.pimpam.utils.NavigationDrawer;
 
 
 public class MainActivity extends BaseActivity implements ViewComicFragment.OnFragmentInteractionListener,AddComicFragment.OnFragmentInteractionListener {
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
+
 
 
     private static Drawer navigationDrawer;
@@ -29,15 +28,17 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        setSupportActionBar(toolbar);
+
 
         setNavigationDrawer();
         FirebaseModule.getInstance().setConnectionDatabase();
 
         CollectionFragment collectionFragment = CollectionFragment.newInstance();
         Database.getInstance().setFragment(collectionFragment);
-        toolbar.setTitle(getString(R.string.seeCollection));
-        getSupportActionBar().hide();
+
+
+
+
         openFragment(collectionFragment,"");
 
 
@@ -49,7 +50,7 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
 
 
     private void setNavigationDrawer() {
-        navigationDrawer = NavigationDrawer.getInstance(this, toolbar).getDrawerBuilder();
+        navigationDrawer = NavigationDrawer.getInstance(this).getDrawerBuilder();
 
     }
 
@@ -89,15 +90,10 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
 
     }
 
-    public void mostrarCargando() {
-        onPreStartConnection(getString(R.string.loading));
-    }
 
     public static Drawer getResult() {
         return navigationDrawer;
     }
-
-
 
 
 
