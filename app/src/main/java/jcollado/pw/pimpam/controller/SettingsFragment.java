@@ -1,11 +1,18 @@
 package jcollado.pw.pimpam.controller;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -16,8 +23,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,11 +41,12 @@ import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.model.Database;
 import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.FirebaseModule;
+import jcollado.pw.pimpam.utils.Functions;
 
 
 public class SettingsFragment  extends BaseFragment {
 
-    private static View view;
+
     @BindView(R.id.profile_edit)
     CircleImageView profile_edit;
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -43,14 +58,22 @@ public class SettingsFragment  extends BaseFragment {
     RadioButton spanishRB;
     @BindView(R.id.radio_valencia)
     RadioButton valenciaRB;
+    @BindView(R.id.language)
+    RadioGroup buttonsLanguage;
+    private static final int GALLERY_PICK = 1;
+    private static final int CAMERA_PICK = 2;
 
-
+    public boolean imageChanged = false;
+    private static View view;
+    private FirebaseUser user;
+    private String imageurl;
+    private static SettingsFragment fragment;
     public SettingsFragment() {
         // Required empty public constructor
     }
 
     public static SettingsFragment newInstance() {
-        SettingsFragment fragment = new SettingsFragment();
+        fragment = new SettingsFragment();
 
         return fragment;
     }
@@ -70,18 +93,36 @@ public class SettingsFragment  extends BaseFragment {
         Glide.with(this).load(FirebaseModule.getInstance().getCurrentUser().getPhotoUrl()).placeholder(R.drawable.placeholder).dontAnimate().into(profile_edit);
         prepareToolbar();
         setHasOptionsMenu(true);
-        checkLanguageButton();
+         checkLanguageButton();
+        user = FirebaseModule.getInstance().getCurrentUser();
+        imageurl = user.getPhotoUrl().toString();
+        nameED.setText(user.getDisplayName());
 
 
         return view;
     }
 
+    @OnClick(R.id.profile_edit)
+    void onProfileImage(){
+        Functions.changeImage(getActivity(),getContext(),this);
+    }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
+    @OnClick(R.id.eraseComicsBT)
+    void onEraseComics(){
+     //TODO
 
     }
+
+
+    @Override
+    public void onImageUploaded(String filename){
+
+        imageurl = filename;
+        addUserInfo();
+
+    }
+
+
     private void prepareToolbar(){
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -98,10 +139,7 @@ public class SettingsFragment  extends BaseFragment {
         toolbar.setTitle(getString(R.string.settings));
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-    }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
@@ -114,7 +152,13 @@ public class SettingsFragment  extends BaseFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done_settings:
-                Log.i("xd","xd");
+                if(imageChanged){
+                    changeProfileWithImage();
+                }
+                else{
+                    addUserInfo();
+                }
+              //  getActivity().getSupportFragmentManager().popBackStack();
                 return true;
 
             default:
@@ -139,6 +183,90 @@ public class SettingsFragment  extends BaseFragment {
 
         }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data != null) {
+            imageChanged = true;
+            if (requestCode == CAMERA_PICK) {
+                Bundle extras = data.getExtras();
+                Bitmap imageBitmap = (Bitmap) extras.get("data");
+                profile_edit.setImageBitmap(imageBitmap);
+            }  if (requestCode == GALLERY_PICK) {
+                profile_edit.setImageURI(data.getData());
+
+            }
+        }
+    }
+
+    private void changeProfileWithImage(){
+
+            profile_edit.setDrawingCacheEnabled(true);
+            profile_edit.buildDrawingCache();
+            Bitmap bitmap = profile_edit.getDrawingCache();
+            FirebaseModule.getInstance().uploadBitmap(bitmap,java.util.UUID.randomUUID().toString(),this,null);
+
+        }
+    private void addUserInfo(){
+        onPreStartConnection(getString(R.string.loading));
+        Uri picUri;
+
+            picUri = Uri.parse(imageurl);
+
+        String name = nameED.getText().toString();
+
+
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(name)
+                .setPhotoUri(picUri)
+                .build();
+
+        user.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+
+                                getLocaleSelected();
+                                onConnectionFinished();
+                        }
+                    }
+                });
+    }
+
+    private void getLocaleSelected(){
+        int radioButtonID = buttonsLanguage.getCheckedRadioButtonId();
+        View radioButton = buttonsLanguage.findViewById(radioButtonID);
+        int idx = buttonsLanguage.indexOfChild(radioButton);
+        switch (idx) {
+            case 0:
+                setLocale("es");
+                break;
+            case 1:
+                setLocale("en");
+                break;
+            case 2:
+                setLocale("ca");
+                break;
+        }
+    }
+
+    public  void setLocale(String lang) {
+        Locale myLocale = new Locale(lang);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
+        Intent refresh = new Intent(getContext(), MainActivity.class);
+        startActivity(refresh);
+        getActivity().finish();
+    }
+
+
+
+
 }
+
 
 

@@ -1,13 +1,16 @@
 package jcollado.pw.pimpam.controller;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+
 import com.mikepenz.materialdrawer.Drawer;
 
-import butterknife.BindView;
+import java.util.Locale;
+
 import butterknife.ButterKnife;
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.model.Database;
@@ -17,7 +20,7 @@ import jcollado.pw.pimpam.utils.FirebaseModule;
 import jcollado.pw.pimpam.utils.NavigationDrawer;
 
 
-public class MainActivity extends BaseActivity implements ViewComicFragment.OnFragmentInteractionListener,AddComicFragment.OnFragmentInteractionListener {
+public class MainActivity extends BaseActivity {
 
 
 
@@ -55,9 +58,6 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
     }
 
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-    }
 
     public void openFragment(BaseFragment fragment,String tag) {
 
@@ -76,9 +76,7 @@ public class MainActivity extends BaseActivity implements ViewComicFragment.OnFr
     public void onBackPressed() {
 
         if (navigationDrawer.getCurrentSelectedPosition() != 1) {
-            FragmentManager fm = getSupportFragmentManager();
-            fm.popBackStack ("add", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            fm.popBackStack ("settings", FragmentManager.POP_BACK_STACK_INCLUSIVE);
+          getSupportFragmentManager().popBackStack();
 
             //openDrawer();
         } else {

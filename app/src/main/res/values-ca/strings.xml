@@ -63,6 +63,7 @@
     <string name="spanish">Espanyol</string>
     <string name="english">Anglés</string>
     <string name="valencia">Valencià</string>
+    <string name="deleteAllComics">Elimina tots els comics</string>
 
 
 </resources>
