@@ -51,7 +51,7 @@
     <string name="login_failed">Error a l\'inici de sesió</string>
     <string name="restore_password">He oblidat la contrasenya</string>
     <string name="succesful_restored_pass">Hem enviat un email al teu corru electrónic per a recuperar la teua contrasenya.</string>
-    <string name="no_comics">Encara no tens còmics, afegisx-los</string>
+    <string name="no_comics">Encara no tens còmics, afegís-los</string>
     <string name="no_results">No hem trobat ningún còmic</string>
 
 

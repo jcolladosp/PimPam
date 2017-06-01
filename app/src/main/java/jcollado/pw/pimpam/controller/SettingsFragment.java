@@ -109,8 +109,7 @@ public class SettingsFragment  extends BaseFragment {
 
     @OnClick(R.id.eraseComicsBT)
     void onEraseComics(){
-     //TODO
-
+        Database.getInstance().deleteAllData();
     }
 
 

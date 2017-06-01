@@ -158,6 +158,11 @@ public class Database {
         });
     }
 
+    public void deleteAllData(){
+        comicReference.setValue(null);
+        serieReference.setValue(null);
+    }
+
     public List<String> getAllSeriesName(){
         ArrayList<String> names = new ArrayList<>();
         for(Serie s : series) names.add(s.getName());
