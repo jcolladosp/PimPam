@@ -1,5 +1,6 @@
 package jcollado.pw.pimpam.controller;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,7 +19,14 @@ public class SplashActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        startSplash();
+        AlertDialog.Builder builderNetwork = Functions.checkConnectionAndAlert(this);
+
+        if(builderNetwork!=null){
+            builderNetwork.show();
+        }
+        else {
+            startSplash();
+        }
     }
     private void startSplash() {
         new Timer().schedule(new TimerTask() {

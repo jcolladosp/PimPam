@@ -68,6 +68,8 @@
     <string name="confirmdelete">Are you sure that you want to delete all comics?</string>
     <string name="comicsDeletedOk">Comics deleted successfully</string>
     <string name="cameraPermissionsDenied">We need camera permissions</string>
+    <string name="noName">No name</string>
+    <string name="editing">Editing </string>
 
 
 </resources>

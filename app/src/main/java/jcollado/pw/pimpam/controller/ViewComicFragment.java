@@ -80,7 +80,6 @@ public class ViewComicFragment extends BaseFragment {
     @BindView(R.id.comicIV)
     SquareImageView comicIV;
     private boolean editingComic = false;
-    private boolean isFavChange = false;
 
 
     private static Comic comic;
@@ -140,7 +139,7 @@ public class ViewComicFragment extends BaseFragment {
             comicIV.setImageURI(data.getData());
 
         }
-    
+
     }
 
 
@@ -207,7 +206,7 @@ public class ViewComicFragment extends BaseFragment {
         editLayout.setVisibility(View.VISIBLE);
         showLayout.setVisibility(View.GONE);
 
-        toolbar.setTitle("Editando "+comic.getDisplayName());
+        toolbar.setTitle(getString(R.string.editing)+comic.getDisplayName());
 
         nameED.setText(comic.getName());
         anyoED.setText(comic.getYear());
@@ -221,8 +220,12 @@ public class ViewComicFragment extends BaseFragment {
         toolbar.setTitle(comic.getDisplayName());
         tvEditorial.setText(comic.getEditorial());
         tvYear.setText(comic.getYear());
-        tvName.setText(comic.getName());
-        isFavChange = comic.getFavourite();
+        if(comic.getName().equals("")){
+            tvName.setText(getString(R.string.noName));
+        }
+        else {
+            tvName.setText(comic.getName());
+        }
         if(comic.getFavourite()){
             starButton.setChecked(true);
             tvFab.setText(getString(R.string.comicInFav));

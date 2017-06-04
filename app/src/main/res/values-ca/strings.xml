@@ -68,6 +68,8 @@
     <string name="confirmdelete">Estàs segur que vols eliminar tots els comics?</string>
     <string name="comicsDeletedOk">Comics eleminats correctament</string>
     <string name="cameraPermissionsDenied">Necesitem el teu permís per obrir la cámera</string>
+    <string name="noName">Sense nom</string>
+    <string name="editing">Editant </string>
 
 
 </resources>

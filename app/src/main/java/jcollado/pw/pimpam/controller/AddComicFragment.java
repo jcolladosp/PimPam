@@ -60,6 +60,7 @@ public class AddComicFragment extends BaseFragment {
     String imageURL;
     static Comic comic;
     static Serie serie;
+    public boolean imageChanged = false;
 
 
 
@@ -103,12 +104,14 @@ public class AddComicFragment extends BaseFragment {
             File f = new File(CameraUtils.getmCurrentPhotoPath());
 
             if (f.length() != 0) {
+                imageChanged = true;
                 Bitmap bmImg1 = BitmapFactory.decodeFile(CameraUtils.getmCurrentPhotoPath());
                 comicIV.setImageBitmap(bmImg1);
             }
         }
 
         if (data != null && requestCode == CameraUtils.GALLERY_PICK) {
+            imageChanged = true;
             comicIV.setImageURI(data.getData());
 
         }
@@ -128,16 +131,24 @@ public class AddComicFragment extends BaseFragment {
     @OnClick(R.id.addFab) void submit() {
         hideKeyboard();
         if(isFieldsCompleted()){
-            comicIV.setDrawingCacheEnabled(true);
-            comicIV.buildDrawingCache();
-            Bitmap bitmap = comicIV.getDrawingCache();
-            imageURL = FirebaseModule.getInstance().uploadBitmap(bitmap,java.util.UUID.randomUUID().toString(),this,null);
-
             serie = Database.getInstance().getSerieByName(serieAC.getText().toString());
             if(serie == null) {
                 serie = FactorySerie.createSerie(serieAC.getText().toString(),anyoED.getText().toString() , editorialED.getText().toString());
             }
             comic = FactoryComic.createComic(nameED.getText().toString(),editorialED.getText().toString(),"",numeroED.getText().toString(),anyoED.getText().toString(),serie,false);
+
+            comicIV.setDrawingCacheEnabled(true);
+            comicIV.buildDrawingCache();
+            Bitmap bitmap = comicIV.getDrawingCache();
+            if(imageChanged) {
+                imageURL = FirebaseModule.getInstance().uploadBitmap(bitmap, java.util.UUID.randomUUID().toString(), this, null);
+            }
+            else{
+                imageURL = "https://firebasestorage.googleapis.com/v0/b/pim-pam-comics-ff8d4.appspot.com/o/images?alt=media&token=e8ea32a5-a787-4a03-8bee-c4143b257844";
+                onImageUploaded(imageURL);
+            }
+
+
         }
     }
 
