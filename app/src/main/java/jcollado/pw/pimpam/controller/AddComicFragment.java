@@ -1,16 +1,10 @@
 package jcollado.pw.pimpam.controller;
 
-import android.Manifest;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Fragment;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -23,12 +17,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.storage.FirebaseStorage;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.single.PermissionListener;
+
+import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,18 +30,15 @@ import jcollado.pw.pimpam.model.FactoryComic;
 import jcollado.pw.pimpam.model.FactorySerie;
 import jcollado.pw.pimpam.model.Serie;
 import jcollado.pw.pimpam.utils.BaseFragment;
+import jcollado.pw.pimpam.utils.CameraUtils;
 import jcollado.pw.pimpam.utils.FirebaseModule;
-import jcollado.pw.pimpam.utils.Functions;
 import jcollado.pw.pimpam.widgets.SquareImageView;
 
 
 public class AddComicFragment extends BaseFragment {
 
     public static final int PLACE_IN_DRAWER = 2;
-    private static final int GALLERY_PICK = 1;
-    private static final int CAMERA_PICK = 2;
     private static  AddComicFragment fragment;
-    private Bitmap imageBitmap;
 
     @BindView(R.id.nameED)
     EditText nameED;
@@ -112,15 +99,18 @@ public class AddComicFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (data != null) {
-            if (requestCode == CAMERA_PICK) {
-                Bundle extras = data.getExtras();
-                imageBitmap = (Bitmap) extras.get("data");
-                comicIV.setImageBitmap(imageBitmap);
-            }  if (requestCode == GALLERY_PICK) {
-                comicIV.setImageURI(data.getData());
+        if (requestCode == CameraUtils.CAMERA_PICK) {
+            File f = new File(CameraUtils.getmCurrentPhotoPath());
 
+            if (f.length() != 0) {
+                Bitmap bmImg1 = BitmapFactory.decodeFile(CameraUtils.getmCurrentPhotoPath());
+                comicIV.setImageBitmap(bmImg1);
             }
+        }
+
+        if (data != null && requestCode == CameraUtils.GALLERY_PICK) {
+            comicIV.setImageURI(data.getData());
+
         }
     }
 
@@ -187,7 +177,7 @@ public class AddComicFragment extends BaseFragment {
 
     @OnClick(R.id.comicIV)
     public void changeImage() {
-        Functions.changeImage(getActivity(),getContext(),fragment);
+        CameraUtils.changeImage(getActivity(),getContext(),fragment);
 
     }
 
@@ -214,14 +204,6 @@ public class AddComicFragment extends BaseFragment {
         });
 
         toolbar.setTitle(getString(R.string.addComic));
-    }
-
-
-
-
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
     }
 
 

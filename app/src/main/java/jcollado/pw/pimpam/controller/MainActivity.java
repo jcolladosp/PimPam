@@ -17,6 +17,7 @@ import jcollado.pw.pimpam.model.Database;
 import jcollado.pw.pimpam.utils.BaseActivity;
 import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.FirebaseModule;
+import jcollado.pw.pimpam.utils.Functions;
 import jcollado.pw.pimpam.utils.NavigationDrawer;
 
 
@@ -37,12 +38,9 @@ public class MainActivity extends BaseActivity {
         FirebaseModule.getInstance().setConnectionDatabase();
 
         CollectionFragment collectionFragment = CollectionFragment.newInstance();
-        Database.getInstance().setFragment(collectionFragment);
-
-
-
-
         openFragment(collectionFragment,"");
+
+        Database.getInstance().setFragment(collectionFragment);
 
 
     }
@@ -80,10 +78,7 @@ public class MainActivity extends BaseActivity {
 
             //openDrawer();
         } else {
-            Intent a = new Intent(Intent.ACTION_MAIN);
-            a.addCategory(Intent.CATEGORY_HOME);
-            a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(a);
+            Functions.closeApp(this);
         }
 
     }

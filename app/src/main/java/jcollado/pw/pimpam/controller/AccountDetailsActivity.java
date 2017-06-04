@@ -2,6 +2,7 @@ package jcollado.pw.pimpam.controller;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,20 +14,21 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
+import java.io.File;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.utils.BaseActivity;
+import jcollado.pw.pimpam.utils.CameraUtils;
 import jcollado.pw.pimpam.utils.FirebaseModule;
 import jcollado.pw.pimpam.utils.Functions;
 
 
 public class AccountDetailsActivity extends BaseActivity {
 
-    private static final int GALLERY_PICK = 1;
-    private static final int CAMERA_PICK = 2;
 
     @BindView(R.id.nameED)
     EditText nameED;
@@ -46,41 +48,42 @@ public class AccountDetailsActivity extends BaseActivity {
 
 
     }
+
     @OnClick(R.id.btn_continuar)
-        void onContinuar(){
+    void onContinuar() {
         onPreStartConnection(getString(R.string.loading));
-        if(imageChanged){
+        if (imageChanged) {
             profile_image.setDrawingCacheEnabled(true);
             profile_image.buildDrawingCache();
             Bitmap bitmap = profile_image.getDrawingCache();
-           String imageURL = FirebaseModule.getInstance().uploadBitmap(bitmap,java.util.UUID.randomUUID().toString(),null,this);
+            String imageURL = FirebaseModule.getInstance().uploadBitmap(bitmap, java.util.UUID.randomUUID().toString(), null, this);
 
-        }
-        else{
-            addUserInfo(FirebaseModule.getInstance().getmAuth().getCurrentUser(),null);
+        } else {
+            addUserInfo(FirebaseModule.getInstance().getmAuth().getCurrentUser(), null);
             onConnectionFinished();
         }
 
 
     }
+
     @OnClick(R.id.profile_image)
-    void onProfileImage(){
-        Functions.changeImage(this,getApplicationContext(),null);
+    void onProfileImage() {
+        CameraUtils.changeImage(this, getApplicationContext(), null);
 
     }
+
     @Override
-    public void onImageUploaded(String filename){
-        addUserInfo(FirebaseModule.getInstance().getmAuth().getCurrentUser(),filename);
+    public void onImageUploaded(String filename) {
+        addUserInfo(FirebaseModule.getInstance().getmAuth().getCurrentUser(), filename);
         onConnectionFinished();
     }
 
 
-    private void addUserInfo( FirebaseUser user, String filename ){
-       Uri picUri;
-        if(filename!=null){
+    private void addUserInfo(FirebaseUser user, String filename) {
+        Uri picUri;
+        if (filename != null) {
             picUri = Uri.parse(filename);
-        }
-        else {
+        } else {
             picUri = Uri.parse(spiderman);
         }
         String name = nameED.getText().toString();
@@ -108,16 +111,20 @@ public class AccountDetailsActivity extends BaseActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (data != null) {
-            imageChanged = true;
-            if (requestCode == CAMERA_PICK) {
-                Bundle extras = data.getExtras();
-                imageBitmap = (Bitmap) extras.get("data");
-                profile_image.setImageBitmap(imageBitmap);
-            } else {
-                profile_image.setImageURI(data.getData());
+        if (requestCode == CameraUtils.CAMERA_PICK) {
+            File f = new File(CameraUtils.getmCurrentPhotoPath());
 
+            if (f.length() != 0) {
+                imageChanged = true;
+                Bitmap bmImg1 = BitmapFactory.decodeFile(CameraUtils.getmCurrentPhotoPath());
+                profile_image.setImageBitmap(bmImg1);
             }
+        }
+
+        if (data != null && requestCode == CameraUtils.GALLERY_PICK) {
+            imageChanged = true;
+            profile_image.setImageURI(data.getData());
+
         }
     }
 }

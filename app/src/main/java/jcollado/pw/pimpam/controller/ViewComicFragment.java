@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -28,6 +29,8 @@ import com.bumptech.glide.Glide;
 import com.varunest.sparkbutton.SparkButton;
 import com.varunest.sparkbutton.SparkEventListener;
 
+import java.io.File;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -37,6 +40,7 @@ import jcollado.pw.pimpam.model.Database;
 import jcollado.pw.pimpam.model.FactoryComic;
 import jcollado.pw.pimpam.model.Serie;
 import jcollado.pw.pimpam.utils.BaseFragment;
+import jcollado.pw.pimpam.utils.CameraUtils;
 import jcollado.pw.pimpam.utils.FirebaseModule;
 import jcollado.pw.pimpam.utils.Functions;
 import jcollado.pw.pimpam.widgets.SquareImageView;
@@ -78,7 +82,7 @@ public class ViewComicFragment extends BaseFragment {
     private boolean editingComic = false;
     private boolean isFavChange = false;
 
-    private OnFragmentInteractionListener mListener;
+
     private static Comic comic;
     private static ViewComicFragment fragment;
 
@@ -116,48 +120,34 @@ public class ViewComicFragment extends BaseFragment {
     }
 
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (data != null) {
-            imageChanged = true;
-            if (requestCode == CAMERA_PICK) {
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                comicIV.setImageBitmap(imageBitmap);
-            } else {
-                comicIV.setImageURI(data.getData());
+        if (requestCode == CameraUtils.CAMERA_PICK) {
+            File f = new File(CameraUtils.getmCurrentPhotoPath());
+
+            if (f.length() != 0) {
+                imageChanged = true;
+                Bitmap bmImg1 = BitmapFactory.decodeFile(CameraUtils.getmCurrentPhotoPath());
+                comicIV.setImageBitmap(bmImg1);
             }
         }
-    }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        if (data != null && requestCode == CameraUtils.GALLERY_PICK) {
+            imageChanged = true;
+            comicIV.setImageURI(data.getData());
+
+        }
+    
     }
 
 
     @OnClick(R.id.comicIV)
     public void changeImage() {
            if(editingComic){
-               Functions.changeImage(getActivity(),getContext(),fragment);
+               CameraUtils.changeImage(getActivity(),getContext(),fragment);
 
            }
     }
@@ -169,7 +159,6 @@ public class ViewComicFragment extends BaseFragment {
     public void onDone(){
         if(!editingComic) {
             editingComic = true;
-            //ditMode(comic.getFavourite());
             editMode();
         }
         else{
@@ -180,14 +169,13 @@ public class ViewComicFragment extends BaseFragment {
                 comicIV.setDrawingCacheEnabled(true);
                 comicIV.buildDrawingCache();
                 Bitmap bitmap = comicIV.getDrawingCache();
-                String imageURL = FirebaseModule.getInstance().uploadBitmap(bitmap,java.util.UUID.randomUUID().toString(),this,null);
+                FirebaseModule.getInstance().uploadBitmap(bitmap,java.util.UUID.randomUUID().toString(),this,null);
 
             }
             else{
                 uploadComicToDatabase(null);
 
             }
-
 
             showMode();
 

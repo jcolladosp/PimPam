@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
@@ -33,6 +34,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
+import java.io.File;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -42,8 +44,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.model.Database;
 import jcollado.pw.pimpam.utils.BaseFragment;
+import jcollado.pw.pimpam.utils.CameraUtils;
 import jcollado.pw.pimpam.utils.FirebaseModule;
 import jcollado.pw.pimpam.utils.Functions;
+import jcollado.pw.pimpam.utils.UserInfo;
 
 
 public class SettingsFragment  extends BaseFragment {
@@ -62,8 +66,6 @@ public class SettingsFragment  extends BaseFragment {
     RadioButton valenciaRB;
     @BindView(R.id.language)
     RadioGroup buttonsLanguage;
-    private static final int GALLERY_PICK = 1;
-    private static final int CAMERA_PICK = 2;
 
     public boolean imageChanged = false;
     private static View view;
@@ -92,13 +94,13 @@ public class SettingsFragment  extends BaseFragment {
 
         view = inflater.inflate(R.layout.fragment_settings, container, false);
         ButterKnife.bind(this, view);
-        Glide.with(this).load(FirebaseModule.getInstance().getCurrentUser().getPhotoUrl()).placeholder(R.drawable.placeholder).dontAnimate().into(profile_edit);
+        Glide.with(this).load(UserInfo.getProfilePictureURL()).placeholder(R.drawable.placeholder).dontAnimate().into(profile_edit);
         prepareToolbar();
         setHasOptionsMenu(true);
          checkLanguageButton();
         user = FirebaseModule.getInstance().getCurrentUser();
         imageurl = user.getPhotoUrl().toString();
-        nameED.setText(user.getDisplayName());
+        nameED.setText(UserInfo.getDisplayName());
 
 
         return view;
@@ -106,7 +108,7 @@ public class SettingsFragment  extends BaseFragment {
 
     @OnClick(R.id.profile_edit)
     void onProfileImage(){
-        Functions.changeImage(getActivity(),getContext(),this);
+        CameraUtils.changeImage(getActivity(),getContext(),this);
     }
 
     @OnClick(R.id.eraseComicsBT)
@@ -203,16 +205,21 @@ public class SettingsFragment  extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (data != null) {
-            imageChanged = true;
-            if (requestCode == CAMERA_PICK) {
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                profile_edit.setImageBitmap(imageBitmap);
-            }  if (requestCode == GALLERY_PICK) {
-                profile_edit.setImageURI(data.getData());
 
+        if (requestCode == CameraUtils.CAMERA_PICK) {
+            File f = new File(CameraUtils.getmCurrentPhotoPath());
+
+            if (f.length() != 0) {
+                imageChanged = true;
+                Bitmap bmImg1 = BitmapFactory.decodeFile(CameraUtils.getmCurrentPhotoPath());
+                profile_edit.setImageBitmap(bmImg1);
             }
+        }
+
+        if (data != null && requestCode == CameraUtils.GALLERY_PICK) {
+            imageChanged = true;
+            profile_edit.setImageURI(data.getData());
+
         }
     }
 

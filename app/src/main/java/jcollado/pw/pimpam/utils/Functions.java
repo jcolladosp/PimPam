@@ -12,7 +12,9 @@ import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.telephony.TelephonyManager;
 import android.util.Base64;
 import android.util.TypedValue;
@@ -27,6 +29,8 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.text.DateFormat;
@@ -43,8 +47,8 @@ import jcollado.pw.pimpam.controller.AddComicFragment;
 
 
 public class Functions {
-    private static final int GALLERY_PICK = 1;
-    private static final int CAMERA_PICK = 2;
+
+
 
     public static boolean isNetworkAvailable(Context context) {
         ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -132,10 +136,17 @@ public class Functions {
     }
 
 
-    public static AlertDialog.Builder checkConnectionAndAlert(Context context){
+    public static AlertDialog.Builder checkConnectionAndAlert(final Context context){
          AlertDialog.Builder builder = null;
         if(!Functions.isNetworkAvailable(context)) {
              builder = getModal(context.getString(R.string.error_title),context.getString(R.string.body_connection_error),context.getString(R.string.ok),context);
+            builder.setNegativeButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                    closeApp(context);
+                }
+            });
 
         }
         return builder;
@@ -163,48 +174,11 @@ public class Functions {
         return emailIntent;
     }
 
-
-    public static void openCamera(final Activity activity, final Context context, final BaseFragment fragment){
-        Dexter.withActivity(activity)
-                .withPermission(Manifest.permission.CAMERA)
-                .withListener(new PermissionListener() {
-                    @Override public void onPermissionGranted(PermissionGrantedResponse response) {
-                        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        if(fragment!=null) fragment.startActivityForResult(cameraIntent, CAMERA_PICK);
-                        else{
-                            activity.startActivityForResult(cameraIntent, CAMERA_PICK);
-                        }
-
-                    }
-                    @Override public void onPermissionDenied(PermissionDeniedResponse response) {
-                        getModal("Necesitamos tu permiso para abrir la camara","Vale",context).show();
-                    }
-                    @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {/* ... */}
-                }).check();
-    }
-    public static void changeImage(final Activity activity, final Context context,  final BaseFragment fragment) {
-
-        AlertDialog.Builder builder = Functions.getModal(R.string.warning_modal_title,R.string.news_image_message, activity);
-        builder.setPositiveButton(R.string.news_image_camera, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                openCamera(activity,context,fragment);
-
-            }
-        });
-        builder.setNeutralButton(R.string.news_image_gallery, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                if(fragment!=null) fragment.startActivityForResult(pickPhoto, GALLERY_PICK);
-                else{
-                    activity.startActivityForResult(pickPhoto, GALLERY_PICK);
-                }
-
-            }
-        });
-        builder.show();
-
-    }
+public static void closeApp(Context context){
+    Intent a = new Intent(Intent.ACTION_MAIN);
+    a.addCategory(Intent.CATEGORY_HOME);
+    a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    context.startActivity(a);
+}
 
 }

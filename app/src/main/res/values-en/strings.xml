@@ -67,6 +67,7 @@
     <string name="atention">Warning!</string>
     <string name="confirmdelete">Are you sure that you want to delete all comics?</string>
     <string name="comicsDeletedOk">Comics deleted successfully</string>
+    <string name="cameraPermissionsDenied">We need camera permissions</string>
 
 
 </resources>

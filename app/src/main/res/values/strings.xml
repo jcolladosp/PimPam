@@ -68,6 +68,7 @@
     <string name="atention">Atención!</string>
     <string name="confirmdelete">¿Estás seguro que quieres borrar todos los comics?</string>
     <string name="comicsDeletedOk">Comics eliminados correctamente</string>
+    <string name="cameraPermissionsDenied">Necesitamos tu permiso para abrir la cámara</string>
 
 
 </resources>
