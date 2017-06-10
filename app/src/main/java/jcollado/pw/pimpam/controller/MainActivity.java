@@ -1,15 +1,8 @@
 package jcollado.pw.pimpam.controller;
 
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 
 import com.mikepenz.materialdrawer.Drawer;
-
-import java.util.Locale;
 
 import butterknife.ButterKnife;
 import jcollado.pw.pimpam.R;

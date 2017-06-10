@@ -8,7 +8,7 @@
     android:background="@android:color/white"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    tools:context="jcollado.pw.pimpam.controller.AuthActivity">
+    tools:context="jcollado.pw.pimpam.login.LoginActivity">
 
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/profile_image"

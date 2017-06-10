@@ -136,10 +136,8 @@ public class Functions {
     }
 
 
-    public static AlertDialog.Builder checkConnectionAndAlert(final Context context){
-         AlertDialog.Builder builder = null;
-        if(!Functions.isNetworkAvailable(context)) {
-             builder = getModal(context.getString(R.string.error_title),context.getString(R.string.body_connection_error),context.getString(R.string.ok),context);
+    public static AlertDialog.Builder getModalNoInternetConnection(final Context context){
+        AlertDialog.Builder builder  = getModal(context.getString(R.string.error_title),context.getString(R.string.body_connection_error),context.getString(R.string.ok),context);
             builder.setNegativeButton(context.getString(R.string.ok), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -148,7 +146,7 @@ public class Functions {
                 }
             });
 
-        }
+
         return builder;
     }
 

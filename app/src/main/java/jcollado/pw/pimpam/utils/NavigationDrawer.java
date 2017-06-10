@@ -3,7 +3,6 @@ package jcollado.pw.pimpam.utils;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
@@ -19,7 +18,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.controller.AddComicFragment;
-import jcollado.pw.pimpam.controller.AuthActivity;
+import jcollado.pw.pimpam.login.LoginActivity;
 import jcollado.pw.pimpam.controller.CollectionFragment;
 import jcollado.pw.pimpam.controller.MainActivity;
 import jcollado.pw.pimpam.controller.SettingsFragment;
@@ -92,7 +91,7 @@ public class NavigationDrawer {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         FirebaseModule.getInstance().getmAuth().signOut();
-                                        Intent i = new Intent(activity.getApplicationContext(), AuthActivity.class);
+                                        Intent i = new Intent(activity.getApplicationContext(), LoginActivity.class);
                                         activity.startActivity(i);
                                     }
                                 });

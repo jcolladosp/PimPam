@@ -1,8 +1,7 @@
-package jcollado.pw.pimpam.controller;
+package jcollado.pw.pimpam.login;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,18 +21,19 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.auth.UserProfileChangeRequest;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jcollado.pw.pimpam.R;
+import jcollado.pw.pimpam.controller.AccountDetailsActivity;
+import jcollado.pw.pimpam.controller.MainActivity;
 import jcollado.pw.pimpam.utils.BaseActivity;
 import jcollado.pw.pimpam.utils.FirebaseModule;
 import jcollado.pw.pimpam.utils.Functions;
 import mehdi.sakout.fancybuttons.FancyButton;
 
-public class AuthActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class LoginActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener {
     @BindView(R.id.btn_create_account)
     FancyButton createAccountButton;
     @BindView(R.id.emailED)
@@ -52,7 +52,7 @@ public class AuthActivity extends BaseActivity implements GoogleApiClient.OnConn
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_auth);
+        setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         mAuth = FirebaseModule.getInstance().getmAuth();
 
@@ -133,12 +133,12 @@ public class AuthActivity extends BaseActivity implements GoogleApiClient.OnConn
                         public void onComplete(@NonNull Task<AuthResult> task) {
 
                             if (!task.isSuccessful()) {
-                                Toast.makeText(AuthActivity.this, getString(R.string.auth_failed) + ": " + task.getException().getMessage(),
+                                Toast.makeText(LoginActivity.this, getString(R.string.auth_failed) + ": " + task.getException().getMessage(),
                                         Toast.LENGTH_SHORT).show();
 
                             } else {
 
-                                Toast.makeText(AuthActivity.this, R.string.register_succesful, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, R.string.register_succesful, Toast.LENGTH_SHORT).show();
 
                             }
                             stopRefreshing();
@@ -158,12 +158,12 @@ public class AuthActivity extends BaseActivity implements GoogleApiClient.OnConn
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (!task.isSuccessful()) {
                                 Log.w("login", "signInWithEmail:failed", task.getException());
-                                Toast.makeText(AuthActivity.this, getString(R.string.login_failed) + ": " + task.getException().getMessage(),
+                                Toast.makeText(LoginActivity.this, getString(R.string.login_failed) + ": " + task.getException().getMessage(),
                                         Toast.LENGTH_SHORT).show();
 
                             } else {
 
-                                Toast.makeText(AuthActivity.this, R.string.login_succesful, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, R.string.login_succesful, Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -181,11 +181,11 @@ public class AuthActivity extends BaseActivity implements GoogleApiClient.OnConn
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
-                                AlertDialog.Builder successRestoreAlert = Functions.getModal(getString(R.string.succesful_restored_pass), getString(R.string.ok), AuthActivity.this);
+                                AlertDialog.Builder successRestoreAlert = Functions.getModal(getString(R.string.succesful_restored_pass), getString(R.string.ok), LoginActivity.this);
                                 successRestoreAlert.show();
 
                             } else {
-                                AlertDialog.Builder errorRestoreAlert = Functions.getModalError(AuthActivity.this);
+                                AlertDialog.Builder errorRestoreAlert = Functions.getModalError(LoginActivity.this);
                                 errorRestoreAlert.show();
                             }
                             stopRefreshing();
@@ -204,7 +204,7 @@ public class AuthActivity extends BaseActivity implements GoogleApiClient.OnConn
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
                 // Google Sign In was successful, authenticate with Firebase
-                Toast.makeText(AuthActivity.this, R.string.register_succesful, Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, R.string.register_succesful, Toast.LENGTH_SHORT).show();
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
             } else {
@@ -242,7 +242,7 @@ public class AuthActivity extends BaseActivity implements GoogleApiClient.OnConn
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
                             Log.w("google", "signInWithCredential", task.getException());
-                            Toast.makeText(AuthActivity.this, "Authentication failed.",
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
                         // ...
