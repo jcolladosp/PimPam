@@ -1,6 +1,5 @@
 package jcollado.pw.pimpam.splash;
 
-import android.content.Context;
 
 /**
  * Created by jcolladosp on 10/06/2017.
@@ -9,21 +8,23 @@ import android.content.Context;
 public class SplashPresenterImpl implements SplashPresenter,SplashInteractor.OnSplashFinishedListener{
     private SplashView splashView;
     private SplashInteractor splashInteractor;
-    private Context context;
 
-    public SplashPresenterImpl(SplashView splashView, Context context) {
+    public SplashPresenterImpl(SplashView splashView) {
         this.splashView = splashView;
         this.splashInteractor = new SplashInteractorImpl();
-        this.context = context;
     }
 
 
 
     @Override
     public void startSplash() {
-        splashInteractor.checkInternetConnection(context,this);
+        boolean isInternetActive = splashView.isNetworkAvailable();
+        splashInteractor.checkInternetConnection(isInternetActive,this);
 
     }
+
+
+
 
     @Override
     public void onNoInternetConnectionFound() {

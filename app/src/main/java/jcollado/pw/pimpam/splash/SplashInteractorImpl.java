@@ -1,8 +1,5 @@
 package jcollado.pw.pimpam.splash;
 
-import android.content.Context;
-
-import jcollado.pw.pimpam.utils.Functions;
 import jcollado.pw.pimpam.utils.UserInfo;
 
 /**
@@ -12,9 +9,9 @@ import jcollado.pw.pimpam.utils.UserInfo;
 public class SplashInteractorImpl implements SplashInteractor {
 
     @Override
-    public void checkInternetConnection(Context context, OnSplashFinishedListener listener) {
-        if(Functions.isNetworkAvailable(context)){
-            isUsserLogged(context,listener);
+    public void checkInternetConnection(boolean isInternetActive, OnSplashFinishedListener listener) {
+        if(isInternetActive){
+            isUsserLogged(listener);
         }
         else{
             listener.onNoInternetConnectionFound();
@@ -22,7 +19,7 @@ public class SplashInteractorImpl implements SplashInteractor {
     }
 
     @Override
-    public void isUsserLogged(Context context, OnSplashFinishedListener listener) {
+    public void isUsserLogged(OnSplashFinishedListener listener) {
         if(UserInfo.isLogged()){
             listener.onUserLogged();
         }

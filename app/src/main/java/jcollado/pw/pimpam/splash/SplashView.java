@@ -8,4 +8,5 @@ public interface SplashView {
     void startMainActivity();
     void startLoginActivity();
     void showErrorNotInternetConnection();
+    boolean isNetworkAvailable();
 }

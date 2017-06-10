@@ -16,8 +16,8 @@ public interface SplashInteractor {
         void onUserNotLogged();
     }
 
-    void checkInternetConnection(Context context, OnSplashFinishedListener listener);
+    void checkInternetConnection(boolean isInternetActive,OnSplashFinishedListener listener);
 
-    void isUsserLogged(Context context, OnSplashFinishedListener listener);
+    void isUsserLogged(OnSplashFinishedListener listener);
 
 }

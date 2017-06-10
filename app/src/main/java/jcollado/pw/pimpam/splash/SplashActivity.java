@@ -12,7 +12,6 @@ import jcollado.pw.pimpam.controller.MainActivity;
 import jcollado.pw.pimpam.login.LoginActivity;
 import jcollado.pw.pimpam.utils.BaseActivity;
 import jcollado.pw.pimpam.utils.Functions;
-import jcollado.pw.pimpam.utils.UserInfo;
 
 public class SplashActivity extends BaseActivity implements SplashView{
     private SplashPresenter splashPresenter;
@@ -21,7 +20,7 @@ public class SplashActivity extends BaseActivity implements SplashView{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        splashPresenter = new SplashPresenterImpl(this,this);
+        splashPresenter = new SplashPresenterImpl(this);
 
         splashPresenter.startSplash();
     }
@@ -57,6 +56,9 @@ public class SplashActivity extends BaseActivity implements SplashView{
     @Override protected void onDestroy() {
         splashPresenter.onDestroy();
         super.onDestroy();
+    }
+    @Override public  boolean isNetworkAvailable(){
+        return Functions.isNetworkAvailable(this);
     }
 
 }
