@@ -82,7 +82,7 @@ public class LoginActivity extends BaseActivity implements LoginView, GoogleApiC
                 .build();
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
+                .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
@@ -118,7 +118,7 @@ public class LoginActivity extends BaseActivity implements LoginView, GoogleApiC
             if (result.isSuccess()) {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
-                firebaseAuthWithGoogle(account);
+                loginPresenter.firebaseAuthWithGoogle(account);
                 loginPresenter.loginWithGoogle();
             } else {
                 showToastErrorRegisterGoogle();
@@ -134,39 +134,14 @@ public class LoginActivity extends BaseActivity implements LoginView, GoogleApiC
     }
 
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        Log.d("google", "firebaseAuthWithGoogle:" + acct.getId());
-
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("google", "signInWithCredential:onComplete:" + task.isSuccessful());
-
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
-                            Log.w("google", "signInWithCredential", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                });
-    }
-
-
     @Override
     public void stopRefreshing() {
         onConnectionFinished();
     }
+
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        // An unresolvable error has occurred and Google APIs (including Sign-In) will not
-        // be available.
-        Log.d("google", "onConnectionFailed:" + connectionResult);
+      Log.d("google", "onConnectionFailed:" + connectionResult);
     }
     @Override
     public void showDialogNotAllFieldsCompleted(){

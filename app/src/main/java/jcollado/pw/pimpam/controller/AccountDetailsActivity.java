@@ -51,7 +51,7 @@ public class AccountDetailsActivity extends BaseActivity {
 
     @OnClick(R.id.btn_continuar)
     void onContinuar() {
-        onPreStartConnection(getString(R.string.loading));
+        onPreStartConnection();
         if (imageChanged) {
             profile_image.setDrawingCacheEnabled(true);
             profile_image.buildDrawingCache();

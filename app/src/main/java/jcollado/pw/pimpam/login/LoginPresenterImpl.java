@@ -3,6 +3,8 @@ package jcollado.pw.pimpam.login;
 
 import android.text.TextUtils;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+
 
 /**
  * Created by jcolladosp on 10/06/2017.
@@ -78,6 +80,11 @@ public class LoginPresenterImpl implements LoginPresenter, LoginInteractor.OnLog
     }
 
     @Override
+    public void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+        loginInteractor.firebaseAuthWithGoogle(acct,this);
+    }
+
+    @Override
     public void onLoginMailSuccess() {
         loginView.stopRefreshing();
         loginView.showToastLoginSuccesfull();
@@ -95,6 +102,7 @@ public class LoginPresenterImpl implements LoginPresenter, LoginInteractor.OnLog
     @Override
     public void onRegisterMailSuccess() {
         loginView.stopRefreshing();
+        loginView.showToastRegisterSuccesfull();
         loginView.startAccountDetailsActivity();
 
     }
