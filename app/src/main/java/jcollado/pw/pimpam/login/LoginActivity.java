@@ -33,7 +33,7 @@ import jcollado.pw.pimpam.utils.FirebaseModule;
 import jcollado.pw.pimpam.utils.Functions;
 import mehdi.sakout.fancybuttons.FancyButton;
 
-public class LoginActivity extends BaseActivity implements GoogleApiClient.OnConnectionFailedListener {
+public class LoginActivity extends BaseActivity implements LoginView, GoogleApiClient.OnConnectionFailedListener {
     @BindView(R.id.btn_create_account)
     FancyButton createAccountButton;
     @BindView(R.id.emailED)
@@ -43,11 +43,11 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.OnCon
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-    private FirebaseUser user;
+
     private GoogleApiClient mGoogleApiClient;
     private static final int RC_SIGN_IN = 9001;
 
-    private boolean notGoogle = false;
+    private LoginPresenter loginPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,8 +55,8 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.OnCon
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         mAuth = FirebaseModule.getInstance().getmAuth();
+        loginPresenter = new LoginPresenterImpl(this);
 
-        authListener();
         configGoogle();
 
 
@@ -65,15 +65,13 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.OnCon
     @Override
     public void onStart() {
         super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
+        loginPresenter.addAuthStateListener();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (mAuthListener != null) {
-            mAuth.removeAuthStateListener(mAuthListener);
-        }
+        loginPresenter.removeAuthStateListener();
     }
 
     private void configGoogle() {
@@ -83,7 +81,6 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.OnCon
                 .requestEmail()
                 .build();
 
-
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
@@ -92,107 +89,23 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.OnCon
 
     }
 
-    private void authListener(){
-    mAuthListener = new FirebaseAuth.AuthStateListener() {
-        @Override
-        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-            user = firebaseAuth.getCurrentUser();
-            if (user != null) {
-                // User is signed in
-
-                Intent i;
-                if(notGoogle){
-                   i = new Intent(getApplicationContext(), AccountDetailsActivity.class);
-
-                }
-                else{
-                    i = new Intent(getApplicationContext(), MainActivity.class);
-                    FirebaseModule.getInstance().setConnectionDatabase();
-
-                }
-                startActivity(i);
-
-            } else {
-                // User is signed out
-                // Log.d(TAG, "onAuthStateChanged:signed_out");
-            }
-        }
-    };
-}
 
 
 
     @OnClick(R.id.btn_create_account)
     void onCreateAccount() {
-        if(checkAllFieldsCompleted()) {
-            onPreStartConnection(getString(R.string.loading));
-            notGoogle = true;
-            mAuth.createUserWithEmailAndPassword(emailED.getText().toString(), passwordED.getText().toString())
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-
-                            if (!task.isSuccessful()) {
-                                Toast.makeText(LoginActivity.this, getString(R.string.auth_failed) + ": " + task.getException().getMessage(),
-                                        Toast.LENGTH_SHORT).show();
-
-                            } else {
-
-                                Toast.makeText(LoginActivity.this, R.string.register_succesful, Toast.LENGTH_SHORT).show();
-
-                            }
-                            stopRefreshing();
-
-                        }
-                    });
-        }
+        loginPresenter.createAccountWithMail(emailED.getText().toString(),passwordED.getText().toString());
     }
 
     @OnClick(R.id.btn_login)
     void onLoginAccount() {
-        if(checkAllFieldsCompleted()) {
-            onPreStartConnection(getString(R.string.loading));
-            mAuth.signInWithEmailAndPassword(emailED.getText().toString(), passwordED.getText().toString())
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (!task.isSuccessful()) {
-                                Log.w("login", "signInWithEmail:failed", task.getException());
-                                Toast.makeText(LoginActivity.this, getString(R.string.login_failed) + ": " + task.getException().getMessage(),
-                                        Toast.LENGTH_SHORT).show();
-
-                            } else {
-
-                                Toast.makeText(LoginActivity.this, R.string.login_succesful, Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-            stopRefreshing();
-        }
+           loginPresenter.loginWithMail(emailED.getText().toString(),passwordED.getText().toString());
     }
 
     @OnClick(R.id.btn_restore_password)
     void onRestorePassword(){
-        if(emailED.getText().length() !=0 ) {
-            onPreStartConnection(getString(R.string.loading));
+          loginPresenter.restorePassword(emailED.getText().toString());
 
-            mAuth.sendPasswordResetEmail(emailED.getText().toString())
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                AlertDialog.Builder successRestoreAlert = Functions.getModal(getString(R.string.succesful_restored_pass), getString(R.string.ok), LoginActivity.this);
-                                successRestoreAlert.show();
-
-                            } else {
-                                AlertDialog.Builder errorRestoreAlert = Functions.getModalError(LoginActivity.this);
-                                errorRestoreAlert.show();
-                            }
-                            stopRefreshing();
-
-                        }
-                    });
-        }
     }
 
     @Override
@@ -204,29 +117,23 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.OnCon
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
                 // Google Sign In was successful, authenticate with Firebase
-                Toast.makeText(LoginActivity.this, R.string.register_succesful, Toast.LENGTH_SHORT).show();
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
+                loginPresenter.loginWithGoogle();
             } else {
-                // Google Sign In failed, update UI appropriately
-                // ...
+                showToastErrorRegisterGoogle();
             }
         }
     }
+
     @OnClick(R.id.btn_google)
     void signInGoogle() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent a = new Intent(Intent.ACTION_MAIN);
-        a.addCategory(Intent.CATEGORY_HOME);
-        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(a);
 
     }
+
+
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d("google", "firebaseAuthWithGoogle:" + acct.getId());
 
@@ -245,12 +152,14 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.OnCon
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
-                        // ...
+
                     }
                 });
     }
-    private void stopRefreshing() {
 
+
+    @Override
+    public void stopRefreshing() {
         onConnectionFinished();
     }
     @Override
@@ -259,18 +168,87 @@ public class LoginActivity extends BaseActivity implements GoogleApiClient.OnCon
         // be available.
         Log.d("google", "onConnectionFailed:" + connectionResult);
     }
-
-    private boolean checkAllFieldsCompleted(){
-        if ( passwordED.getText().length() != 0 && emailED.getText().length() != 0)
-                return true;
-        else{
-            AlertDialog.Builder allFieldsBuilder = Functions.getModal(getString(R.string.allFieldsRequired),getString(R.string.ok),this);
-            allFieldsBuilder.show();
-            return false;
-
-
-        }
+    @Override
+    public void showDialogNotAllFieldsCompleted(){
+        AlertDialog.Builder allFieldsBuilder = Functions.getModal(getString(R.string.allFieldsRequired),getString(R.string.ok),this);
+        allFieldsBuilder.show();
     }
+
+    @Override
+    public void showToastLoginFailed(String error){
+        Toast.makeText(LoginActivity.this, getString(R.string.login_failed) + ": " + error,
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showToastLoginSuccesfull() {
+        Toast.makeText(LoginActivity.this, R.string.login_succesful, Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void showToastRegisterFailed(String error) {
+        Toast.makeText(LoginActivity.this, getString(R.string.auth_failed) + ": " + error,
+                Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void showToastRegisterSuccesfull() {
+        Toast.makeText(LoginActivity.this, R.string.register_succesful, Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void showDialogRestorePassword() {
+        AlertDialog.Builder successRestoreAlert = Functions.getModal(getString(R.string.succesful_restored_pass), getString(R.string.ok), LoginActivity.this);
+        successRestoreAlert.show();
+
+    }
+
+    @Override
+    public void showDialogGeneralError() {
+        AlertDialog.Builder errorRestoreAlert = Functions.getModalError(LoginActivity.this);
+        errorRestoreAlert.show();
+    }
+
+    @Override
+    public void showToastErrorRegisterGoogle() {
+        Toast.makeText(LoginActivity.this, "Authentication failed.",Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void startAccountDetailsActivity() {
+        Intent i = new Intent(getApplicationContext(), AccountDetailsActivity.class);
+        startActivity(i);
+
+    }
+
+    @Override
+    public void startMainActivity() {
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(i);
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent a = new Intent(Intent.ACTION_MAIN);
+        a.addCategory(Intent.CATEGORY_HOME);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(a);
+
+    }
+
+    @Override public void onDestroy() {
+        loginPresenter.onDestroy();
+        super.onDestroy();
+    }
+    @Override public void onPreStartConnection(){
+        super.onPreStartConnection();
+    }
+
 
 }
 

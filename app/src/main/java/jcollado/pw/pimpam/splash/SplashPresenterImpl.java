@@ -24,24 +24,29 @@ public class SplashPresenterImpl implements SplashPresenter,SplashInteractor.OnS
     }
 
 
-
-
     @Override
     public void onNoInternetConnectionFound() {
-        splashView.showErrorNotInternetConnection();
+        if (splashView != null) {
+            splashView.showErrorNotInternetConnection();
+        }
 
     }
 
     @Override
     public void onUserLogged() {
-        splashView.startMainActivity();
+        if (splashView != null) {
+            splashView.startMainActivity();
+        }
     }
 
     @Override
     public void onUserNotLogged() {
-        splashView.startLoginActivity();
+        if (splashView != null) {
+            splashView.startLoginActivity();
+        }
 
     }
+
     @Override public void onDestroy() {
         splashView = null;
     }

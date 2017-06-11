@@ -38,8 +38,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
 
-    public void onPreStartConnection(String message) {
-        progressBar.setMessage(message);
+    public void onPreStartConnection() {
+        progressBar.setMessage(getString(R.string.loading));
         progressBar.setCancelable(false);
         progressBar.show();
     }
