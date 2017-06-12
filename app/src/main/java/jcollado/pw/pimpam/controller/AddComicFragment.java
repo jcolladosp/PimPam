@@ -141,7 +141,7 @@ public class AddComicFragment extends BaseFragment {
             comicIV.buildDrawingCache();
             Bitmap bitmap = comicIV.getDrawingCache();
             if(imageChanged) {
-                imageURL = FirebaseModule.getInstance().uploadBitmap(bitmap, java.util.UUID.randomUUID().toString(), this, null);
+                //imageURL = FirebaseModule.getInstance().uploadBitmap(bitmap, java.util.UUID.randomUUID().toString(), this, null);
             }
             else{
                 imageURL = "https://firebasestorage.googleapis.com/v0/b/pim-pam-comics-ff8d4.appspot.com/o/images?alt=media&token=e8ea32a5-a787-4a03-8bee-c4143b257844";

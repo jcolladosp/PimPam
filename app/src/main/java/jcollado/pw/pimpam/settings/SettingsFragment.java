@@ -1,15 +1,14 @@
 package jcollado.pw.pimpam.settings;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -24,10 +23,13 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
+
 
 import java.io.File;
 import java.util.Locale;
@@ -38,10 +40,10 @@ import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.controller.MainActivity;
-import jcollado.pw.pimpam.model.Database;
+
 import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.CameraUtils;
-import jcollado.pw.pimpam.utils.FirebaseModule;
+
 import jcollado.pw.pimpam.utils.Functions;
 import jcollado.pw.pimpam.utils.UserInfo;
 
@@ -64,7 +66,7 @@ public class SettingsFragment extends BaseFragment implements SettingsView {
     @BindView(R.id.language)
     RadioGroup buttonsLanguage;
 
-    public boolean imageChanged = false;
+
     private static View view;
 
     private String imageurl;
@@ -104,8 +106,10 @@ public class SettingsFragment extends BaseFragment implements SettingsView {
 
     @OnClick(R.id.profile_edit)
     void onProfileImage(){
+        final BaseFragment fragment = this;
+        CameraUtils.changeImage(getActivity(),getContext(),fragment);
 
-        CameraUtils.changeImage(getActivity(),getContext(),this);
+
     }
 
     private void setUserInfo(){
@@ -118,14 +122,6 @@ public class SettingsFragment extends BaseFragment implements SettingsView {
     void onEraseComics(){
         showDialogDeleteAllComics();
     }
-
-
-    @Override
-    public void onImageUploaded(String filename){
-        imageurl = filename;
-        //addUserInfo();
-    }
-
 
     private void prepareToolbar(){
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -154,13 +150,7 @@ public class SettingsFragment extends BaseFragment implements SettingsView {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_done_settings:
-                if(imageChanged){
-                    changeProfileWithImage();
-                }
-                else{
-                    settingsPresenter.addUserInfo(nameED.getText().toString(),imageurl);
-                }
-              //  getActivity().getSupportFragmentManager().popBackStack();
+                settingsPresenter.updateUserInfo(nameED.getText().toString(),imageurl);
                 return true;
 
             default:
@@ -170,58 +160,81 @@ public class SettingsFragment extends BaseFragment implements SettingsView {
 
     private void checkLanguageButton(){
         String locale = getResources().getConfiguration().locale.toString();
+        settingsPresenter.checkLocaleRadioButton(locale);
 
-
-            if(locale.contains("en")) {
-                englishRB.setChecked(true);
-            }
-
-            else if(locale.contains("ca")) {
-                valenciaRB.setChecked(true);
-            }
-            else {
-                spanishRB.setChecked(true);
-            }
-
-        }
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == CameraUtils.CAMERA_PICK) {
             File f = new File(CameraUtils.getmCurrentPhotoPath());
 
             if (f.length() != 0) {
-                imageChanged = true;
-                Bitmap bmImg1 = BitmapFactory.decodeFile(CameraUtils.getmCurrentPhotoPath());
-                profile_edit.setImageBitmap(bmImg1);
+                profileIVfromURI(CameraUtils.getmCurrentPhotoPath());
             }
         }
 
         if (data != null && requestCode == CameraUtils.GALLERY_PICK) {
-            imageChanged = true;
-            profile_edit.setImageURI(data.getData());
+            profileIVfromURI(data.getData().toString());
 
         }
     }
-
-    private void changeProfileWithImage(){
-
-            profile_edit.setDrawingCacheEnabled(true);
-            profile_edit.buildDrawingCache();
-            Bitmap bitmap = profile_edit.getDrawingCache();
-            FirebaseModule.getInstance().uploadBitmap(bitmap,java.util.UUID.randomUUID().toString(),this,null);
-
-        }
 
 
     public int getLocaleSelected(){
         int radioButtonID = buttonsLanguage.getCheckedRadioButtonId();
         View radioButton = buttonsLanguage.findViewById(radioButtonID);
-        int idx = buttonsLanguage.indexOfChild(radioButton);
-        return idx;
+        return buttonsLanguage.indexOfChild(radioButton);
+
     }
+
+    @Override
+    public void setCheckedEnglishRB() {
+        englishRB.setChecked(true);
+
+    }
+
+    @Override
+    public void setCheckedSpanishRB() {
+        spanishRB.setChecked(true);
+    }
+
+    @Override
+    public void setCheckedValencianRB() {
+
+        valenciaRB.setChecked(true);
+
+    }
+
+    @Override
+    public void profileIVfromURI(String url) {
+        Uri uri = Uri.parse(url);
+        profile_edit.setImageURI(uri);
+        profile_edit.buildDrawingCache();
+        Bitmap bitmap = profile_edit.getDrawingCache();
+        imageurl = Functions.saveToInternalStorage(bitmap,"profileimage",getContext());
+        settingsPresenter.setImageChangedTrue();
+    }
+
+    @Override
+    public String getNameED() {
+        return nameED.getText().toString();
+    }
+
+    @Override
+    public void showDialogInfoUpdatedCorrectly() {
+         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(R.string.profileUpdatedCorrectly);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            settingsPresenter.setLocaleSelection(getLocaleSelected());
+            }
+        });
+        builder.show();
+    }
+
 
     public  void setLocale(String lang) {
         Locale myLocale = new Locale(lang);

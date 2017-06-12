@@ -56,7 +56,7 @@ public class AccountDetailsActivity extends BaseActivity {
             profile_image.setDrawingCacheEnabled(true);
             profile_image.buildDrawingCache();
             Bitmap bitmap = profile_image.getDrawingCache();
-            String imageURL = FirebaseModule.getInstance().uploadBitmap(bitmap, java.util.UUID.randomUUID().toString(), null, this);
+            //String imageURL = FirebaseModule.getInstance().uploadBitmap(bitmap, java.util.UUID.randomUUID().toString(), null, this);
 
         } else {
             addUserInfo(FirebaseModule.getInstance().getmAuth().getCurrentUser(), null);

@@ -10,6 +10,9 @@ public class SettingsPresenterImpl implements SettingsPresenter,SettingsInteract
     private SettingsView settingsView;
     private SettingsInteractor settingsInteractor;
 
+    private boolean imageChanged = false;
+
+
     public SettingsPresenterImpl(SettingsView settingsView) {
         this.settingsView = settingsView;
         this.settingsInteractor = new SettingsInteractorImpl();
@@ -25,7 +28,7 @@ public class SettingsPresenterImpl implements SettingsPresenter,SettingsInteract
     @Override
     public void deleteAllComics() {
         settingsView.onPreStartConnection();
-        settingsInteractor.sendRequestDeleteAllComics(this);
+        settingsInteractor.DeleteAllComicsRequest(this);
     }
 
     @Override
@@ -35,11 +38,12 @@ public class SettingsPresenterImpl implements SettingsPresenter,SettingsInteract
     }
 
     @Override
-    public void onUserInfoUpdateSucess() {
+    public void onUserInfoUpdateSuccess() {
         settingsView.stopRefreshing();
-        setLocaleSelection(settingsView.getLocaleSelected());
+        settingsView.showDialogInfoUpdatedCorrectly();
 
     }
+
 
     public void setLocaleSelection(int idx){
         switch (idx) {
@@ -56,7 +60,46 @@ public class SettingsPresenterImpl implements SettingsPresenter,SettingsInteract
     }
 
     @Override
-    public void addUserInfo(String name, String url) {
-        settingsInteractor.sendRequestAddUserInfo(name,url,this);
+    public void updateUserInfo(String name, String url) {
+        if(imageChanged) {
+            uploadProfileImage(url, java.util.UUID.randomUUID().toString());
+        }
+        else{
+            settingsView.onPreStartConnection();
+            settingsInteractor.AddUserInfoRequest(name, url, this);
+        }
+    }
+
+    @Override
+    public void checkLocaleRadioButton(String locale) {
+        if(locale.contains("en")) {
+            settingsView.setCheckedEnglishRB();
+        }
+
+        else if(locale.contains("ca")) {
+            settingsView.setCheckedValencianRB();
+
+        }
+        else {
+            settingsView.setCheckedSpanishRB();
+        }
+    }
+
+    @Override
+    public void uploadProfileImage(String url, String name) {
+        settingsView.onPreStartConnection();
+        settingsInteractor.uploadImageRequest(url,name,this);
+    }
+
+    @Override
+    public void setImageChangedTrue() {
+        imageChanged = true;
+
+    }
+
+    @Override
+    public void onUploadImageSuccess(String url) {
+        settingsInteractor.AddUserInfoRequest(settingsView.getNameED(), url, this);
+
     }
 }

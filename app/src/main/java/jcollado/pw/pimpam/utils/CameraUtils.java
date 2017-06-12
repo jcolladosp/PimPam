@@ -54,27 +54,38 @@ public class CameraUtils {
                 }).check();
     }
     public static void changeImage(final Activity activity, final Context context,  final BaseFragment fragment) {
+        Dexter.withActivity(activity)
+                .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                .withListener(new PermissionListener() {
+                    @Override public void onPermissionGranted(PermissionGrantedResponse response) {
+                        AlertDialog.Builder builder = Functions.getModal(R.string.warning_modal_title,R.string.news_image_message, activity);
+                        builder.setPositiveButton(R.string.news_image_camera, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                openCamera(activity,context,fragment);
 
-        AlertDialog.Builder builder = Functions.getModal(R.string.warning_modal_title,R.string.news_image_message, activity);
-        builder.setPositiveButton(R.string.news_image_camera, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                openCamera(activity,context,fragment);
+                            }
+                        });
+                        builder.setNeutralButton(R.string.news_image_gallery, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                if(fragment!=null) fragment.startActivityForResult(pickPhoto, GALLERY_PICK);
+                                else{
+                                    activity.startActivityForResult(pickPhoto, GALLERY_PICK);
+                                }
 
-            }
-        });
-        builder.setNeutralButton(R.string.news_image_gallery, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                if(fragment!=null) fragment.startActivityForResult(pickPhoto, GALLERY_PICK);
-                else{
-                    activity.startActivityForResult(pickPhoto, GALLERY_PICK);
-                }
+                            }
+                        });
+                        builder.show();
 
-            }
-        });
-        builder.show();
+                    }
+                    @Override public void onPermissionDenied(PermissionDeniedResponse response) {
+                        Functions.getModal(context.getString(R.string.cameraPermissionsDenied),context.getString(R.string.ok),context).show();
+                    }
+                    @Override public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {/* ... */}
+                }).check();
+
 
     }
     private static File createImageFile(Context context) throws IOException {

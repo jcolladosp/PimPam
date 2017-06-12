@@ -71,6 +71,7 @@
     <string name="cameraPermissionsDenied">Necesitamos tu permiso para abrir la cámara</string>
     <string name="noName">Sin nombre</string>
     <string name="editing">Editando </string>
+    <string name="profileUpdatedCorrectly">Informacion del perfil actualizada correctamente</string>
 
 
 </resources>

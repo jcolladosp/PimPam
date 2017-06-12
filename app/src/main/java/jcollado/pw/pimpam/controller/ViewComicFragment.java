@@ -168,7 +168,7 @@ public class ViewComicFragment extends BaseFragment {
                 comicIV.setDrawingCacheEnabled(true);
                 comicIV.buildDrawingCache();
                 Bitmap bitmap = comicIV.getDrawingCache();
-                FirebaseModule.getInstance().uploadBitmap(bitmap,java.util.UUID.randomUUID().toString(),this,null);
+               // FirebaseModule.getInstance().uploadBitmap(bitmap,java.util.UUID.randomUUID().toString(),this,null);
 
             }
             else{

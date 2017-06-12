@@ -1,5 +1,6 @@
 package jcollado.pw.pimpam.settings;
 
+
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
@@ -19,11 +20,11 @@ public class SettingsInteractorImpl implements SettingsInteractor {
     private FirebaseUser user = FirebaseModule.getInstance().getCurrentUser();;
 
     @Override
-    public void sendRequestDeleteAllComics(OnSettingsFinishedListener listener) {
+    public void DeleteAllComicsRequest(OnSettingsFinishedListener listener) {
         Database.getInstance().deleteAllData(listener);
     }
 
-    public void sendRequestAddUserInfo(String name, String url, final OnSettingsFinishedListener listener){
+    public void AddUserInfoRequest(String name, String url, final OnSettingsFinishedListener listener){
         Uri picUri = Uri.parse(url);
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(name)
@@ -36,9 +37,16 @@ public class SettingsInteractorImpl implements SettingsInteractor {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
 
-                                listener.onUserInfoUpdateSucess();
+                                listener.onUserInfoUpdateSuccess();
                         }
                     }
                 });
+    }
+
+
+
+    @Override
+    public void uploadImageRequest(String url, String name,OnSettingsFinishedListener listener) {
+        FirebaseModule.getInstance().uploadImageToFirebase(url,name,listener);
     }
 }

@@ -70,6 +70,7 @@
     <string name="cameraPermissionsDenied">We need camera permissions</string>
     <string name="noName">No name</string>
     <string name="editing">Editing </string>
+    <string name="profileUpdatedCorrectly">Profile information updated correctly</string>
 
 
 </resources>

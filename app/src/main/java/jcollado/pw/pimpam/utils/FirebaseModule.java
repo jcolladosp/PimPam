@@ -1,6 +1,8 @@
 package jcollado.pw.pimpam.utils;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
@@ -16,11 +18,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 
-import jcollado.pw.pimpam.R;
-import jcollado.pw.pimpam.controller.AddComicFragment;
 import jcollado.pw.pimpam.model.Database;
 
 /**
@@ -74,14 +75,18 @@ public class FirebaseModule {
         return serieReference;
     }
 
-    public String uploadBitmap(Bitmap bitmap, String imagename, final BaseFragment fragment, final BaseActivity activity){
-        if(fragment!=null) fragment.onPreStartConnection();
+    public void uploadImageToFirebase(String url, String imagename, final UploadImageListener listener){
 
-        final String[] downloadURL = new String[1];
         StorageReference ImagesRef = storageRef.child(PrefKeys.IMAGES.toString()).child(UserInfo.getUniqueID()).child(imagename);
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        Bitmap bitmap = BitmapFactory.decodeFile(url, options);
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
+
         UploadTask uploadTask = ImagesRef.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
@@ -94,13 +99,12 @@ public class FirebaseModule {
             @SuppressWarnings("VisibleForTests")
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                downloadURL[0] = taskSnapshot.getDownloadUrl().toString();
-                if(fragment!=null){  fragment.onImageUploaded(downloadURL[0]);}
-                if (activity!=null){ activity.onImageUploaded(downloadURL[0]);}
+
+                listener.onUploadImageSuccess(taskSnapshot.getDownloadUrl().toString());
 
         }
         });
-        return downloadURL[0];
+
     }
 
 

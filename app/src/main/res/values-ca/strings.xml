@@ -70,6 +70,7 @@
     <string name="cameraPermissionsDenied">Necesitem el teu permís per obrir la cámera</string>
     <string name="noName">Sense nom</string>
     <string name="editing">Editant </string>
+    <string name="profileUpdatedCorrectly">Informacio del perfil actualitzada correctament</string>
 
 
 </resources>
