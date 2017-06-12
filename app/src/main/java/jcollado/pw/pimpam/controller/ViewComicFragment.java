@@ -284,7 +284,7 @@ public class ViewComicFragment extends BaseFragment {
         }
     }
     public void mostrarCargando(){
-        onPreStartConnection(getString(R.string.loading));
+        onPreStartConnection();
     }
 
     public void comicDeleted(){

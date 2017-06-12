@@ -75,7 +75,7 @@ public class FirebaseModule {
     }
 
     public String uploadBitmap(Bitmap bitmap, String imagename, final BaseFragment fragment, final BaseActivity activity){
-        if(fragment!=null) fragment.onPreStartConnection(fragment.getString(R.string.loading));
+        if(fragment!=null) fragment.onPreStartConnection();
 
         final String[] downloadURL = new String[1];
         StorageReference ImagesRef = storageRef.child(PrefKeys.IMAGES.toString()).child(UserInfo.getUniqueID()).child(imagename);

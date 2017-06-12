@@ -2,7 +2,7 @@ package jcollado.pw.pimpam.login;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.support.annotation.NonNull;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
@@ -14,13 +14,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
+
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,7 +23,6 @@ import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.controller.AccountDetailsActivity;
 import jcollado.pw.pimpam.controller.MainActivity;
 import jcollado.pw.pimpam.utils.BaseActivity;
-import jcollado.pw.pimpam.utils.FirebaseModule;
 import jcollado.pw.pimpam.utils.Functions;
 import mehdi.sakout.fancybuttons.FancyButton;
 
@@ -41,9 +34,6 @@ public class LoginActivity extends BaseActivity implements LoginView, GoogleApiC
     @BindView(R.id.passwordED)
     EditText passwordED;
 
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthListener;
-
     private GoogleApiClient mGoogleApiClient;
     private static final int RC_SIGN_IN = 9001;
 
@@ -54,7 +44,7 @@ public class LoginActivity extends BaseActivity implements LoginView, GoogleApiC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        mAuth = FirebaseModule.getInstance().getmAuth();
+
         loginPresenter = new LoginPresenterImpl(this);
 
         configGoogle();

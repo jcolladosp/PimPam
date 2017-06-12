@@ -11,7 +11,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,7 +30,6 @@ import butterknife.OnClick;
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.model.Comic;
 import jcollado.pw.pimpam.model.Database;
-import jcollado.pw.pimpam.model.Serie;
 import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.ComicCardAdapter;
 import jcollado.pw.pimpam.utils.Functions;
@@ -206,7 +205,7 @@ public class CollectionFragment extends BaseFragment {
         onConnectionFinished();
     }
     public void mostrarCargando(){
-        onPreStartConnection(getString(R.string.loading));
+        onPreStartConnection();
     }
 
 

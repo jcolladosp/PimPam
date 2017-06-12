@@ -1,7 +1,6 @@
-package jcollado.pw.pimpam.controller;
+package jcollado.pw.pimpam.settings;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -10,14 +9,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,6 +37,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jcollado.pw.pimpam.R;
+import jcollado.pw.pimpam.controller.MainActivity;
 import jcollado.pw.pimpam.model.Database;
 import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.CameraUtils;
@@ -50,12 +46,13 @@ import jcollado.pw.pimpam.utils.Functions;
 import jcollado.pw.pimpam.utils.UserInfo;
 
 
-public class SettingsFragment  extends BaseFragment {
+public class SettingsFragment extends BaseFragment implements SettingsView {
 
 
     @BindView(R.id.profile_edit)
     CircleImageView profile_edit;
-    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.nameED)
     EditText nameED;
     @BindView(R.id.radio_english)
@@ -69,76 +66,64 @@ public class SettingsFragment  extends BaseFragment {
 
     public boolean imageChanged = false;
     private static View view;
-    private FirebaseUser user;
+
     private String imageurl;
+    private SettingsPresenter settingsPresenter;
     private static SettingsFragment fragment;
+
     public SettingsFragment() {
         // Required empty public constructor
     }
 
     public static SettingsFragment newInstance() {
         fragment = new SettingsFragment();
-
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
         view = inflater.inflate(R.layout.fragment_settings, container, false);
         ButterKnife.bind(this, view);
-        Glide.with(this).load(UserInfo.getProfilePictureURL()).placeholder(R.drawable.placeholder).dontAnimate().into(profile_edit);
+        settingsPresenter =  new SettingsPresenterImpl(this);
+
         prepareToolbar();
         setHasOptionsMenu(true);
-         checkLanguageButton();
-        user = FirebaseModule.getInstance().getCurrentUser();
-        imageurl = user.getPhotoUrl().toString();
-        nameED.setText(UserInfo.getDisplayName());
-
+        checkLanguageButton();
+        setUserInfo();
 
         return view;
     }
 
     @OnClick(R.id.profile_edit)
     void onProfileImage(){
+
         CameraUtils.changeImage(getActivity(),getContext(),this);
+    }
+
+    private void setUserInfo(){
+        imageurl = UserInfo.getProfilePictureURL().toString();
+        nameED.setText(UserInfo.getDisplayName());
+        Glide.with(this).load(imageurl).placeholder(R.drawable.placeholder).dontAnimate().into(profile_edit);
     }
 
     @OnClick(R.id.eraseComicsBT)
     void onEraseComics(){
-        AlertDialog.Builder builder = Functions.getModal(R.string.atention,R.string.confirmdelete, getActivity());
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Database.getInstance().deleteAllData();
-                Functions.getModal(R.string.comicsDeletedOk,getContext()).show();
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-
-            }
-        });
-
-    builder.show();
+        showDialogDeleteAllComics();
     }
 
 
     @Override
     public void onImageUploaded(String filename){
-
         imageurl = filename;
-        addUserInfo();
-
+        //addUserInfo();
     }
 
 
@@ -146,7 +131,6 @@ public class SettingsFragment  extends BaseFragment {
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeButtonEnabled(false);
-
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.hamburger));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,7 +138,6 @@ public class SettingsFragment  extends BaseFragment {
                 MainActivity.openDrawer();
             }
         });
-
         toolbar.setTitle(getString(R.string.settings));
     }
 
@@ -175,7 +158,7 @@ public class SettingsFragment  extends BaseFragment {
                     changeProfileWithImage();
                 }
                 else{
-                    addUserInfo();
+                    settingsPresenter.addUserInfo(nameED.getText().toString(),imageurl);
                 }
               //  getActivity().getSupportFragmentManager().popBackStack();
                 return true;
@@ -231,48 +214,13 @@ public class SettingsFragment  extends BaseFragment {
             FirebaseModule.getInstance().uploadBitmap(bitmap,java.util.UUID.randomUUID().toString(),this,null);
 
         }
-    private void addUserInfo(){
-        onPreStartConnection(getString(R.string.loading));
-        Uri picUri;
-
-            picUri = Uri.parse(imageurl);
-
-        String name = nameED.getText().toString();
 
 
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName(name)
-                .setPhotoUri(picUri)
-                .build();
-
-        user.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-
-                                getLocaleSelected();
-                                onConnectionFinished();
-                        }
-                    }
-                });
-    }
-
-    private void getLocaleSelected(){
+    public int getLocaleSelected(){
         int radioButtonID = buttonsLanguage.getCheckedRadioButtonId();
         View radioButton = buttonsLanguage.findViewById(radioButtonID);
         int idx = buttonsLanguage.indexOfChild(radioButton);
-        switch (idx) {
-            case 0:
-                setLocale("es");
-                break;
-            case 1:
-                setLocale("en");
-                break;
-            case 2:
-                setLocale("ca");
-                break;
-        }
+        return idx;
     }
 
     public  void setLocale(String lang) {
@@ -287,8 +235,45 @@ public class SettingsFragment  extends BaseFragment {
         getActivity().finish();
     }
 
+    @Override public void onDestroy() {
+        settingsPresenter.onDestroy();
+        super.onDestroy();
+    }
 
+    @Override
+    public void showDialogDeleteAllComics() {
+        AlertDialog.Builder builder = Functions.getModal(R.string.atention,R.string.confirmdelete, getActivity());
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                settingsPresenter.deleteAllComics();
 
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+
+            }
+        });
+
+        builder.show();
+    }
+
+    @Override
+    public void showDialogsComicsDeletedSuccess() {
+        Functions.getModal(R.string.comicsDeletedOk,getContext()).show();
+    }
+
+    @Override
+    public void stopRefreshing() {
+        onConnectionFinished();
+    }
+
+    @Override public void onPreStartConnection(){
+        super.onPreStartConnection();
+    }
 
 }
 

@@ -26,7 +26,6 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-
         setNavigationDrawer();
         FirebaseModule.getInstance().setConnectionDatabase();
 
@@ -34,8 +33,6 @@ public class MainActivity extends BaseActivity {
         openFragment(collectionFragment,"");
 
         Database.getInstance().setFragment(collectionFragment);
-
-
     }
 
     public static void openDrawer() {
@@ -45,6 +42,7 @@ public class MainActivity extends BaseActivity {
 
     private void setNavigationDrawer() {
         navigationDrawer = NavigationDrawer.getInstance(this).getDrawerBuilder();
+        NavigationDrawer.loadProfileImage();
 
     }
 
@@ -69,7 +67,6 @@ public class MainActivity extends BaseActivity {
         if (navigationDrawer.getCurrentSelectedPosition() != 1) {
           getSupportFragmentManager().popBackStack();
 
-            //openDrawer();
         } else {
             Functions.closeApp(this);
         }

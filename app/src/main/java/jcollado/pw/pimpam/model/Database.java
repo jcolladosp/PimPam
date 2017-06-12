@@ -12,6 +12,7 @@ import java.util.List;
 
 import jcollado.pw.pimpam.controller.CollectionFragment;
 import jcollado.pw.pimpam.controller.ViewComicFragment;
+import jcollado.pw.pimpam.settings.SettingsInteractor;
 import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.FirebaseModule;
 
@@ -158,9 +159,10 @@ public class Database {
         });
     }
 
-    public void deleteAllData(){
+    public void deleteAllData(SettingsInteractor.OnSettingsFinishedListener listener){
         comicReference.setValue(null);
         serieReference.setValue(null);
+        listener.onComicsDeleted();
     }
 
     public List<String> getAllSeriesName(){
