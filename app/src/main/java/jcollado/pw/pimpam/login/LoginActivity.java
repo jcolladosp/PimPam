@@ -2,7 +2,6 @@ package jcollado.pw.pimpam.login;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.EditText;
@@ -15,12 +14,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jcollado.pw.pimpam.R;
-import jcollado.pw.pimpam.controller.AccountDetailsActivity;
+import jcollado.pw.pimpam.accountDetails.AccountDetailsActivity;
 import jcollado.pw.pimpam.controller.MainActivity;
 import jcollado.pw.pimpam.utils.BaseActivity;
 import jcollado.pw.pimpam.utils.Functions;
