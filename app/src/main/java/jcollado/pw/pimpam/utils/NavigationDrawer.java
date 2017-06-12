@@ -27,9 +27,9 @@ import com.mikepenz.materialdrawer.util.DrawerUIUtils;
 
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.controller.AddComicFragment;
-import jcollado.pw.pimpam.login.LoginActivity;
 import jcollado.pw.pimpam.controller.CollectionFragment;
 import jcollado.pw.pimpam.controller.MainActivity;
+import jcollado.pw.pimpam.login.LoginActivity;
 import jcollado.pw.pimpam.settings.SettingsFragment;
 
 /**

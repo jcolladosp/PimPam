@@ -3,7 +3,6 @@ package jcollado.pw.pimpam.controller;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -31,7 +30,6 @@ import jcollado.pw.pimpam.model.FactorySerie;
 import jcollado.pw.pimpam.model.Serie;
 import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.CameraUtils;
-import jcollado.pw.pimpam.utils.FirebaseModule;
 import jcollado.pw.pimpam.widgets.SquareImageView;
 
 

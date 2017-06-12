@@ -1,6 +1,5 @@
 package jcollado.pw.pimpam.settings;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,13 +22,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.bumptech.glide.Glide;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionDeniedResponse;
-import com.karumi.dexter.listener.PermissionGrantedResponse;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.single.PermissionListener;
-
 
 import java.io.File;
 import java.util.Locale;
@@ -40,10 +32,8 @@ import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.controller.MainActivity;
-
 import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.CameraUtils;
-
 import jcollado.pw.pimpam.utils.Functions;
 import jcollado.pw.pimpam.utils.UserInfo;
 
@@ -288,6 +278,11 @@ public class SettingsFragment extends BaseFragment implements SettingsView {
         super.onPreStartConnection();
     }
 
+    @Override
+    public void showDialogGeneralError() {
+        AlertDialog.Builder errorRestoreAlert = Functions.getModalError(getActivity());
+        errorRestoreAlert.show();
+    }
 }
 
 

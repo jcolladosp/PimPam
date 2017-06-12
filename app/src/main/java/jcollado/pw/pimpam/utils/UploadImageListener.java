@@ -6,4 +6,5 @@ package jcollado.pw.pimpam.utils;
 
 public interface UploadImageListener {
     void onUploadImageSuccess(String url);
+    void onUploadImageError();
 }

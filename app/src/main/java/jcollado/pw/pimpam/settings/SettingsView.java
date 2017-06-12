@@ -20,5 +20,6 @@ public interface SettingsView {
     void profileIVfromURI(String url);
     String getNameED();
     void showDialogInfoUpdatedCorrectly();
+    void showDialogGeneralError();
 
 }

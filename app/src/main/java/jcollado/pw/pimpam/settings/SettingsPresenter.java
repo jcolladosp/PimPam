@@ -1,8 +1,5 @@
 package jcollado.pw.pimpam.settings;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-
 /**
  * Created by jcolladosp on 11/06/2017.
  */

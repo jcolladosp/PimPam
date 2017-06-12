@@ -2,20 +2,11 @@ package jcollado.pw.pimpam.utils;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
-import com.mikepenz.iconics.IconicsDrawable;
-import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
-import com.mikepenz.materialdrawer.util.DrawerImageLoader;
-import com.mikepenz.materialdrawer.util.DrawerUIUtils;
 
 import jcollado.pw.pimpam.R;
 

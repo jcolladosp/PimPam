@@ -41,8 +41,8 @@ public class MainActivity extends BaseActivity {
 
 
     private void setNavigationDrawer() {
-        navigationDrawer = NavigationDrawer.getInstance(this).getDrawerBuilder();
         NavigationDrawer.loadProfileImage();
+        navigationDrawer = NavigationDrawer.getInstance(this).getDrawerBuilder();
 
     }
 

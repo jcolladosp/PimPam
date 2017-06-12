@@ -2,10 +2,8 @@ package jcollado.pw.pimpam.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -13,14 +11,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 
 import jcollado.pw.pimpam.model.Database;
 
@@ -92,14 +87,13 @@ public class FirebaseModule {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 Log.e("fire", exception.toString());
-                // Handle unsuccessful uploads
+                listener.onUploadImageError();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             @SuppressWarnings("VisibleForTests")
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-
                 listener.onUploadImageSuccess(taskSnapshot.getDownloadUrl().toString());
 
         }

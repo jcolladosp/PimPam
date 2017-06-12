@@ -43,7 +43,7 @@
             android:name=".login.LoginActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait" />
-        <activity android:name=".controller.AccountDetailsActivity"></activity>
+        <activity android:name=".accountDetails.AccountDetailsActivity"></activity>
     </application>
 
 </manifest>

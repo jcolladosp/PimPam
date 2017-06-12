@@ -1,18 +1,13 @@
-package jcollado.pw.pimpam.controller;
+package jcollado.pw.pimpam.accountDetails;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.widget.EditText;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.io.File;
 
@@ -21,92 +16,54 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jcollado.pw.pimpam.R;
+import jcollado.pw.pimpam.controller.MainActivity;
 import jcollado.pw.pimpam.utils.BaseActivity;
 import jcollado.pw.pimpam.utils.CameraUtils;
-import jcollado.pw.pimpam.utils.FirebaseModule;
 import jcollado.pw.pimpam.utils.Functions;
+import jcollado.pw.pimpam.utils.UserInfo;
 
 
-public class AccountDetailsActivity extends BaseActivity {
+public class AccountDetailsActivity extends BaseActivity implements AccountDetailsView {
 
 
     @BindView(R.id.nameED)
     EditText nameED;
     @BindView(R.id.profile_image)
     CircleImageView profile_image;
-    public boolean imageChanged = false;
-    private Bitmap imageBitmap;
-    String spiderman = "https://animotionlatinoamerica.files.wordpress.com/2016/05/decoration-stickers-spiderman.jpg";
+
+
+    private AccountDetailsPresenter accountDetailsPresenter;
+
+    private String imageurl = "https://animotionlatinoamerica.files.wordpress.com/2016/05/decoration-stickers-spiderman.jpg";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_details);
         ButterKnife.bind(this);
+        accountDetailsPresenter = new AccountDetailsPresenterImpl(this);
+        setUserInfoOnView();
 
-        Glide.with(this).load(spiderman).placeholder(R.drawable.placeholder).dontAnimate().into(profile_image);
+    }
 
+    private void setUserInfoOnView(){
+
+        Glide.with(this).load(imageurl).placeholder(R.drawable.placeholder).dontAnimate().into(profile_image);
 
     }
 
     @OnClick(R.id.btn_continuar)
     void onContinuar() {
-        onPreStartConnection();
-        if (imageChanged) {
-            profile_image.setDrawingCacheEnabled(true);
-            profile_image.buildDrawingCache();
-            Bitmap bitmap = profile_image.getDrawingCache();
-            //String imageURL = FirebaseModule.getInstance().uploadBitmap(bitmap, java.util.UUID.randomUUID().toString(), null, this);
-
-        } else {
-            addUserInfo(FirebaseModule.getInstance().getmAuth().getCurrentUser(), null);
-            onConnectionFinished();
-        }
-
+        accountDetailsPresenter.updateUserInfo(nameED.getText().toString(),imageurl);
 
     }
 
     @OnClick(R.id.profile_image)
     void onProfileImage() {
         CameraUtils.changeImage(this, getApplicationContext(), null);
-
-    }
-
-    @Override
-    public void onImageUploaded(String filename) {
-        addUserInfo(FirebaseModule.getInstance().getmAuth().getCurrentUser(), filename);
-        onConnectionFinished();
     }
 
 
-    private void addUserInfo(FirebaseUser user, String filename) {
-        Uri picUri;
-        if (filename != null) {
-            picUri = Uri.parse(filename);
-        } else {
-            picUri = Uri.parse(spiderman);
-        }
-        String name = nameED.getText().toString();
-
-
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName(name)
-                .setPhotoUri(picUri)
-                .build();
-
-        user.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(i);
-                            FirebaseModule.getInstance().setConnectionDatabase();
-
-                        }
-                    }
-                });
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -115,16 +72,61 @@ public class AccountDetailsActivity extends BaseActivity {
             File f = new File(CameraUtils.getmCurrentPhotoPath());
 
             if (f.length() != 0) {
-                imageChanged = true;
-                Bitmap bmImg1 = BitmapFactory.decodeFile(CameraUtils.getmCurrentPhotoPath());
-                profile_image.setImageBitmap(bmImg1);
+                profileIVfromURI(CameraUtils.getmCurrentPhotoPath());
             }
         }
 
         if (data != null && requestCode == CameraUtils.GALLERY_PICK) {
-            imageChanged = true;
-            profile_image.setImageURI(data.getData());
+            profileIVfromURI(data.getData().toString());
 
         }
     }
+
+    @Override public void stopRefreshing() {
+        onConnectionFinished();
+    }
+
+    @Override public void onPreStartConnection(){
+        super.onPreStartConnection();
+    }
+
+    @Override public void onDestroy() {
+        accountDetailsPresenter.onDestroy();
+        super.onDestroy();
+    }
+
+    @Override
+    public void profileIVfromURI(String url) {
+        Uri uri = Uri.parse(url);
+        profile_image.setImageURI(uri);
+        profile_image.buildDrawingCache();
+        Bitmap bitmap = profile_image.getDrawingCache();
+        imageurl = Functions.saveToInternalStorage(bitmap,"profileimage",this);
+        accountDetailsPresenter.setImageChangedTrue();
+    }
+
+    @Override
+    public String getNameED() {
+        return nameED.getText().toString();
+    }
+
+    @Override
+    public void showDialogGeneralError() {
+        AlertDialog.Builder errorRestoreAlert = Functions.getModalError(this);
+        errorRestoreAlert.show();
+    }
+
+    @Override
+    public void startMainActivity() {
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(i);
+
+    }
+
+    @Override
+    public void showDialogNameRequired() {
+        AlertDialog.Builder allFieldsBuilder = Functions.getModal(getString(R.string.allFieldsRequired),getString(R.string.ok),this);
+        allFieldsBuilder.show();
+    }
+
 }

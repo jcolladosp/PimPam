@@ -1,7 +1,5 @@
 package jcollado.pw.pimpam.settings;
 
-import android.graphics.Bitmap;
-
 import jcollado.pw.pimpam.utils.UploadImageListener;
 
 /**

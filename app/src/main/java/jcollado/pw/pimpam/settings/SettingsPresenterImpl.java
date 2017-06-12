@@ -102,4 +102,9 @@ public class SettingsPresenterImpl implements SettingsPresenter,SettingsInteract
         settingsInteractor.AddUserInfoRequest(settingsView.getNameED(), url, this);
 
     }
+
+    @Override
+    public void onUploadImageError() {
+        settingsView.showDialogGeneralError();
+    }
 }

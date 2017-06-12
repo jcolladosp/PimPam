@@ -1,7 +1,5 @@
 package jcollado.pw.pimpam.splash;
 
-import android.content.Context;
-
 /**
  * Created by jcolladosp on 10/06/2017.
  */

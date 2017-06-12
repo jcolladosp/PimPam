@@ -1,14 +1,9 @@
 package jcollado.pw.pimpam.controller;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.app.AlertDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,7 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -37,12 +31,8 @@ import butterknife.OnClick;
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.model.Comic;
 import jcollado.pw.pimpam.model.Database;
-import jcollado.pw.pimpam.model.FactoryComic;
-import jcollado.pw.pimpam.model.Serie;
 import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.CameraUtils;
-import jcollado.pw.pimpam.utils.FirebaseModule;
-import jcollado.pw.pimpam.utils.Functions;
 import jcollado.pw.pimpam.widgets.SquareImageView;
 
 

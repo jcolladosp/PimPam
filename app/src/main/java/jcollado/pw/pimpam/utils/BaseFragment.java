@@ -10,8 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
-
-import butterknife.ButterKnife;
 import jcollado.pw.pimpam.R;
 import jcollado.pw.pimpam.controller.MainActivity;
 
