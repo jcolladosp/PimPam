@@ -3,6 +3,7 @@ package jcollado.pw.pimpam.controller;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -30,10 +31,13 @@ import jcollado.pw.pimpam.model.FactorySerie;
 import jcollado.pw.pimpam.model.Serie;
 import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.CameraUtils;
+import jcollado.pw.pimpam.utils.FirebaseModule;
+import jcollado.pw.pimpam.utils.Functions;
+import jcollado.pw.pimpam.utils.UploadImageListener;
 import jcollado.pw.pimpam.widgets.SquareImageView;
 
 
-public class AddComicFragment extends BaseFragment {
+public class AddComicFragment extends BaseFragment implements UploadImageListener{
 
     public static final int PLACE_IN_DRAWER = 2;
     private static  AddComicFragment fragment;
@@ -55,7 +59,8 @@ public class AddComicFragment extends BaseFragment {
     AutoCompleteTextView serieAC;
 
     FirebaseStorage storage;
-    String imageURL;
+    String imageLink;
+    String imageurl;
     static Comic comic;
     static Serie serie;
     public boolean imageChanged = false;
@@ -102,17 +107,22 @@ public class AddComicFragment extends BaseFragment {
             File f = new File(CameraUtils.getmCurrentPhotoPath());
 
             if (f.length() != 0) {
-                imageChanged = true;
-                Bitmap bmImg1 = BitmapFactory.decodeFile(CameraUtils.getmCurrentPhotoPath());
-                comicIV.setImageBitmap(bmImg1);
+                profileIVfromURI(CameraUtils.getmCurrentPhotoPath());
             }
         }
 
         if (data != null && requestCode == CameraUtils.GALLERY_PICK) {
-            imageChanged = true;
-            comicIV.setImageURI(data.getData());
+            profileIVfromURI(data.getData().toString());
 
         }
+    }
+    public void profileIVfromURI(String url) {
+        Uri uri = Uri.parse(url);
+        comicIV.setImageURI(uri);
+        comicIV.buildDrawingCache();
+        Bitmap bitmap = comicIV.getDrawingCache();
+        imageurl = Functions.saveToInternalStorage(bitmap,"profileimage",getContext());
+        imageChanged = true;
     }
 
     private void onItemSerieACTVListener(){
@@ -129,21 +139,20 @@ public class AddComicFragment extends BaseFragment {
     @OnClick(R.id.addFab) void submit() {
         hideKeyboard();
         if(isFieldsCompleted()){
+            onPreStartConnection();
             serie = Database.getInstance().getSerieByName(serieAC.getText().toString());
             if(serie == null) {
                 serie = FactorySerie.createSerie(serieAC.getText().toString(),anyoED.getText().toString() , editorialED.getText().toString());
             }
             comic = FactoryComic.createComic(nameED.getText().toString(),editorialED.getText().toString(),"",numeroED.getText().toString(),anyoED.getText().toString(),serie,false);
 
-            comicIV.setDrawingCacheEnabled(true);
-            comicIV.buildDrawingCache();
-            Bitmap bitmap = comicIV.getDrawingCache();
+
             if(imageChanged) {
-                //imageURL = FirebaseModule.getInstance().uploadBitmap(bitmap, java.util.UUID.randomUUID().toString(), this, null);
+                FirebaseModule.getInstance().uploadImageToFirebase(imageurl, java.util.UUID.randomUUID().toString(),this);
             }
             else{
-                imageURL = "https://firebasestorage.googleapis.com/v0/b/pim-pam-comics-ff8d4.appspot.com/o/images?alt=media&token=e8ea32a5-a787-4a03-8bee-c4143b257844";
-                onImageUploaded(imageURL);
+                imageLink = "https://firebasestorage.googleapis.com/v0/b/pim-pam-comics-ff8d4.appspot.com/o/images?alt=media&token=e8ea32a5-a787-4a03-8bee-c4143b257844";
+                onImageUploaded(imageLink);
             }
 
 
@@ -216,6 +225,15 @@ public class AddComicFragment extends BaseFragment {
     }
 
 
+    @Override
+    public void onUploadImageSuccess(String url) {
+        onImageUploaded(url);
+    }
+
+    @Override
+    public void onUploadImageError() {
+
+    }
 }
 
 

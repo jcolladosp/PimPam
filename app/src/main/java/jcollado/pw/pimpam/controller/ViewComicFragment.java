@@ -3,6 +3,7 @@ package jcollado.pw.pimpam.controller;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -33,13 +34,15 @@ import jcollado.pw.pimpam.model.Comic;
 import jcollado.pw.pimpam.model.Database;
 import jcollado.pw.pimpam.utils.BaseFragment;
 import jcollado.pw.pimpam.utils.CameraUtils;
+import jcollado.pw.pimpam.utils.FirebaseModule;
+import jcollado.pw.pimpam.utils.Functions;
+import jcollado.pw.pimpam.utils.UploadImageListener;
 import jcollado.pw.pimpam.widgets.SquareImageView;
 
 
-public class ViewComicFragment extends BaseFragment {
+public class ViewComicFragment extends BaseFragment implements UploadImageListener {
 
-    private static final int GALLERY_PICK = 1;
-    private static final int CAMERA_PICK = 2;
+
     private boolean imageChanged = false;
     private     MenuItem actionDelete;
 
@@ -69,6 +72,8 @@ public class ViewComicFragment extends BaseFragment {
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.comicIV)
     SquareImageView comicIV;
+    String imageLink;
+    String imageurl;
     private boolean editingComic = false;
 
 
@@ -118,15 +123,12 @@ public class ViewComicFragment extends BaseFragment {
             File f = new File(CameraUtils.getmCurrentPhotoPath());
 
             if (f.length() != 0) {
-                imageChanged = true;
-                Bitmap bmImg1 = BitmapFactory.decodeFile(CameraUtils.getmCurrentPhotoPath());
-                comicIV.setImageBitmap(bmImg1);
+                profileIVfromURI(CameraUtils.getmCurrentPhotoPath());
             }
         }
 
         if (data != null && requestCode == CameraUtils.GALLERY_PICK) {
-            imageChanged = true;
-            comicIV.setImageURI(data.getData());
+            profileIVfromURI(data.getData().toString());
 
         }
 
@@ -155,10 +157,8 @@ public class ViewComicFragment extends BaseFragment {
             actionDelete.setVisible(false);
             editFab.setImageResource(R.drawable.ic_edit);
             if(imageChanged){
-                comicIV.setDrawingCacheEnabled(true);
-                comicIV.buildDrawingCache();
-                Bitmap bitmap = comicIV.getDrawingCache();
-               // FirebaseModule.getInstance().uploadBitmap(bitmap,java.util.UUID.randomUUID().toString(),this,null);
+                onPreStartConnection();
+                FirebaseModule.getInstance().uploadImageToFirebase(imageurl, java.util.UUID.randomUUID().toString(),this);
 
             }
             else{
@@ -169,6 +169,14 @@ public class ViewComicFragment extends BaseFragment {
             showMode();
 
         }
+    }
+    public void profileIVfromURI(String url) {
+        Uri uri = Uri.parse(url);
+        comicIV.setImageURI(uri);
+        comicIV.buildDrawingCache();
+        Bitmap bitmap = comicIV.getDrawingCache();
+        imageurl = Functions.saveToInternalStorage(bitmap,"profileimage",getContext());
+        imageChanged = true;
     }
 
     @Override
@@ -187,6 +195,7 @@ public class ViewComicFragment extends BaseFragment {
 
 
         Database.getInstance().comicToDatabase(comic,this);
+        onConnectionFinished();
     }
 
     private void editMode(){
@@ -315,6 +324,17 @@ public class ViewComicFragment extends BaseFragment {
 
             }
         });
+
+    }
+
+    @Override
+    public void onUploadImageSuccess(String url) {
+        onImageUploaded(url);
+
+    }
+
+    @Override
+    public void onUploadImageError() {
 
     }
 }
