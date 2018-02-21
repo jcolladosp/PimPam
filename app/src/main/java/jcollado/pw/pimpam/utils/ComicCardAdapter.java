@@ -133,10 +133,10 @@ public class ComicCardAdapter extends RecyclerView.Adapter<ComicCardAdapter.Card
 
         public CardHolder(View view) {
             super(view);
-            title = (TextView) view.findViewById(R.id.title);
-            count = (TextView) view.findViewById(R.id.count);
-            thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
-            favButton = (SparkButton) view.findViewById(R.id.star_button1);
+            title =  view.findViewById(R.id.title);
+            count =  view.findViewById(R.id.count);
+            thumbnail = view.findViewById(R.id.thumbnail);
+            favButton = view.findViewById(R.id.star_button1);
 
 
             view.setOnClickListener(this);
